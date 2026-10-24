@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
 import { useForm } from "@tanstack/react-form"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { PathInput } from "@/components/ui/path-input"
 import {
   Select,
   SelectContent,
@@ -38,12 +39,9 @@ import {
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { useInstanceCapabilities } from "@/hooks/useInstanceCapabilities"
 import { useInstanceTrackers } from "@/hooks/useInstanceTrackers"
-import { usePathAutocomplete } from "@/hooks/usePathAutocomplete"
 import { useQBittorrentAppInfo } from "@/hooks/useQBittorrentAppInfo"
 import { api } from "@/lib/api"
-import { cn } from "@/lib/utils"
 import type { TorrentCreationParams, TorrentFormat } from "@/types"
 
 import { useTranslation } from "react-i18next"
@@ -58,41 +56,6 @@ function parseLines(input: string): string[] {
 const torrentFilePathSchema = z.string().trim().refine(
   (value) => value === "" || (!value.endsWith("/") && !value.endsWith("\\"))
 )
-
-interface PathSuggestionsProps {
-  suggestions: string[]
-  highlightedIndex: number
-  onSelect: (entry: string) => void
-  listRef: React.RefObject<HTMLDivElement | null>
-}
-
-function PathSuggestions({ suggestions, highlightedIndex, onSelect, listRef }: PathSuggestionsProps): React.ReactNode {
-  if (suggestions.length === 0) return null
-
-  return (
-    <div className="relative">
-      <div ref={listRef} className="absolute z-50 mt-1 left-0 right-0 rounded-md border bg-popover text-popover-foreground shadow-md">
-        <div className="max-h-55 overflow-y-auto py-1">
-          {suggestions.map((entry, idx) => (
-            <button
-              key={entry}
-              type="button"
-              title={entry}
-              className={cn(
-                "w-full px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground",
-                highlightedIndex === idx? "bg-accent text-accent-foreground": "hover:bg-accent/70"
-              )}
-              onMouseDown={(e) => e.preventDefault()}
-              onClick={() => onSelect(entry)}
-            >
-              <span className="block truncate text-left">{entry}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
 
 const FORM_ID = "torrent-creator-form"
 
@@ -115,8 +78,6 @@ export function TorrentCreatorDialog({ instanceId, open, onOpenChange }: Torrent
   // Fetch active trackers for the select dropdown
   const { data: activeTrackers } = useInstanceTrackers(instanceId, { enabled: open })
 
-  const { data: capabilities } = useInstanceCapabilities(instanceId)
-  const supportsPathAutocomplete = capabilities?.supportsPathAutocomplete ?? false
 
   const mutation = useMutation({
     mutationFn: async (data: TorrentCreationParams) => {
@@ -174,36 +135,6 @@ export function TorrentCreatorDialog({ instanceId, open, onOpenChange }: Torrent
     },
   })
 
-  const setSourcePath = useCallback((path: string) => {
-    form.setFieldValue("sourcePath", path)
-  }, [form])
-
-  const setTorrentFilePath = useCallback((path: string) => {
-    form.setFieldValue("torrentFilePath", path)
-  }, [form])
-
-  const {
-    suggestions: sourcePathSuggestions,
-    handleInputChange: handleSourcePathInputChange,
-    handleSelect: handleSourcePathSelect,
-    handleKeyDown: handleSourcePathKeyDown,
-    highlightedIndex: sourcePathHighlightedIndex,
-    showSuggestions: showSourcePathSuggestions,
-    inputRef: sourcePathInputRef,
-    listRef: sourcePathListRef,
-  } = usePathAutocomplete(setSourcePath, instanceId, { includeFiles: true })
-
-  const {
-    suggestions: torrentFilePathSuggestions,
-    handleInputChange: handleTorrentFilePathInputChange,
-    handleSelect: handleTorrentFilePathSelect,
-    handleKeyDown: handleTorrentFilePathKeyDown,
-    highlightedIndex: torrentFilePathHighlightedIndex,
-    showSuggestions: showTorrentFilePathSuggestions,
-    inputRef: torrentFilePathInputRef,
-    listRef: torrentFilePathListRef,
-  } = usePathAutocomplete(setTorrentFilePath, instanceId)
-
   useEffect(() => {
     if (!supportsFormatSelection) {
       form.setFieldValue("format", "v1")
@@ -253,32 +184,16 @@ export function TorrentCreatorDialog({ instanceId, open, onOpenChange }: Torrent
                   <Label htmlFor="sourcePath">
                     {t("creatorDialog.sourcePath")} <span className="text-destructive">*</span>
                   </Label>
-                  <Input
+                  <PathInput
                     id="sourcePath"
-                    ref={supportsPathAutocomplete ? sourcePathInputRef : undefined}
+                    instanceId={instanceId}
+                    includeFiles
                     placeholder={t("creatorDialog.sourcePathPlaceholder")}
-                    autoComplete="off"
-                    spellCheck={false}
                     value={field.state.value}
                     onBlur={field.handleBlur}
-                    onKeyDown={supportsPathAutocomplete ? handleSourcePathKeyDown : undefined}
-                    onChange={(e) => {
-                      field.handleChange(e.target.value)
-                      if (supportsPathAutocomplete) {
-                        handleSourcePathInputChange(e.target.value)
-                      }
-                    }}
+                    onValueChange={field.handleChange}
                     required
                   />
-
-                  {supportsPathAutocomplete && showSourcePathSuggestions && (
-                    <PathSuggestions
-                      suggestions={sourcePathSuggestions}
-                      highlightedIndex={sourcePathHighlightedIndex}
-                      onSelect={handleSourcePathSelect}
-                      listRef={sourcePathListRef}
-                    />
-                  )}
 
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <span>{t("creatorDialog.sourcePathHelp")}</span>
@@ -513,32 +428,15 @@ export function TorrentCreatorDialog({ instanceId, open, onOpenChange }: Torrent
                   {(field) => (
                     <div className="space-y-2">
                       <Label htmlFor="torrentFilePath">{t("creatorDialog.saveTorrentTo")}</Label>
-                      <Input
+                      <PathInput
                         id="torrentFilePath"
-                        ref={supportsPathAutocomplete ? torrentFilePathInputRef : undefined}
+                        instanceId={instanceId}
                         placeholder={t("creatorDialog.saveTorrentToPlaceholder")}
-                        autoComplete="off"
-                        spellCheck={false}
                         value={field.state.value}
                         aria-invalid={field.state.meta.isTouched && !!field.state.meta.errors[0]}
                         onBlur={field.handleBlur}
-                        onKeyDown={supportsPathAutocomplete ? handleTorrentFilePathKeyDown : undefined}
-                        onChange={(e) => {
-                          field.handleChange(e.target.value)
-                          if (supportsPathAutocomplete) {
-                            handleTorrentFilePathInputChange(e.target.value)
-                          }
-                        }}
+                        onValueChange={field.handleChange}
                       />
-
-                      {supportsPathAutocomplete && showTorrentFilePathSuggestions && (
-                        <PathSuggestions
-                          suggestions={torrentFilePathSuggestions}
-                          highlightedIndex={torrentFilePathHighlightedIndex}
-                          onSelect={handleTorrentFilePathSelect}
-                          listRef={torrentFilePathListRef}
-                        />
-                      )}
 
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <span>{t("creatorDialog.saveTorrentToHelp")}</span>

@@ -479,9 +479,9 @@ describe("InstancePreferencesDialog", () => {
     await waitFor(async () => expect((await fieldFor("preferences.fileManagement.defaultSavePath")).getAttribute("autocomplete")).toBe("off"))
     const savePath = await fieldFor("preferences.fileManagement.defaultSavePath")
     fireEvent.change(savePath, { target: { value: "/data/m" } })
-    const movies = await screen.findByRole("button", { name: "/data/movies" })
-    expect(screen.getByRole("button", { name: "/data/music" })).toBeTruthy()
-    expect(screen.queryByRole("button", { name: "/data/tv" })).toBeNull()
+    const movies = await screen.findByRole("option", { name: "movies" })
+    expect(screen.getByRole("option", { name: "music" })).toBeTruthy()
+    expect(screen.queryByRole("option", { name: "tv" })).toBeNull()
     fireEvent.click(movies)
     expect(savePath.value).toBe("/data/movies/")
     expect(listed).toContain("/data/")
@@ -500,10 +500,10 @@ describe("InstancePreferencesDialog", () => {
     await waitFor(async () => expect((await fieldFor("preferences.fileManagement.defaultSavePath")).getAttribute("autocomplete")).toBe("off"))
     const savePath = await fieldFor("preferences.fileManagement.defaultSavePath")
     fireEvent.change(savePath, { target: { value: "/data/m" } })
-    await screen.findByRole("button", { name: "/data/movies" })
+    await screen.findByRole("option", { name: "movies" })
 
     fireEvent.keyDown(savePath, { key: "Escape" })
-    await waitFor(() => expect(screen.queryByRole("button", { name: "/data/movies" })).toBeNull())
+    await waitFor(() => expect(screen.queryByRole("option", { name: "movies" })).toBeNull())
     expect(onOpenChange).not.toHaveBeenCalled()
 
     fireEvent.keyDown(savePath, { key: "Escape" })
@@ -537,9 +537,9 @@ describe("InstancePreferencesDialog", () => {
       { key: "ip_filter_enabled", value: true, tab: "connection", section: "ipFiltering", control: "switch" },
       { key: "ip_filter_path", value: "", tab: "connection", section: "ipFiltering", control: "path", dependsOn: "ip_filter_enabled" },
     ], { supportsPathAutocomplete: true })
-    const { queryClient } = renderDialog("connection")
+    renderDialog("connection")
 
-    await waitFor(() => expect(queryClient.getQueryData(["instance-capabilities", 1])).toBeDefined())
+    // A file field is a plain text box, so it never lists folders.
     const filterPath = await fieldFor("preferences.connectionSettings.ipFilterPath")
     expect(filterPath.getAttribute("autocomplete")).toBeNull()
     fireEvent.change(filterPath, { target: { value: "/data/m" } })

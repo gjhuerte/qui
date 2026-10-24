@@ -249,5 +249,10 @@
     },
     "perSecond": "{{unit}}/с",
     "valueWithUnit": "{{value}} {{unit}}"
+  },
+  "pathInput": {
+    "loading": "Завантаження...",
+    "empty": "Ця папка порожня",
+    "noMatches": "Немає збігів"
   }
 }

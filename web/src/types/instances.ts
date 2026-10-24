@@ -171,6 +171,8 @@ export interface InstanceCapabilities {
   subcategoriesAlwaysEnabled: boolean
   supportsTorrentTmpPath: boolean
   supportsPathAutocomplete: boolean
+  /** qBittorrent 5.0+ lists folders, or qui lists them through the filesystem access of the instance. */
+  supportsFolderBrowsing?: boolean
   supportsTestEmail: boolean
   supportsFreeSpacePathSource: boolean
   supportsSetRSSFeedURL: boolean

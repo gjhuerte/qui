@@ -36,6 +36,7 @@ import {
 import { FieldHelp } from "@/components/ui/field-help"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { PathInput } from "@/components/ui/path-input"
 import { MultiSelect, type Option } from "@/components/ui/multi-select"
 import {
   Select,
@@ -57,7 +58,6 @@ import { useInstanceMetadata } from "@/hooks/useInstanceMetadata"
 import { useIndexerTrackerDomains } from "@/hooks/useIndexerTrackerDomains"
 import { useInstanceTrackers } from "@/hooks/useInstanceTrackers"
 import { useInstances } from "@/hooks/useInstances"
-import { usePathAutocomplete } from "@/hooks/usePathAutocomplete"
 import { buildTrackerCustomizationMaps, trackerGroupKey, useTrackerCustomizations } from "@/hooks/useTrackerCustomizations"
 import { useTrackerIcons } from "@/hooks/useTrackerIcons"
 import { api } from "@/lib/api"
@@ -88,7 +88,6 @@ import type {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { ArrowDown, ArrowUp, Folder, Info, Loader2, Plus, X } from "lucide-react"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { createPortal } from "react-dom"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { AutomationActivityRunDialog } from "./AutomationActivityRunDialog"
@@ -770,7 +769,6 @@ export function WorkflowDialog({ open, onOpenChange, instanceId, rule, onSuccess
 
   const supportsTrackerHealth = capabilities?.supportsTrackerHealth ?? false
   const supportsFreeSpacePathSource = capabilities?.supportsFreeSpacePathSource ?? false
-  const supportsPathAutocomplete = capabilities?.supportsPathAutocomplete ?? false
   const ruleInstance = useMemo(() => instances?.find(i => i.id === instanceId), [instances, instanceId])
   const hasLocalFilesystemAccess = ruleInstance?.hasLocalFilesystemAccess ?? false
   const hasTrustedIdentity = ruleInstance?.capabilities.trustedIdentity ?? false
@@ -789,24 +787,6 @@ export function WorkflowDialog({ open, onOpenChange, instanceId, rule, onSuccess
     [supportsTrackerHealth, canRead, hasTrustedIdentity]
   )
 
-  // Callback for path autocomplete suggestion selection
-  const handleFreeSpacePathSelect = useCallback((path: string) => {
-    setFormState(prev => ({ ...prev, exprFreeSpaceSourcePath: path }))
-    setFreeSpaceSourcePathError(null)
-  }, [])
-
-  // Path autocomplete for free space source
-  const {
-    suggestions: freeSpaceSuggestions,
-    handleInputChange: handleFreeSpacePathInputChange,
-    handleSelect: handleFreeSpacePathSelectSuggestion,
-    handleKeyDown: handleFreeSpacePathKeyDown,
-    highlightedIndex: freeSpaceHighlightedIndex,
-    showSuggestions: showFreeSpaceSuggestions,
-    inputRef: freeSpacePathInputRef,
-    listRef: freeSpaceListRef,
-  } = usePathAutocomplete(handleFreeSpacePathSelect, instanceId)
-
   const pathTemplateHelp = (docsUrl: string) => (
     <>
       {t("preferences.workflowDialog.templateHelp.absolutePath")}{" "}
@@ -818,24 +798,6 @@ export function WorkflowDialog({ open, onOpenChange, instanceId, rule, onSuccess
       </a>
     </>
   )
-
-  // Container and position for autocomplete dropdown portal (inside dialog, outside scroll)
-  const dropdownContainerRef = useRef<HTMLDivElement>(null)
-  const [dropdownRect, setDropdownRect] = useState<{ top: number; left: number; width: number } | null>(null)
-
-  useEffect(() => {
-    if (showFreeSpaceSuggestions && freeSpaceSuggestions.length > 0 && freeSpacePathInputRef.current && dropdownContainerRef.current) {
-      const inputRect = freeSpacePathInputRef.current.getBoundingClientRect()
-      const containerRect = dropdownContainerRef.current.getBoundingClientRect()
-      setDropdownRect({
-        top: inputRect.bottom - containerRect.top,
-        left: inputRect.left - containerRect.left,
-        width: inputRect.width,
-      })
-    } else {
-      setDropdownRect(null)
-    }
-  }, [showFreeSpaceSuggestions, freeSpaceSuggestions.length, freeSpacePathInputRef])
 
   // Build category options for the category action dropdown
   const categoryOptions = useMemo(() => {
@@ -2290,10 +2252,6 @@ export function WorkflowDialog({ open, onOpenChange, instanceId, rule, onSuccess
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="sm:max-w-4xl lg:max-w-5xl max-h-[90dvh] flex flex-col p-2 sm:p-6">
-          {/* Container for portaled dropdowns - outside scroll area but inside dialog */}
-          <div ref={dropdownContainerRef} className="absolute inset-0 pointer-events-none overflow-visible" style={{ zIndex: 100 }}>
-            {/* Dropdown portals render here */}
-          </div>
           <DialogHeader>
             <DialogTitle>{rule ? t("preferences.workflowDialog.editWorkflow") : t("preferences.workflowDialog.addWorkflow")}</DialogTitle>
           </DialogHeader>
@@ -3890,12 +3848,12 @@ export function WorkflowDialog({ open, onOpenChange, instanceId, rule, onSuccess
                             {t("preferences.workflowDialog.move.newSavePath")}
                             <FieldHelp>{pathTemplateHelp(MOVE_PATH_DOCS_URL)}</FieldHelp>
                           </Label>
-                          <Input
+                          <PathInput
                             ref={movePathInputRef}
-                            type="text"
+                            instanceId={instanceId}
                             value={formState.exprMovePath}
-                            onChange={(e) => {
-                              setFormState(prev => ({ ...prev, exprMovePath: e.target.value }))
+                            onValueChange={(value) => {
+                              setFormState(prev => ({ ...prev, exprMovePath: value }))
                               setMovePathServerError(null)
                             }}
                             placeholder={t("preferences.workflowDialog.move.placeholder")}
@@ -3975,8 +3933,6 @@ export function WorkflowDialog({ open, onOpenChange, instanceId, rule, onSuccess
                         }))
                         if (nextType !== "path") {
                           setFreeSpaceSourcePathError(null)
-                          // Clear autocomplete state to prevent stale suggestions
-                          handleFreeSpacePathInputChange("")
                         }
                       }}
                     >
@@ -3994,21 +3950,14 @@ export function WorkflowDialog({ open, onOpenChange, instanceId, rule, onSuccess
                       <div className="flex flex-col gap-1">
                         <div className="relative">
                           <Folder className="absolute left-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground z-10" />
-                          <Input
-                            ref={supportsPathAutocomplete ? freeSpacePathInputRef : undefined}
+                          <PathInput
+                            instanceId={instanceId}
                             value={formState.exprFreeSpaceSourcePath}
-                            autoComplete="off"
-                            spellCheck={false}
-                            onKeyDown={supportsPathAutocomplete ? handleFreeSpacePathKeyDown : undefined}
-                            onChange={(e) => {
-                              const nextPath = e.target.value
+                            onValueChange={(nextPath) => {
                               setFormState(prev => ({
                                 ...prev,
                                 exprFreeSpaceSourcePath: nextPath,
                               }))
-                              if (supportsPathAutocomplete) {
-                                handleFreeSpacePathInputChange(nextPath)
-                              }
                               if (freeSpaceSourcePathError && nextPath.trim() !== "") {
                                 setFreeSpaceSourcePathError(null)
                               }
@@ -4017,36 +3966,6 @@ export function WorkflowDialog({ open, onOpenChange, instanceId, rule, onSuccess
                             className={cn("h-8 text-xs pl-7", freeSpaceSourcePathError && "border-destructive/50")}
                           />
                         </div>
-                        {dropdownRect && dropdownContainerRef.current && createPortal(
-                          <div
-                            ref={freeSpaceListRef}
-                            className="absolute rounded-md border bg-popover text-popover-foreground shadow-md pointer-events-auto"
-                            style={{
-                              top: dropdownRect.top,
-                              left: dropdownRect.left,
-                              width: dropdownRect.width,
-                            }}
-                          >
-                            <div className="max-h-40 overflow-y-auto py-1">
-                              {freeSpaceSuggestions.map((entry, idx) => (
-                                <button
-                                  key={entry}
-                                  type="button"
-                                  title={entry}
-                                  className={cn(
-                                    "w-full px-3 py-1.5 text-xs text-left",
-                                    freeSpaceHighlightedIndex === idx ? "bg-accent text-accent-foreground" : "hover:bg-accent hover:text-accent-foreground"
-                                  )}
-                                  onMouseDown={(e) => e.preventDefault()}
-                                  onClick={() => handleFreeSpacePathSelectSuggestion(entry)}
-                                >
-                                  <span className="block truncate">{entry}</span>
-                                </button>
-                              ))}
-                            </div>
-                          </div>,
-                          dropdownContainerRef.current
-                        )}
                         {freeSpaceSourcePathError && (
                           <p className="text-xs text-destructive">{freeSpaceSourcePathError}</p>
                         )}

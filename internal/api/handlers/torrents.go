@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/fs"
 	"mime"
 	"mime/multipart"
 	"net/http"
@@ -57,6 +58,8 @@ type TorrentsHandler struct {
 	torrentDownloader torrentDownloader // nil when no indexer service is configured
 	contentResolver   torrentContentResolver
 	archiveExporter   torrentArchiveExporter
+	// folderLister lists folders from disk for a qBittorrent that cannot list them; nil without filesystem access.
+	folderLister folderLister
 }
 
 // truncateExpr truncates long filter expressions for cleaner logging
@@ -2700,6 +2703,26 @@ func (h *TorrentsHandler) GetDirectoryContent(w http.ResponseWriter, r *http.Req
 	if !ok {
 		RespondError(w, http.StatusBadRequest, "Invalid mode")
 		return
+	}
+
+	// qBittorrent before 5.0 cannot list folders. Then qui lists them itself,
+	// like Flood does, when it can read the disk of the instance.
+	if client, clientErr := h.syncManager.GetClient(r.Context(), instanceID); clientErr != nil || !client.SupportsPathAutocomplete() {
+		paths, handled, err := h.listFromDisk(r.Context(), instanceID, dirPath, mode)
+		if handled {
+			switch {
+			case err == nil:
+				RespondJSON(w, http.StatusOK, paths)
+			case errors.Is(err, fs.ErrNotExist):
+				RespondError(w, http.StatusNotFound, "Directory not found")
+			case errors.Is(err, fs.ErrPermission):
+				RespondError(w, http.StatusForbidden, "Permission denied")
+			default:
+				log.Error().Err(err).Int("instanceID", instanceID).Msg("Failed to list directory from disk")
+				RespondError(w, http.StatusInternalServerError, "Failed to get directory contents")
+			}
+			return
+		}
 	}
 
 	response, err := h.syncManager.GetDirectoryContentCtx(r.Context(), instanceID, dirPath, mode, withMetadata)

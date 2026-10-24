@@ -52,6 +52,7 @@ import {
 import { FieldHelp } from "@/components/ui/field-help"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { PathInput } from "@/components/ui/path-input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   Select,
@@ -1796,6 +1797,7 @@ const DEFAULT_RULE_FORM_STATE: RuleFormState = {
 }
 
 interface RuleFormFieldsProps {
+  instanceId: number
   state: RuleFormState
   onChange: <K extends keyof RuleFormState>(field: K, value: RuleFormState[K]) => void
   feeds: FeedInfo[]
@@ -1805,6 +1807,7 @@ interface RuleFormFieldsProps {
 }
 
 function RuleFormFields({
+  instanceId,
   state,
   onChange,
   feeds,
@@ -1908,11 +1911,12 @@ function RuleFormFields({
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor={`${idPrefix}-save-path`}>{t("ruleForm.savePath")}</Label>
-          <Input
+          <PathInput
             id={`${idPrefix}-save-path`}
+            instanceId={instanceId}
             placeholder={t("ruleForm.savePathPlaceholder")}
             value={state.savePath}
-            onChange={(e) => onChange("savePath", e.target.value)}
+            onValueChange={(value) => onChange("savePath", value)}
           />
         </div>
         <div className="space-y-2">
@@ -2097,6 +2101,7 @@ function AddRuleDialog({
           <Separator />
 
           <RuleFormFields
+            instanceId={instanceId}
             state={formState}
             onChange={handleFieldChange}
             feeds={feeds}
@@ -2222,6 +2227,7 @@ function EditRuleDialog({
         </DialogHeader>
         <div className="space-y-4 py-4">
           <RuleFormFields
+            instanceId={instanceId}
             state={formState}
             onChange={handleFieldChange}
             feeds={feeds}

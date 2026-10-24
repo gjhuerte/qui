@@ -242,5 +242,10 @@
     },
     "perSecond": "{{unit}}/s",
     "valueWithUnit": "{{value}} {{unit}}"
+  },
+  "pathInput": {
+    "loading": "Načítání...",
+    "empty": "Tato složka je prázdná",
+    "noMatches": "Žádné shody"
   }
 }

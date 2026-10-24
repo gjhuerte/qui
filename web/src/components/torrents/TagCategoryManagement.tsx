@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { PathInput } from "@/components/ui/path-input"
 import { api } from "@/lib/api"
 import type { Category } from "@/types"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
@@ -215,10 +216,11 @@ export function CreateCategoryDialog({ open, onOpenChange, instanceId, parent }:
           </div>
           <div className="space-y-2">
             <Label htmlFor="savePath">{t("tagCategoryManagement.createCategory.savePath")}</Label>
-            <Input
+            <PathInput
               id="savePath"
+              instanceId={instanceId}
               value={savePath}
-              onChange={(e) => setSavePath(e.target.value)}
+              onValueChange={setSavePath}
               placeholder={t("tagCategoryManagement.createCategory.savePathPlaceholder")}
             />
           </div>
@@ -295,13 +297,16 @@ export function EditCategoryDialog({ open, onOpenChange, instanceId, category }:
             readOnly
           />
           <Label htmlFor="editSavePath">{t("tagCategoryManagement.editCategory.newSavePath")}</Label>
-          <Input
+          <PathInput
             id="editSavePath"
+            instanceId={instanceId}
+            rootPath={category.savePath || undefined}
             value={newSavePath}
-            onChange={(e) => setNewSavePath(e.target.value)}
+            onValueChange={setNewSavePath}
             placeholder={t("tagCategoryManagement.editCategory.placeholder")}
             onKeyDown={(e) => {
-              if (e.key === "Enter") {
+              // The path picker prevents the default when Enter picks a folder from its list.
+              if (e.key === "Enter" && !e.defaultPrevented) {
                 handleSave()
               }
             }}

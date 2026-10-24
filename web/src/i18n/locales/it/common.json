@@ -235,5 +235,10 @@
     },
     "perSecond": "{{unit}}/s",
     "valueWithUnit": "{{value}} {{unit}}"
+  },
+  "pathInput": {
+    "loading": "Caricamento...",
+    "empty": "Questa cartella è vuota",
+    "noMatches": "Nessuna corrispondenza"
   }
 }

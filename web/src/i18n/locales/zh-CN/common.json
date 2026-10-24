@@ -228,5 +228,10 @@
     },
     "perSecond": "{{unit}}/s",
     "valueWithUnit": "{{value}} {{unit}}"
+  },
+  "pathInput": {
+    "loading": "加载中...",
+    "empty": "此文件夹为空",
+    "noMatches": "无匹配项"
   }
 }

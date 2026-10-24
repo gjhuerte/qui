@@ -7,11 +7,10 @@ import { Button } from "@/components/ui/button"
 import { FieldHelp } from "@/components/ui/field-help"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { PathInput } from "@/components/ui/path-input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
-import { useInstanceCapabilities } from "@/hooks/useInstanceCapabilities"
-import { usePathAutocomplete } from "@/hooks/usePathAutocomplete"
 import { api } from "@/lib/api"
 import { useIncognitoMode } from "@/lib/incognito"
 import { BYTES_PER_UNIT, unitLabel, type ByteUnit } from "@/lib/unit-format"
@@ -144,68 +143,35 @@ function TextWidget({ id, field, labels, value, onChange, disabled }: WidgetProp
   )
 }
 
-// qBittorrent 5.0 and later can list folders, so a folder field suggests them as the user types.
-// A file field, such as the IP filter, has no option source and gets no suggestions. The same
-// input stays mounted when the capabilities arrive, so a user who types early keeps the focus.
+// A folder field opens a folder browser on qBittorrent 5.0 and later, which can list folders.
+// A file field, such as the IP filter, has no option source and stays a plain text field.
 function PathWidget({ id, instanceId, field, labels, value, onChange, disabled }: WidgetProps) {
   const { t } = useTranslation("instances")
   const [incognitoMode] = useIncognitoMode()
-  const { data: capabilities } = useInstanceCapabilities(instanceId)
-  const suggestsFolders = capabilities?.supportsPathAutocomplete && field.optionSource === "pathAutocomplete"
-  const {
-    suggestions,
-    handleInputChange,
-    handleSelect,
-    handleKeyDown,
-    handleBlur,
-    highlightedIndex,
-    showSuggestions,
-    inputRef,
-    listRef,
-  } = usePathAutocomplete(onChange, instanceId)
+  const placeholder = labels.placeholderKey ? t(labels.placeholderKey) : undefined
 
   return (
     <div className="space-y-2">
       <FieldLabel id={id} labels={labels} />
-      <Input
-        ref={inputRef}
-        id={id}
-        autoComplete={suggestsFolders ? "off" : undefined}
-        spellCheck={false}
-        value={String(value ?? "")}
-        disabled={disabled}
-        placeholder={labels.placeholderKey ? t(labels.placeholderKey) : undefined}
-        onChange={(e) => {
-          onChange(e.target.value)
-          if (suggestsFolders) handleInputChange(e.target.value)
-        }}
-        onKeyDown={handleKeyDown}
-        onBlur={handleBlur}
-        className={incognitoMode ? "blur-sm select-none" : undefined}
-      />
-      {showSuggestions && (
-        <div className="relative">
-          <div ref={listRef} className="absolute left-0 right-0 z-50 mt-1 rounded-md border bg-popover text-popover-foreground shadow-md">
-            <div className="max-h-55 overflow-y-auto py-1">
-              {suggestions.map((entry, index) => (
-                <button
-                  key={entry}
-                  type="button"
-                  title={incognitoMode ? undefined : entry}
-                  className={cn(
-                    "w-full px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground",
-                    highlightedIndex === index ? "bg-accent text-accent-foreground" : "hover:bg-accent/70",
-                    incognitoMode && "blur-sm"
-                  )}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => handleSelect(entry)}
-                >
-                  <span className="block truncate text-left">{entry}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
+      {field.optionSource === "pathAutocomplete" ? (
+        <PathInput
+          id={id}
+          instanceId={instanceId}
+          value={String(value ?? "")}
+          disabled={disabled}
+          placeholder={placeholder}
+          onValueChange={onChange}
+        />
+      ) : (
+        <Input
+          id={id}
+          spellCheck={false}
+          value={String(value ?? "")}
+          disabled={disabled}
+          placeholder={placeholder}
+          onChange={(e) => onChange(e.target.value)}
+          className={incognitoMode ? "blur-sm select-none" : undefined}
+        />
       )}
     </div>
   )
@@ -289,9 +255,8 @@ function scanDirsOf(folders: WatchFolder[]): Record<string, number | string> {
   return scanDirs
 }
 
-function WatchFoldersWidget({ labels, value, onChange, disabled }: WidgetProps) {
+function WatchFoldersWidget({ instanceId, labels, value, onChange, disabled }: WidgetProps) {
   const { t } = useTranslation("instances")
-  const [incognitoMode] = useIncognitoMode()
   // The rows live here, so that a row with an empty path stays while the user fills it in.
   const [folders, setFolders] = useState(() => watchFoldersOf(value))
   const update = (next: WatchFolder[]) => {
@@ -300,7 +265,6 @@ function WatchFoldersWidget({ labels, value, onChange, disabled }: WidgetProps) 
   }
   const updateRow = (index: number, change: Partial<WatchFolder>) =>
     update(folders.map((folder, i) => i === index ? { ...folder, ...change } : folder))
-  const blur = incognitoMode ? "blur-sm select-none" : undefined
 
   return (
     <div className="space-y-3">
@@ -326,12 +290,12 @@ function WatchFoldersWidget({ labels, value, onChange, disabled }: WidgetProps) 
           <div className="grid grid-cols-1 items-start gap-3 md:grid-cols-2">
             <div className="space-y-2">
               <Label className="text-sm font-medium">{t("preferences.fileManagement.watchFolders.monitoredFolderLabel")}</Label>
-              <Input
+              <PathInput
+                instanceId={instanceId}
                 value={folder.path}
                 disabled={disabled}
-                onChange={(e) => updateRow(index, { path: e.target.value })}
+                onValueChange={(path) => updateRow(index, { path })}
                 placeholder={t("preferences.fileManagement.watchFolders.monitoredFolderPlaceholder")}
-                className={blur}
               />
             </div>
             <div className="space-y-2">
@@ -356,12 +320,12 @@ function WatchFoldersWidget({ labels, value, onChange, disabled }: WidgetProps) 
           {folder.destination === "other" && (
             <div className="space-y-2">
               <Label className="text-sm font-medium">{t("preferences.fileManagement.watchFolders.customSavePathLabel")}</Label>
-              <Input
+              <PathInput
+                instanceId={instanceId}
                 value={folder.otherPath}
                 disabled={disabled || !folder.path}
-                onChange={(e) => updateRow(index, { otherPath: e.target.value })}
+                onValueChange={(otherPath) => updateRow(index, { otherPath })}
                 placeholder={t("preferences.fileManagement.watchFolders.customSavePathPlaceholder")}
-                className={blur}
               />
             </div>
           )}

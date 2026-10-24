@@ -84,6 +84,13 @@ func (h *InstancesHandler) GetInstanceCapabilities(w http.ResponseWriter, r *htt
 	}
 
 	capabilities := NewInstanceCapabilitiesResponse(client)
+	// qBittorrent before 5.0 cannot list folders, but qui can when it reads the
+	// disk of the instance (local or SSH access).
+	if !capabilities.SupportsFolderBrowsing && h.instanceStore != nil {
+		if instance, err := h.instanceStore.Get(ctx, instanceID); err == nil {
+			capabilities.SupportsFolderBrowsing = models.FilesystemCapabilitiesOf(instance).Read
+		}
+	}
 	RespondJSON(w, http.StatusOK, capabilities)
 }
 

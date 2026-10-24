@@ -235,5 +235,10 @@
     },
     "perSecond": "{{unit}}/s",
     "valueWithUnit": "{{value}} {{unit}}"
+  },
+  "pathInput": {
+    "loading": "Wird geladen...",
+    "empty": "Dieser Ordner ist leer",
+    "noMatches": "Keine Treffer"
   }
 }

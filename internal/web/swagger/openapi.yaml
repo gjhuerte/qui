@@ -7191,6 +7191,9 @@ components:
         supportsPathAutocomplete:
           type: boolean
           description: Whether the instance can list folders for path autocomplete (WebAPI 2.11.2+, qBittorrent 5.0+).
+        supportsFolderBrowsing:
+          type: boolean
+          description: Whether the folder picker can list folders, through qBittorrent (5.0+) or through the local or SSH filesystem access of the instance. GET /api/instances/{instanceID}/getDirectoryContent uses the filesystem access when qBittorrent cannot list folders.
         supportsTestEmail:
           type: boolean
           description: Whether the instance can send a test email (WebAPI 2.11.2+, qBittorrent 5.0+).

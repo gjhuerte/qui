@@ -15,9 +15,6 @@ vi.mock("sonner", () => ({ toast: { success: vi.fn(), error: vi.fn() } }))
 vi.mock("@tanstack/react-virtual", () => ({
   useVirtualizer: () => ({ getTotalSize: () => 0, getVirtualItems: () => [] }),
 }))
-vi.mock("@/hooks/usePathAutocomplete", () => ({
-  usePathAutocomplete: () => ({ suggestions: [], isLoading: false }),
-}))
 
 afterEach(cleanup)
 

@@ -552,6 +552,7 @@ export const CAPABILITIES: InstanceCapabilities = {
   subcategoriesAlwaysEnabled: false,
   supportsTorrentTmpPath: true,
   supportsPathAutocomplete: false,
+  supportsFolderBrowsing: false,
   supportsTestEmail: false,
   supportsFreeSpacePathSource: false,
   supportsSetRSSFeedURL: false,

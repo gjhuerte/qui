@@ -14,6 +14,7 @@ import {
   DialogTrigger
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
+import { PathInput } from "@/components/ui/path-input"
 import { Label } from "@/components/ui/label"
 import {
   Select,
@@ -37,7 +38,6 @@ import {
 } from "@/components/ui/tooltip"
 import { useInstanceCapabilities } from "@/hooks/useInstanceCapabilities.ts"
 import { useInstanceMetadata } from "@/hooks/useInstanceMetadata"
-import { usePathAutocomplete } from "@/hooks/usePathAutocomplete"
 import { useAddTorrentPreferences } from "@/hooks/usePreferenceValues"
 import { api } from "@/lib/api"
 import { canOfferManualCrossSeed } from "@/lib/manual-cross-seed"
@@ -190,7 +190,6 @@ export function AddTorrentDialog({ instanceId, open: controlledOpen, onOpenChang
 
   const { data: capabilities } = useInstanceCapabilities(instanceId)
   const supportsTorrentTmpPath = capabilities?.supportsTorrentTmpPath ?? false
-  const supportsPathAutocomplete = capabilities?.supportsPathAutocomplete ?? false
 
   // Reset tag state when dialog closes
   useEffect(() => {
@@ -640,36 +639,6 @@ export function AddTorrentDialog({ instanceId, open: controlledOpen, onOpenChang
     if (pristine("tempPath")) form.setFieldValue("tempPath", preferenceDefaults.tempPath, opts)
     if (pristine("startPaused")) form.setFieldValue("startPaused", preferenceDefaults.startPaused, opts)
   }, [form, addTorrentPreferences.loaded, preferenceDefaults])
-
-  const setSavePath = useCallback((path: string) => {
-    form.setFieldValue("savePath", path)
-  }, [form])
-
-  const setTempPath = useCallback((path: string) => {
-    form.setFieldValue("tempPath", path)
-  }, [form])
-
-  const {
-    suggestions: saveSuggestions,
-    handleInputChange: handleSaveInputChange,
-    handleSelect: handleSaveInputSelect,
-    handleKeyDown: handleSaveKeyDown,
-    highlightedIndex: saveHighlightedIndex,
-    showSuggestions: showSaveSuggestions,
-    inputRef: savePathInputRef,
-    listRef: savePathListRef,
-  } = usePathAutocomplete(setSavePath, instanceId);
-
-  const {
-    suggestions: tempSuggestions,
-    handleInputChange: handleTempInputChange,
-    handleSelect: handleTempInputSelect,
-    handleKeyDown: handleTempKeyDown,
-    highlightedIndex: tempHighlightedIndex,
-    showSuggestions: showTempSuggestions,
-    inputRef: tempPathInputRef,
-    listRef: tempPathListRef,
-  } = usePathAutocomplete(setTempPath, instanceId);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     // Filter to .torrent files only (iOS Safari may bypass accept attribute filtering)
@@ -1365,46 +1334,14 @@ export function AddTorrentDialog({ instanceId, open: controlledOpen, onOpenChang
                             {(field) => (
                               <div className="space-y-2">
                                 <Label htmlFor="savePath">{t("addTorrentDialog.options.savePath")}</Label>
-                                <Input
+                                <PathInput
                                   id="savePath"
-                                  ref={supportsPathAutocomplete ? savePathInputRef : undefined}
+                                  instanceId={instanceId}
                                   placeholder={preferenceDefaults.savePath || t("addTorrentDialog.options.savePathPlaceholder")}
-                                  autoComplete="off"
-                                  spellCheck={false}
                                   value={field.state.value}
                                   onBlur={field.handleBlur}
-                                  onKeyDown={supportsPathAutocomplete ? handleSaveKeyDown : undefined}
-                                  onChange={(e) => {
-                                    field.handleChange(e.target.value)
-                                    if (supportsPathAutocomplete) {
-                                      handleSaveInputChange(e.target.value)
-                                    }
-                                  }}
+                                  onValueChange={field.handleChange}
                                 />
-
-                                {supportsPathAutocomplete && showSaveSuggestions && saveSuggestions.length > 0 && (
-                                  <div className="relative">
-                                    <div ref={savePathListRef} className="absolute z-50 mt-1 left-0 right-0 rounded-md border bg-popover text-popover-foreground shadow-md">
-                                      <div className="max-h-55 overflow-y-auto py-1">
-                                        {saveSuggestions.map((entry, idx) => (
-                                          <button
-                                            key={entry}
-                                            type="button"
-                                            title={entry}
-                                            className={cn(
-                                              "w-full px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground",
-                                              saveHighlightedIndex === idx? "bg-accent text-accent-foreground": "hover:bg-accent/70"
-                                            )}
-                                            onMouseDown={(e) => e.preventDefault()}
-                                            onClick={() => handleSaveInputSelect(entry)}
-                                          >
-                                            <span className="block truncate text-left">{entry}</span>
-                                          </button>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  </div>
-                                )}
 
                                 <p className="text-xs text-muted-foreground">
                                   {t("addTorrentDialog.options.manualSavePath")}
@@ -1440,46 +1377,14 @@ export function AddTorrentDialog({ instanceId, open: controlledOpen, onOpenChang
                                       return (
                                         <div className="space-y-2 pl-4 border-l-2 border-primary border-opacity-50 data-[temp-path-enabled=true]:block hidden" data-temp-path-enabled={tempPathEnabled}>
                                           <Label htmlFor="tempPath">{t("addTorrentDialog.options.tempPath")}</Label>
-                                          <Input
+                                          <PathInput
                                             id="tempPath"
-                                            ref={supportsPathAutocomplete ? tempPathInputRef : undefined}
+                                            instanceId={instanceId}
                                             placeholder={preferenceDefaults.tempPath || t("addTorrentDialog.options.tempPathPlaceholder")}
-                                            autoComplete="off"
-                                            spellCheck={false}
                                             value={field.state.value}
                                             onBlur={field.handleBlur}
-                                            onKeyDown={supportsPathAutocomplete ? handleTempKeyDown : undefined}
-                                            onChange={(e) => {
-                                              field.handleChange(e.target.value)
-                                              if (supportsPathAutocomplete) {
-                                                handleTempInputChange(e.target.value)
-                                              }
-                                            }}
+                                            onValueChange={field.handleChange}
                                           />
-
-                                          {supportsPathAutocomplete && showTempSuggestions && tempSuggestions.length > 0 && (
-                                            <div className="relative">
-                                              <div ref={tempPathListRef} className="absolute z-50 mt-1 left-0 right-0 rounded-md border bg-popover text-popover-foreground shadow-md">
-                                                <div className="max-h-55 overflow-y-auto py-1">
-                                                  {tempSuggestions.map((entry, idx) => (
-                                                    <button
-                                                      key={entry}
-                                                      type="button"
-                                                      title={entry}
-                                                      className={cn(
-                                                        "w-full px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground",
-                                                        tempHighlightedIndex === idx? "bg-accent text-accent-foreground": "hover:bg-accent/70"
-                                                      )}
-                                                      onMouseDown={(e) => e.preventDefault()}
-                                                      onClick={() => handleTempInputSelect(entry)}
-                                                    >
-                                                      <span className="block truncate text-left">{entry}</span>
-                                                    </button>
-                                                  ))}
-                                                </div>
-                                              </div>
-                                            </div>
-                                          )}
 
                                           <p className="text-xs text-muted-foreground">
                                             {t("addTorrentDialog.options.tempPathDescription")}
