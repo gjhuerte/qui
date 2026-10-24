@@ -44,7 +44,6 @@ import { buildTrackerCustomizationMaps, trackerGroupKey, useTrackerCustomization
 import { useTrackerIcons } from "@/hooks/useTrackerIcons"
 import { EMPTY_SIDEBAR_FILTERS, hasSidebarFilters } from "@/lib/filter-views"
 import { getIncognitoCategories, getIncognitoTags, getIncognitoTrackers, getLinuxCount, useIncognitoMode } from "@/lib/incognito"
-import { useSpreadsheetDisguise } from "@/lib/spreadsheet-disguise"
 import { TRACKER_HEALTH_DISPLAY } from "@/lib/torrent-table/row-display"
 import { cn, formatBytes } from "@/lib/utils"
 import type { Category, TorrentFilters } from "@/types"
@@ -209,9 +208,6 @@ const FilterSidebarComponent = ({
 
   // Use incognito mode hook
   const [incognitoMode] = useIncognitoMode()
-  // Incognito vocabulary changes with the spreadsheet theme, so the fake lists
-  // below have to recompute when the theme switches.
-  const spreadsheetDisguise = useSpreadsheetDisguise()
   const { data: trackerIcons } = useTrackerIcons()
   const { data: trackerCustomizations } = useTrackerCustomizations()
   const { data: capabilities } = useInstanceCapabilities(
@@ -545,16 +541,16 @@ const FilterSidebarComponent = ({
   // Use fake data if in incognito mode, otherwise use props
   // When loading or showing stale data, show empty data to prevent stale data from previous instance
   const categories = useMemo(() => {
-    if (incognitoMode) return getIncognitoCategories(spreadsheetDisguise)
+    if (incognitoMode) return getIncognitoCategories()
     if (isLoading || isStaleData) return {}  // Clear categories during loading or when stale
     return propsCategories || {}
-  }, [incognitoMode, propsCategories, isLoading, isStaleData, spreadsheetDisguise])
+  }, [incognitoMode, propsCategories, isLoading, isStaleData])
 
   const tags = useMemo(() => {
-    if (incognitoMode) return getIncognitoTags(spreadsheetDisguise)
+    if (incognitoMode) return getIncognitoTags()
     if (isLoading || isStaleData) return []  // Clear tags during loading or when stale
     return propsTags || []
-  }, [incognitoMode, propsTags, isLoading, isStaleData, spreadsheetDisguise])
+  }, [incognitoMode, propsTags, isLoading, isStaleData])
 
   // Helper function to check if we have received data from the server
   const hasReceivedData = useCallback((data: unknown) => {
@@ -762,7 +758,7 @@ const FilterSidebarComponent = ({
   // Use fake trackers if in incognito mode or extract from torrentCounts
   // When loading or showing stale data, show empty data to prevent stale data from previous instance
   const trackers = useMemo(() => {
-    if (incognitoMode) return getIncognitoTrackers(spreadsheetDisguise)
+    if (incognitoMode) return getIncognitoTrackers()
     if (isLoading || isStaleData) return []  // Clear trackers during loading or when stale
 
     // Extract unique trackers from torrentCounts
@@ -773,7 +769,7 @@ const FilterSidebarComponent = ({
       .sort() : []
 
     return realTrackers
-  }, [incognitoMode, torrentCounts, isLoading, isStaleData, spreadsheetDisguise])
+  }, [incognitoMode, torrentCounts, isLoading, isStaleData])
 
   const trackerCustomizationMaps = useMemo(
     () => buildTrackerCustomizationMaps(trackerCustomizations),
@@ -1880,6 +1876,7 @@ const FilterSidebarComponent = ({
           >
             {/* Saved Views */}
             <FilterViewsSection
+              instanceId={instanceId}
               selectedFilters={selectedFilters}
               onApply={applyFilterChange}
               hasActiveFilters={hasActiveFilters}

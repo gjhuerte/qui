@@ -8,14 +8,11 @@ import { FALLBACK_THEME } from "@/utils/themeLoader";
 export interface Theme {
   id: string;
   name: string;
-  isPremium?: boolean;
   description?: string;
   lightOnly?: boolean;
   variations?: string[];
   /** True for sideloaded custom themes loaded at runtime from disk. */
   isCustom?: boolean;
-  /** Locked premium stub: preview colors only, never applicable (no license). */
-  locked?: boolean;
   /** Raw CSS for custom themes, injected verbatim as a <style> element. */
   rawCss?: string;
   cssVars: {
@@ -58,7 +55,7 @@ export function registerBuiltinThemes(list: Theme[]): void {
   themes.splice(0, themes.length, ...list);
 }
 
-// Sideloaded custom themes are fetched at runtime (premium-gated) and registered
+// Sideloaded custom themes are fetched at runtime and registered
 // here so the synchronous theme lookups below can resolve their "custom:" ids.
 let customThemes: Theme[] = [];
 
@@ -73,11 +70,6 @@ export function getThemeById(id: string): Theme | undefined {
 
 export function getDefaultTheme(): Theme {
   return themes.find(theme => theme.id === "minimal") || themes[0];
-}
-
-export function isThemePremium(themeId: string): boolean {
-  const theme = getThemeById(themeId);
-  return theme?.isPremium ?? false;
 }
 
 export { themes as default };

@@ -73,7 +73,6 @@ import { isAllInstancesScope } from "@/lib/instances"
 import { resolveFooterSpeeds } from "@/lib/scoped-speeds"
 import { formatSpeedWithUnit, useSpeedUnits } from "@/lib/speedUnits"
 import { unitLabel } from "@/lib/unit-format"
-import { useSpreadsheetDisguise } from "@/lib/spreadsheet-disguise"
 import { resolveStreamFallbackStatus } from "@/lib/stream-status"
 import { buildTorrentFieldRequest, type TorrentFieldName, type TorrentFieldScope, type TorrentFieldSelection } from "@/lib/torrent-field-request"
 import { cn } from "@/lib/utils"
@@ -127,8 +126,6 @@ const NAME_COLUMN_MIN_WIDTH = 160
 // commit from that callback re-renders the whole table at ~10x the cost of the same
 // update from an event handler. Commit once the size has settled instead.
 const STRETCH_RESIZE_SETTLE_MS = 120
-// Must match the .ss-row-gutter width in spreadsheet-chrome.css.
-const SPREADSHEET_ROW_GUTTER_WIDTH = 44
 
 function columnDefId(col: TorrentTableColumnDef): string | null {
   if ("id" in col && col.id) return col.id
@@ -257,9 +254,6 @@ export const TorrentTableOptimized = memo(function TorrentTableOptimized({
 
   const { viewMode: desktopViewMode, cycleViewMode } = usePersistedCompactViewState("desktop")
 
-  // Spreadsheet theme: row numbers down the left edge, with a blank corner cell
-  // in the header. Stacked (compact) rows have no column grid to number.
-  const showRowGutter = useSpreadsheetDisguise() && desktopViewMode !== "compact"
 
   const { trackerIcons, trackerCustomizationLookup } = useTrackerIconCache()
 
@@ -683,7 +677,7 @@ export const TorrentTableOptimized = memo(function TorrentTableOptimized({
       return sum + (columnSizing[id] ?? col.size ?? 0)
     }, 0)
   }, [columns, columnVisibility, columnSizing])
-  const availableWidth = containerWidth - (showRowGutter ? SPREADSHEET_ROW_GUTTER_WIDTH : 0)
+  const availableWidth = containerWidth
   const effectiveStretch = stretchNameColumn && fixedColsWidth + NAME_COLUMN_MIN_WIDTH <= availableWidth
   const effectiveColumnSizing = useMemo(() => {
     if (!effectiveStretch) return columnSizing
@@ -1461,7 +1455,6 @@ export const TorrentTableOptimized = memo(function TorrentTableOptimized({
                 setColumnFilters={setColumnFilters}
                 minTableWidth={minTableWidth}
                 viewMode={desktopViewMode}
-                showRowGutter={showRowGutter}
                 stretchedColumnId={effectiveStretch ? "name" : undefined}
               />
 
@@ -1506,7 +1499,6 @@ export const TorrentTableOptimized = memo(function TorrentTableOptimized({
                       isRowSelected={isRowSelected}
                       desktopViewMode={desktopViewMode as TableViewMode}
                       minTableWidth={minTableWidth}
-                      showRowGutter={showRowGutter}
                       columns={columns}
                       columnSizing={columnSizing}
                       columnVisibility={columnVisibility}

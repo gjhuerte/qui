@@ -11,7 +11,7 @@ const fixture = vi.hoisted(() => {
   const makeTheme = (
     id: string,
     name: string,
-    options: Pick<Theme, "isPremium" | "isCustom" | "variations" | "locked"> = {}
+    options: Pick<Theme, "isCustom" | "variations"> = {}
   ): Theme => ({
     id,
     name,
@@ -42,17 +42,12 @@ const fixture = vi.hoisted(() => {
   const otherTheme = makeTheme("other", "Other theme", {
     variations: ["amber"],
   })
-  // Unlicensed install: the server ships premium themes as locked stubs.
-  const premiumTheme = makeTheme("premium", "Premium theme", {
-    isPremium: true,
-    locked: true,
-  })
   const customTheme = makeTheme("custom:local", "Custom theme", {
     isCustom: true,
   })
 
   return {
-    builtInThemes: [selectedTheme, premiumTheme, otherTheme],
+    builtInThemes: [selectedTheme, otherTheme],
     customThemes: [customTheme],
     selectedTheme,
   }
@@ -62,8 +57,6 @@ vi.mock("@/config/themes", () => ({
   themes: fixture.builtInThemes,
   getThemeById: (id: string) =>
     [...fixture.builtInThemes, ...fixture.customThemes].find((theme) => theme.id === id),
-  isThemePremium: (id: string) =>
-    fixture.builtInThemes.find((theme) => theme.id === id)?.isPremium ?? false,
 }))
 
 vi.mock("@/utils/theme", () => ({
@@ -124,14 +117,11 @@ describe("ThemeToggle", () => {
     const selectedItem = selected.closest("[role=menuitem]") as HTMLElement
     const otherName = screen.getByText("Other theme")
     const otherItem = themeItem("Other theme")
-    const premiumItem = themeItem("Premium theme")
     const customItem = themeItem("Custom theme")
     const items = screen.getAllByRole("menuitem")
 
     expect(items.indexOf(selectedItem)).toBeLessThan(items.indexOf(otherItem))
-    expect(items.indexOf(otherItem)).toBeLessThan(items.indexOf(premiumItem))
-    expect(items.indexOf(premiumItem)).toBeLessThan(items.indexOf(customItem))
-    expect(premiumItem.hasAttribute("data-disabled")).toBe(true)
+    expect(items.indexOf(otherItem)).toBeLessThan(items.indexOf(customItem))
 
     await waitFor(() => expect(swatchCount(selectedItem)).toBe(3))
     expect(swatchCount(otherItem)).toBe(2)
@@ -140,7 +130,6 @@ describe("ThemeToggle", () => {
     const variationRow = otherItem.querySelector("[data-slot=\"theme-variations\"]")
     expect(variationRow).not.toBeNull()
     expect(variationRow?.querySelectorAll("[style]")).toHaveLength(1)
-    expect(screen.queryByText("themeToggle.premium")).toBeNull()
     expect(screen.queryByText("themeToggle.custom")).toBeNull()
   })
 

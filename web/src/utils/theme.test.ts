@@ -24,7 +24,6 @@ beforeEach(() => {
   })))
   registerBuiltinThemes([
     { id: "minimal", name: "Minimal", cssVars },
-    { id: "locked-premium", name: "Locked", isPremium: true, locked: true, cssVars: { light: {}, dark: {} } },
   ])
 })
 
@@ -35,9 +34,9 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
-describe("setTheme locked fallback", () => {
+describe("setTheme unknown-id fallback", () => {
   it("applies the default without persisting or syncing the downgrade", async () => {
-    localStorage.setItem("color-theme", "locked-premium")
+    localStorage.setItem("color-theme", "removed-theme")
 
     const events: Array<{ themeId: string; isSystemChange: boolean }> = []
     const listener = (event: Event) => {
@@ -45,12 +44,12 @@ describe("setTheme locked fallback", () => {
       events.push({ themeId: theme.id, isSystemChange })
     }
     window.addEventListener("themechange", listener)
-    await setTheme("locked-premium")
+    await setTheme("removed-theme")
     window.removeEventListener("themechange", listener)
 
     expect(document.documentElement.getAttribute("data-theme")).toBe("minimal")
-    // The stored selection survives so it comes back when the license does.
-    expect(localStorage.getItem("color-theme")).toBe("locked-premium")
+    // The stored selection survives so a custom theme comes back once its file loads.
+    expect(localStorage.getItem("color-theme")).toBe("removed-theme")
     // Flagged as system-driven so useThemeSettingsSync never pushes the
     // downgrade to the server, which would overwrite the stored selection.
     expect(events).toEqual([{ themeId: "minimal", isSystemChange: true }])
@@ -70,14 +69,14 @@ describe("setTheme locked fallback", () => {
     expect(events).toEqual([true])
   })
 
-  it("keeps a requested variation while the selected theme is locked", async () => {
-    await setTheme("locked-premium", "dark", "purple", true)
+  it("keeps a requested variation while the selected theme is unknown", async () => {
+    await setTheme("removed-theme", "dark", "purple", true)
 
-    expect(getStoredVariation("locked-premium")).toBe("purple")
+    expect(getStoredVariation("removed-theme")).toBe("purple")
   })
 
   it("keeps the stored selection through a mode toggle on the fallback", async () => {
-    localStorage.setItem("color-theme", "locked-premium")
+    localStorage.setItem("color-theme", "removed-theme")
 
     const events: Array<{ themeId: string; isSystemChange: boolean }> = []
     const listener = (event: Event) => {
@@ -88,7 +87,7 @@ describe("setTheme locked fallback", () => {
     await setThemeMode("dark")
     window.removeEventListener("themechange", listener)
 
-    expect(localStorage.getItem("color-theme")).toBe("locked-premium")
+    expect(localStorage.getItem("color-theme")).toBe("removed-theme")
     // A user change dispatched with the applied fallback theme; the sync hook
     // maps it back to the stored selection before pushing to the server.
     expect(events).toEqual([{ themeId: "minimal", isSystemChange: false }])

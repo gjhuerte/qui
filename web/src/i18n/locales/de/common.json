@@ -149,11 +149,9 @@
     "dark": "Dunkel",
     "system": "System",
     "theme": "Design",
-    "premium": "Premium",
     "switchedToMode": "Zu Modus {{mode}} gewechselt",
     "switchedToTheme": "Zu Design {{theme}} gewechselt",
-    "switchedToThemeVariation": "Zu Design {{theme}} ({{variation}}) gewechselt",
-    "premiumThemeError": "Dies ist ein Premium-Design. Öffne Einstellungen → Designs, um eine Lizenz zu aktivieren."
+    "switchedToThemeVariation": "Zu Design {{theme}} ({{variation}}) gewechselt"
   },
   "updateBanner": {
     "updateAvailable": "Update verfügbar",

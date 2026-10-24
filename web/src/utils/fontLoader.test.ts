@@ -8,9 +8,7 @@ import { readdirSync, readFileSync } from "node:fs"
 import { join, resolve } from "node:path"
 import { FONT_MAP, extractFontName } from "./fontLoader"
 
-// Bundled theme CSS lives in the backend assets tree. The premium subdirectory
-// only exists after `make build` fetches it, so locally this covers premium
-// themes too while CI covers the free set.
+// Bundled theme CSS lives in the backend assets tree.
 const THEMES_DIR = resolve(import.meta.dirname, "../../../internal/themes/assets")
 
 // CSS generic keywords never need loading.

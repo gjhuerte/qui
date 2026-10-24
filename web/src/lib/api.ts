@@ -2179,7 +2179,7 @@ class ApiClient {
     return this.request("/themes", { signal })
   }
 
-  // Custom themes (sideloaded CSS files; premium-gated server-side)
+  // Custom themes (sideloaded CSS files)
   async getCustomThemes(): Promise<{
     directory: string
     themes: Array<{ id: string; filename: string; css: string }>
@@ -2187,7 +2187,7 @@ class ApiClient {
     return this.request("/themes/custom")
   }
 
-  // Theme settings (theme selection stored in the database; writes premium-gated server-side)
+  // Theme settings (theme selection stored in the database)
   async getThemeSettings(): Promise<ThemeSlots> {
     return this.request<ThemeSlots>("/themes/settings")
   }

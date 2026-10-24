@@ -3401,23 +3401,9 @@ paths:
                           type: string
                         description:
                           type: string
-                        premium:
-                          type: boolean
                         css:
                           type: string
-                          description: Full theme CSS. Absent on locked premium entries.
-                        preview:
-                          type: object
-                          description: Swatch colors for locked premium entries.
-                          properties:
-                            light:
-                              type: object
-                              additionalProperties:
-                                type: string
-                            dark:
-                              type: object
-                              additionalProperties:
-                                type: string
+                          description: Full theme CSS.
 
   /api/themes/custom:
     get:

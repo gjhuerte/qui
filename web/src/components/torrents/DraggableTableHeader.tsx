@@ -9,6 +9,7 @@ import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { flexRender } from "@tanstack/react-table"
 import { ChevronDown, ChevronUp } from "lucide-react"
+import type { MouseEvent as ReactMouseEvent } from "react"
 import { ColumnFilterPopover } from "./ColumnFilterPopover"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import type { ViewMode } from "@/hooks/usePersistedCompactViewState"
@@ -61,9 +62,33 @@ interface DraggableTableHeaderProps {
   viewMode?: ViewMode
   onFilterChange?: (columnId: string, filter: ColumnFilter | null) => void
   stretched?: boolean
+  // The header to the left, whose resize edge this header's left grab zone extends.
+  previousHeader?: TorrentTableHeader
+  previousStretched?: boolean
 }
 
-export function DraggableTableHeader({ header, columnFilters = [], viewMode = "normal", onFilterChange, stretched = false }: DraggableTableHeaderProps) {
+// Double-click on a resize edge: fit the column to its widest cell.
+function fitColumnToContent(event: ReactMouseEvent<HTMLElement>, header: TorrentTableHeader) {
+  const { column } = header
+  const table = header.getContext().table
+  event.preventDefault()
+  event.stopPropagation()
+  const gridRoot = event.currentTarget.closest("[role=\"grid\"]") as HTMLElement | null
+  const measured = gridRoot ? measureTorrentColumnFitWidth(gridRoot, column.id) : null
+  if (measured === null) {
+    column.resetSize()
+    return
+  }
+  const minSize = column.columnDef.minSize ?? 20
+  const maxSize = column.columnDef.maxSize ?? Number.MAX_SAFE_INTEGER
+  const nextWidth = Math.min(Math.max(Math.ceil(measured), minSize), maxSize)
+  table.setColumnSizing(prev => ({
+    ...prev,
+    [column.id]: nextWidth,
+  }))
+}
+
+export function DraggableTableHeader({ header, columnFilters = [], viewMode = "normal", onFilterChange, stretched = false, previousHeader, previousStretched = false }: DraggableTableHeaderProps) {
   const { column } = header
 
   const isSelectHeader = column.id === "select"
@@ -88,6 +113,9 @@ export function DraggableTableHeader({ header, columnFilters = [], viewMode = "n
 
   // A stretched column's width is derived, so resizing it would only store an invisible value.
   const canResize = column.getCanResize() && !stretched
+  // The cell clips its children, so the grab zone of the edge on the left of
+  // this cell lives here and drives the previous column.
+  const canResizePrevious = !!previousHeader && previousHeader.column.getCanResize() && !previousStretched
   const shouldShowSeparator = canResize || stretched || column.columnDef.enableResizing === false
   const shouldShowSortIndicator = !isSelectHeader && column.getIsSorted() && (isPriorityHeader || !isCompactHeader)
   const canSort = column.getCanSort() || (!!trackerColumn && trackerColumn.getCanSort())
@@ -170,36 +198,28 @@ export function DraggableTableHeader({ header, columnFilters = [], viewMode = "n
         </div>
       </div>
 
+      {/* Grab zone for the edge on the left: resizes the previous column */}
+      {canResizePrevious && previousHeader && (
+        <div
+          aria-hidden="true"
+          data-resize-zone="previous"
+          onMouseDown={previousHeader.getResizeHandler()}
+          onTouchStart={previousHeader.getResizeHandler()}
+          onDoubleClick={(event) => fitColumnToContent(event, previousHeader)}
+          className="absolute left-0 top-0 z-10 h-full w-2 cursor-col-resize select-none touch-none"
+        />
+      )}
+
       {/* Resize handle */}
       {shouldShowSeparator && (
         <div
           onMouseDown={canResize ? header.getResizeHandler() : undefined}
           onTouchStart={canResize ? header.getResizeHandler() : undefined}
           onDoubleClick={(event) => {
-            if (!canResize) {
-              return
-            }
-            event.preventDefault()
-            event.stopPropagation()
-            const gridRoot = event.currentTarget.closest("[role=\"grid\"]") as HTMLElement | null
-            if (!gridRoot) {
-              column.resetSize()
-              return
-            }
-            const measured = measureTorrentColumnFitWidth(gridRoot, column.id)
-            if (measured === null) {
-              column.resetSize()
-              return
-            }
-            const minSize = column.columnDef.minSize ?? 20
-            const maxSize = column.columnDef.maxSize ?? Number.MAX_SAFE_INTEGER
-            const nextWidth = Math.min(Math.max(Math.ceil(measured), minSize), maxSize)
-            table.setColumnSizing(prev => ({
-              ...prev,
-              [column.id]: nextWidth,
-            }))
+            if (canResize) fitColumnToContent(event, header)
           }}
-          className={`absolute right-0 top-0 h-full w-2 select-none group/resize flex justify-end ${canResize ? "cursor-col-resize touch-none" : "pointer-events-none"
+          // 12px of grab area left of the line, plus the 8px zone in the next cell.
+          className={`absolute right-0 top-0 z-10 h-full w-3 select-none group/resize flex justify-end ${canResize ? "cursor-col-resize touch-none" : "pointer-events-none"
           }`}
         >
           <div

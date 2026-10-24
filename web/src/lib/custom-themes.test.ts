@@ -38,7 +38,6 @@ describe("parseCustomThemes", () => {
     expect(theme.description).toBe("Calm blue")
     expect(theme.lightOnly).toBe(true)
     expect(theme.isCustom).toBe(true)
-    expect(theme.isPremium).toBe(true)
     expect(theme.rawCss).toBe(validCss)
     expect(theme.cssVars.light["--primary"]).toBe("oklch(0.5 0.1 250)")
     expect(theme.cssVars.dark["--background"]).toBe("#000000")
@@ -85,7 +84,6 @@ describe("decideCustomThemeAction", () => {
     id: "custom:ocean",
     name: "Ocean",
     isCustom: true,
-    isPremium: true,
     rawCss: ":root{--primary:blue}",
     cssVars: { light: {}, dark: {} },
   }

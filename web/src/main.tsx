@@ -9,7 +9,6 @@ import App from "./App.tsx"
 import { setupLaunchQueueConsumer } from "@/lib/launch-queue"
 import { initI18n } from "./i18n"
 import "./index.css"
-import "./spreadsheet-chrome.css"
 
 setupLaunchQueueConsumer()
 

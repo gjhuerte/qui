@@ -5,6 +5,7 @@
 
 import type { QBittorrentAppInfo } from "./app"
 import type { InstanceError } from "./instances"
+import type { ColumnFilter } from "@/lib/column-filter-utils"
 
 export interface TorrentTracker {
   url: string
@@ -222,6 +223,18 @@ export interface TorrentFilters {
 }
 
 /**
+ * What a saved view stores besides the sidebar filters: the header search, the
+ * table sort, and the column filters. Views saved before these existed carry none.
+ */
+export interface SavedViewTableState {
+  search?: string
+  sorting?: { id: string; desc: boolean }[]
+  columnFilters?: ColumnFilter[]
+}
+
+export type SavedViewState = Partial<TorrentFilters> & SavedViewTableState
+
+/**
  * A named snapshot of TorrentFilters, saved server-side and shared across
  * instances. The backend stores filters as an opaque blob, so treat them as
  * partial and normalize with toViewFilters before use.
@@ -229,14 +242,14 @@ export interface TorrentFilters {
 export interface FilterView {
   id: number
   name: string
-  filters: Partial<TorrentFilters>
+  filters: SavedViewState
   createdAt: string
   updatedAt: string
 }
 
 export interface FilterViewInput {
   name: string
-  filters: Partial<TorrentFilters>
+  filters: SavedViewState
 }
 
 /**

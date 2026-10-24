@@ -341,10 +341,5 @@ export interface BuiltinTheme {
   id: string
   name: string
   description?: string
-  premium: boolean
-  css?: string
-  preview?: {
-    light: Record<string, string>
-    dark: Record<string, string>
-  }
+  css: string
 }

@@ -149,11 +149,9 @@
     "dark": "Fosc",
     "system": "Sistema",
     "theme": "Tema",
-    "premium": "Premium",
     "switchedToMode": "S'ha canviat al mode {{mode}}",
     "switchedToTheme": "S'ha canviat al tema {{theme}}",
-    "switchedToThemeVariation": "S'ha canviat al tema {{theme}} ({{variation}})",
-    "premiumThemeError": "Aquest és un tema premium. Obre Configuració → Temes per activar una llicència."
+    "switchedToThemeVariation": "S'ha canviat al tema {{theme}} ({{variation}})"
   },
   "updateBanner": {
     "updateAvailable": "Actualització disponible",

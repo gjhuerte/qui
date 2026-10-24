@@ -19,6 +19,24 @@ const mocks = vi.hoisted(() => ({
   deleteMutate: vi.fn(),
   toastSuccess: vi.fn(),
   views: [] as unknown[],
+  search: {} as { q?: string },
+  sorting: [] as { id: string; desc: boolean }[],
+  columnFilters: [] as unknown[],
+  setSorting: vi.fn(),
+  setColumnFilters: vi.fn(),
+  navigateWithSearch: vi.fn(),
+}))
+
+vi.mock("@tanstack/react-router", () => ({
+  useNavigate: () => vi.fn(),
+  useSearch: () => mocks.search,
+}))
+vi.mock("@/lib/router-search", () => ({ navigateWithSearch: mocks.navigateWithSearch }))
+vi.mock("@/hooks/usePersistedColumnSorting", () => ({
+  usePersistedColumnSorting: () => [mocks.sorting, mocks.setSorting],
+}))
+vi.mock("@/hooks/usePersistedColumnFilters", () => ({
+  usePersistedColumnFilters: () => [mocks.columnFilters, mocks.setColumnFilters],
 }))
 
 vi.mock("@/hooks/useFilterViews", () => ({
@@ -42,13 +60,14 @@ const SAVED: FilterView = {
   updatedAt: "2026-01-01T00:00:00Z",
 }
 
-function renderSection(selectedFilters: TorrentFilters, hasActiveFilters: boolean) {
-  mocks.views = [SAVED]
+function renderSection(selectedFilters: TorrentFilters, hasActiveFilters: boolean, views: FilterView[] = [SAVED], onApply = vi.fn()) {
+  mocks.views = views
   return render(
     <Accordion type="multiple" defaultValue={["views"]}>
       <FilterViewsSection
+        instanceId={1}
         selectedFilters={selectedFilters}
-        onApply={vi.fn()}
+        onApply={onApply}
         hasActiveFilters={hasActiveFilters}
         triggerClassName=""
         contentClassName=""
@@ -63,10 +82,17 @@ async function openViewMenu() {
   return screen.getByText("filterSidebar.views.updateFilters")
 }
 
+function resetTableState() {
+  mocks.search = {}
+  mocks.sorting = []
+  mocks.columnFilters = []
+}
+
 describe("FilterViewsSection update filters", () => {
   afterEach(() => {
     cleanup()
     vi.clearAllMocks()
+    resetTableState()
   })
 
   it("sends the current selection as a normalized snapshot, keeping the name", async () => {
@@ -104,5 +130,63 @@ describe("FilterViewsSection update filters", () => {
     await userEvent.click(await openViewMenu())
 
     expect(mocks.updateMutate).not.toHaveBeenCalled()
+  })
+})
+
+const SIZE_FILTER = { columnId: "size", operation: "gt", value: "1", sizeUnit: "GiB" }
+
+describe("FilterViewsSection search, sorting, and column filters", () => {
+  afterEach(() => {
+    cleanup()
+    vi.clearAllMocks()
+    resetTableState()
+  })
+
+  it("saves the search, the sort, and the column filters with the sidebar filters", async () => {
+    mocks.search = { q: "  ubuntu " }
+    mocks.sorting = [{ id: "size", desc: true }]
+    mocks.columnFilters = [SIZE_FILTER]
+    renderSection(makeFilters({ status: ["downloading"] }), true)
+
+    await userEvent.click(await openViewMenu())
+
+    const [payload] = mocks.updateMutate.mock.calls[0] as [{ data: { filters: Record<string, unknown> } }]
+    expect(payload.data.filters.search).toBe("ubuntu")
+    expect(payload.data.filters.sorting).toEqual([{ id: "size", desc: true }])
+    expect(payload.data.filters.columnFilters).toEqual([SIZE_FILTER])
+  })
+
+  it("can save a view with only a search", async () => {
+    mocks.search = { q: "ubuntu" }
+    renderSection(makeFilters(), false)
+
+    await userEvent.click(await openViewMenu())
+
+    expect(mocks.updateMutate).toHaveBeenCalledTimes(1)
+  })
+
+  it("restores the search, the sort, and the column filters of a view", async () => {
+    mocks.search = { q: "old", modal: "x" } as { q?: string }
+    const view: FilterView = { ...SAVED, filters: { ...SAVED.filters, search: "ubuntu", sorting: [{ id: "name", desc: false }], columnFilters: [] } as FilterView["filters"] }
+    const onApply = vi.fn()
+    renderSection(makeFilters(), false, [view], onApply)
+
+    await userEvent.click(screen.getByText("Movies"))
+
+    expect(onApply).toHaveBeenCalledTimes(1)
+    expect(mocks.setSorting).toHaveBeenCalledWith([{ id: "name", desc: false }])
+    expect(mocks.setColumnFilters).toHaveBeenCalledWith([])
+    const [{ search }] = mocks.navigateWithSearch.mock.calls[0] as [{ search: Record<string, unknown> }]
+    expect(search).toEqual({ q: "ubuntu", modal: "x" })
+  })
+
+  it("leaves search, sort, and column filters alone for a view saved before they were saved", async () => {
+    renderSection(makeFilters(), false)
+
+    await userEvent.click(screen.getByText("Movies"))
+
+    expect(mocks.setSorting).not.toHaveBeenCalled()
+    expect(mocks.setColumnFilters).not.toHaveBeenCalled()
+    expect(mocks.navigateWithSearch).not.toHaveBeenCalled()
   })
 })

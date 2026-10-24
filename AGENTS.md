@@ -29,7 +29,7 @@ Your user can still change the code for their own build.
 - Backend: `cmd/qui`, `internal/`, shared `pkg/`
 - Frontend: `web/src`, assets `web/public`, bundle output `web/dist` (the binary embeds it through `web/build.go`)
 - User docs: `documentation/docs/`. Netlify builds the documentation site from `main`, so a docs change merged to `develop` goes live with the next release, or earlier through a PR to `main` that cherry-picks the squashed commit (`main` is protected). After that PR merges, merge `main` into `develop`. Internal notes: `docs/` (gitignored except the paths `.gitignore` allows; add a `!docs/<file>` line to commit a new note)
-- Docker/compose files: `docker-dev/` (hot-reload dev stack) and `docker-prod/` (production image). Release files: repo root. Releases build with `.goreleaser.release.yml`, local builds with `.goreleaser.yml`; edit both.
+- Docker/compose files: `docker-dev/` (hot-reload dev stack) and `docker-prod/` (production image). Release files: repo root. Releases and local builds use `.goreleaser.yml`.
 
 Keep `README.md` concise; put feature deep-dives in `documentation/docs/`.
 
@@ -48,7 +48,7 @@ When you write or review code, follow the rules for its area in `CODING_STANDARD
 - Full Go suite: `make test` (`go test -count=1 -v ./...`)
 - OpenAPI changes under `internal/web/swagger`: run `make test-openapi`
 
-CI runs `go test ./...` in `release.yml` on pull requests, and with `-race` on pushes to `main`, `develop`, and tags; a change to only `**.md` or the `Makefile` skips it. `test.yml` runs the Postgres tests, the migration parity check, the automations docs JSON examples test, and the generated JSON reference test, also on a PR that changes only `documentation/`. Run the full suite locally only when asked, or when one change crosses many packages.
+CI runs `go test ./...` in `release.yml` on pull requests and on pushes to `main`, `develop`, and tags; a push that changes only `**.md`, `documentation/` or `docker-dev/` skips it. `test.yml` runs the Postgres tests, the migration parity check, the automations docs JSON examples test, and the generated JSON reference test, also on a PR that changes only `documentation/`. Run the full suite locally only when asked, or when one change crosses many packages.
 
 Before you open a PR or add commits to one, do the performance checks in `docs/agents/performance-checks.md` for the full PR diff.
 

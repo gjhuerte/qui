@@ -3,13 +3,10 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-// Incognito mode utilities for disguising torrents as Linux ISOs (default) or as
-// office documents while the Spreadsheet theme is active. getLinux* names are kept
-// as the stable incognito API; each getter picks its vocabulary at call time.
+// Incognito mode utilities for disguising torrents as Linux ISOs.
 
 import type { Category } from "@/types"
 import { useClientSetting } from "@/lib/client-settings"
-import { isSpreadsheetDisguiseActive } from "./spreadsheet-disguise"
 
 // Linux ISO names for incognito mode
 const linuxIsoNames = [
@@ -209,224 +206,20 @@ const LINUX_VOCAB: IncognitoVocab = {
   folderNames: LINUX_FOLDER_NAMES,
 }
 
-// Spreadsheet flavor: served instead of the linux vocabulary while the
-// Spreadsheet theme is active, so incognito rows read as office documents.
-const SHEET_DOC_NAMES = [
-  "Q1 Budget Consolidation v3.xlsx",
-  "Q2 Budget Consolidation v7 FINAL.xlsx",
-  "Q3 Forecast - Draft (do not distribute).xlsx",
-  "Headcount Plan FY27 DRAFT.xlsx",
-  "Travel Expense Reconciliation May.xlsx",
-  "Travel Expense Reconciliation June.xlsx",
-  "Fixed Asset Register 2026.xlsx",
-  "Inventory Recount - Warehouse B.xlsx",
-  "Inventory Recount - Warehouse C.xlsx",
-  "Vendor Master Cleanup - Phase 2.xlsx",
-  "PO Backlog Review 2026-08.xlsx",
-  "Contract Renewal Tracker.xlsx",
-  "Capex Requests FY27 Round 1.xlsx",
-  "Opex Run Rate Analysis.xlsx",
-  "Timesheet Export Week 27.csv",
-  "Facilities Maintenance Log.xlsx",
-  "Insurance Certificates Index.xlsx",
-  "Utilization Dashboard Data.csv",
-  "Vendor W9 Tracker.xlsx",
-  "Vendor SLA Comparison.xlsx",
-  "Server Inventory - Rack B4.xlsx",
-  "Server Patch Schedule 2026-H2.xlsx",
-  "Patch Compliance Report 2026-07.xlsx",
-  "Patch Compliance Report 2026-08.xlsx",
-  "SSL Cert Expiry Tracker.xlsx",
-  "Certificate Inventory - Wildcards.xlsx",
-  "License Audit - Adobe 2026.xlsx",
-  "O365 License Assignment.csv",
-  "License Renewal Calendar FY27.xlsx",
-  "VM Capacity Planning Q3.xlsx",
-  "Storage Growth Forecast.xlsx",
-  "Backup Job Status Export.csv",
-  "Restore Test Log 2026-Q2.xlsx",
-  "AD Group Membership Audit.csv",
-  "Access Review Q2 - Finance Apps.xlsx",
-  "MFA Enrollment Status.xlsx",
-  "Vulnerability Scan Summary 2026-07.xlsx",
-  "Firewall Rule Review 2026.xlsx",
-  "VPN Usage Report 2026-07.csv",
-  "DNS Zone Export 2026-08.csv",
-  "IP Address Allocation Plan.xlsx",
-  "Switch Port Mapping - Floor 2.xlsx",
-  "WiFi Survey Results - HQ.xlsx",
-  "Network Diagram - HQ Floor 1.vsdx",
-  "Laptop Refresh Wave 3.xlsx",
-  "Asset Tag Reconciliation.xlsx",
-  "Printer Fleet Inventory.xlsx",
-  "UPS Battery Replacement Log.xlsx",
-  "Datacenter Power Usage 2026-07.csv",
-  "Egress Cost Breakdown 2026-06.csv",
-  "Decommission Checklist - legacy-web01.xlsx",
-  "Change Freeze Calendar FY27.xlsx",
-  "On-call Rota 2026-H2.xlsx",
-  "Helpdesk SLA Metrics 2026-Q2.xlsx",
-  "Ticket Volume Dashboard Data.csv",
-  "Incident Postmortem Index.xlsx",
-  "DR Runbook v4.docx",
-  "SOC2 Evidence Index.pdf",
-  "Hardware EOL Matrix 2027.xlsx",
-]
-
-const SHEET_CATEGORIES: Record<string, Category> = {
-  "Finance": { name: "Finance", savePath: "/shares/finance" },
-  "Procurement": { name: "Procurement", savePath: "/shares/procurement" },
-  "Operations": { name: "Operations", savePath: "/shares/operations" },
-  "HR": { name: "HR", savePath: "/shares/hr" },
-  "Facilities": { name: "Facilities", savePath: "/shares/facilities" },
-  "Compliance": { name: "Compliance", savePath: "/shares/compliance" },
-  "IT Assets": { name: "IT Assets", savePath: "/shares/it-assets" },
-  "Infrastructure": { name: "Infrastructure", savePath: "/shares/infrastructure" },
-  "Licensing": { name: "Licensing", savePath: "/shares/licensing" },
-  "Security": { name: "Security", savePath: "/shares/security" },
-}
-
-const SHEET_TAGS = [
-  "pending review",
-  "approved",
-  "draft",
-  "final",
-  "q1",
-  "q2",
-  "q3",
-  "q4",
-  "fy26",
-  "fy27",
-  "audit",
-  "restricted",
-  "archived",
-  "shared",
-  "monthly close",
-  "board",
-  "reconciled",
-  "needs signoff",
-  "template",
-  "export",
-  "patching",
-  "licensing",
-  "renewals",
-]
-
-const SHEET_TRACKERS = [
-  "fileserver-01.corp.internal",
-  "fileserver-02.corp.internal",
-  "sharepoint.corp.internal",
-  "dms.corp.internal",
-  "backup-nas.corp.internal",
-  "finance-share.corp.internal",
-  "archive.corp.internal",
-  "sync-gw.corp.internal",
-  "erp-export.corp.internal",
-  "print-scan.corp.internal",
-  "itsm.corp.internal",
-  "wiki.corp.internal",
-]
-
-const SHEET_TEAMS = [
-  "Finance Operations",
-  "FP&A Team",
-  "Procurement Office",
-  "Internal Audit",
-  "IT Operations",
-  "Infrastructure Team",
-  "Service Desk",
-  "Security Office",
-]
-
-const SHEET_NOTES = [
-  "Pending sign-off from FP&A.",
-  "Source data pulled from ERP export 2026-07-01.",
-  "Updated per auditor request, see tab Notes.",
-  "Figures preliminary until monthly close completes.",
-  "Pending CAB approval before the next change window.",
-  "Exported from the asset system 2026-07-14.",
-  "Do not edit, rows synced from monitoring export.",
-  "Cert expiry dates verified against inventory 2026-08-01.",
-]
-
-const SHEET_SAVE_PATHS = [
-  "/shares/finance/FY26",
-  "/shares/finance/monthly-close",
-  "/shares/procurement/vendors",
-  "/shares/operations/reports",
-  "/shares/hr/planning",
-  "/shares/facilities/contracts",
-  "/shares/compliance/audit-2026",
-  "/shares/it-assets/inventory",
-  "/shares/infrastructure/capacity",
-  "/shares/licensing/renewals",
-  "/shares/security/access-reviews",
-  "/shares/archive/2025",
-]
-
-const SHEET_FOLDER_NAMES = [
-  "FY26",
-  "FY25",
-  "Q1",
-  "Q2",
-  "Q3",
-  "Q4",
-  "reports",
-  "exports",
-  "archive",
-  "vendors",
-  "invoices",
-  "receipts",
-  "statements",
-  "reconciliations",
-  "budgets",
-  "forecasts",
-  "templates",
-  "backup",
-  "monthly-close",
-  "audit",
-  "contracts",
-  "approved",
-  "drafts",
-  "final",
-  "working",
-  "shared",
-  "inventory",
-  "licenses",
-  "patching",
-  "runbooks",
-  "network",
-  "assets",
-]
-
-const SHEET_VOCAB: IncognitoVocab = {
-  names: SHEET_DOC_NAMES,
-  categories: SHEET_CATEGORIES,
-  categoryKeys: Object.keys(SHEET_CATEGORIES),
-  tags: SHEET_TAGS,
-  trackers: SHEET_TRACKERS,
-  releaseTeams: SHEET_TEAMS,
-  releaseNotes: SHEET_NOTES,
-  savePaths: SHEET_SAVE_PATHS,
-  folderNames: SHEET_FOLDER_NAMES,
-}
-
 function vocab(): IncognitoVocab {
-  return isSpreadsheetDisguiseActive() ? SHEET_VOCAB : LINUX_VOCAB
+  return LINUX_VOCAB
 }
 
-// The explicit flag (from useSpreadsheetDisguise) keeps callers' memo
-// dependencies honest instead of hiding the theme read in this module.
-export function getIncognitoCategories(spreadsheetDisguise: boolean): Record<string, Category> {
-  return spreadsheetDisguise ? SHEET_VOCAB.categories : LINUX_VOCAB.categories
+export function getIncognitoCategories(): Record<string, Category> {
+  return LINUX_VOCAB.categories
 }
 
-export function getIncognitoTags(spreadsheetDisguise: boolean): string[] {
-  return spreadsheetDisguise ? SHEET_VOCAB.tags : LINUX_VOCAB.tags
+export function getIncognitoTags(): string[] {
+  return LINUX_VOCAB.tags
 }
 
-export function getIncognitoTrackers(spreadsheetDisguise: boolean): string[] {
-  return spreadsheetDisguise ? SHEET_VOCAB.trackers : LINUX_VOCAB.trackers
+export function getIncognitoTrackers(): string[] {
+  return LINUX_VOCAB.trackers
 }
 
 // Generate deterministic Linux folder name based on hash and depth

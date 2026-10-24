@@ -49,8 +49,9 @@ export function setThemeLocalOnly(localOnly: boolean): void {
 }
 
 /**
- * The stored selection, not the applied theme: a locked premium id paints the
- * fallback default, which must not overwrite the server selection.
+ * The stored selection, not the applied theme: an id that does not resolve yet
+ * (a custom theme file not loaded) paints the fallback default, which must not
+ * overwrite the server selection.
  */
 export function storedThemeSelection(mode: ThemeMode, appliedId: string, appliedVariant?: string): ThemeSettings {
   const themeId = localStorage.getItem("color-theme") ?? appliedId
@@ -109,23 +110,15 @@ export function useThemeSettingsSync(): void {
   useEffect(() => {
     if (!selection?.themeId) return
     lastSynced.current = JSON.stringify(selection)
-    // Mirror the server selection locally even when it resolves to a locked
-    // stub or an unknown id, so the push below never sends a differing local
-    // id over it.
+    // Mirror the server selection locally even when it is an unknown id, so
+    // the push below never sends a differing local id over it.
     localStorage.setItem("color-theme", selection.themeId)
     // Skip unknown ids (e.g. a custom theme not registered yet) so we never
     // downgrade the local selection to the default theme.
     const resolved = getThemeById(selection.themeId)
     if (!resolved) return
-    if (resolved.locked) {
-      // The cached catalog carries CSS only for the previously selected
-      // theme, but the server serves the selected theme's CSS even pre-auth.
-      // Refetch so a remote selection change can paint instead of sitting on
-      // the default until the hourly refresh.
-      void queryClient.invalidateQueries({ queryKey: ["builtin-themes"] })
-    }
     void setTheme(selection.themeId, selection.mode, selection.variation, true)
-  }, [selection, builtins.isSuccess, queryClient])
+  }, [selection, builtins.isSuccess])
 
   // Push: store local theme changes in the current slot.
   useEffect(() => {
@@ -133,7 +126,7 @@ export function useThemeSettingsSync(): void {
       const { theme, mode, isSystemChange, variant } = (event as CustomEvent).detail
       const slot = slotRef.current
       if (isSystemChange || !slot) return
-      // Mode changes during a locked fallback still sync.
+      // Mode changes during a fallback to the default still sync.
       const payload = storedThemeSelection(mode, theme.id, variant)
       const serialized = JSON.stringify(payload)
       if (serialized === lastSynced.current) return

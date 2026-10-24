@@ -149,11 +149,9 @@
     "dark": "Scuro",
     "system": "Sistema",
     "theme": "Tema",
-    "premium": "Premium",
     "switchedToMode": "Passato alla modalità {{mode}}",
     "switchedToTheme": "Passato al tema {{theme}}",
-    "switchedToThemeVariation": "Passato al tema {{theme}} ({{variation}})",
-    "premiumThemeError": "Questo è un tema premium. Apri Impostazioni → Temi per attivare una licenza."
+    "switchedToThemeVariation": "Passato al tema {{theme}} ({{variation}})"
   },
   "updateBanner": {
     "updateAvailable": "Aggiornamento disponibile",

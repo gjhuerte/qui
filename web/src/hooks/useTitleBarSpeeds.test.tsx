@@ -37,12 +37,6 @@ vi.mock("@/lib/speedUnits", () => ({
   useSpeedUnits: () => ["bytes", vi.fn()],
   formatSpeedWithUnit: (speed: number) => `${speed} B/s`,
 }))
-vi.mock(import("@/lib/spreadsheet-disguise"), async (importOriginal) => ({
-  ...await importOriginal(),
-  isSpreadsheetDisguiseActive: () => false,
-  spreadsheetDocumentTitle: () => "Spreadsheet",
-  useSpreadsheetDisguise: () => false,
-}))
 
 import { useTitleBarSpeeds } from "@/hooks/useTitleBarSpeeds"
 

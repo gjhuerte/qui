@@ -21,7 +21,6 @@ const builtinThemes = Object.entries(themeCSS).map(([file, css]) => {
     id: name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
     name,
     description: /@description:\s*(.+?)\s*(?:\n|\*)/.exec(css)?.[1],
-    premium: false,
     css,
   }
 }).sort((a, b) => (a.id === "minimal" ? -1 : b.id === "minimal" ? 1 : a.name.localeCompare(b.name)))

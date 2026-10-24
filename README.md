@@ -71,4 +71,7 @@ The qBittorrent wiki includes a longer [list of community WebUIs](https://github
 
 ## License
 
-GPL-2.0-or-later
+GPL-2.0-or-later.
+
+- [`LICENSE`](LICENSE) is the original license of qui, by s0up and the autobrr contributors.
+- [`LICENSE-GPL-2.0`](LICENSE-GPL-2.0) is the same GPL 2.0 license with the copyright notice of this fork.

@@ -138,53 +138,38 @@ describe("useThemeSettingsSync", () => {
   })
 
   it("pushes the stored selection and variation, not the applied fallback theme", () => {
-    // Mode toggle during the locked-premium fallback: sync the new mode
+    // Mode toggle during the fallback for an unknown id: sync the new mode
     // without replacing the stored selection or variation on the server.
-    localStorage.setItem("color-theme", "locked-premium")
-    setStoredVariation("locked-premium", "purple")
+    localStorage.setItem("color-theme", "unknown-theme")
+    setStoredVariation("unknown-theme", "purple")
     renderHook(() => useThemeSettingsSync(), { wrapper })
 
     dispatchThemeChange({ theme: { id: "minimal" }, mode: "dark", isSystemChange: false })
 
     expect(mockApi.updateThemeSettings).toHaveBeenCalledExactlyOnceWith({
-      themeId: "locked-premium",
+      themeId: "unknown-theme",
       mode: "dark",
       variation: "purple",
     }, "default")
   })
 
   it("mirrors a pulled unresolvable selection so a mode change keeps it", async () => {
-    // Fresh browser, server selection is a premium theme this client cannot
-    // resolve: the pull must persist the id locally, or the next mode toggle
+    // Fresh browser, server selection is a theme this client cannot resolve
+    // (a custom theme file not loaded yet): the pull must persist the id locally, or the next mode toggle
     // would push the applied fallback id over the server selection.
-    mockApi.getThemeSettings.mockResolvedValue({ default: { themeId: "locked-premium", mode: "light" } })
+    mockApi.getThemeSettings.mockResolvedValue({ default: { themeId: "unknown-theme", mode: "light" } })
     renderHook(() => useThemeSettingsSync(), { wrapper })
 
     await waitFor(() => {
-      expect(localStorage.getItem("color-theme")).toBe("locked-premium")
+      expect(localStorage.getItem("color-theme")).toBe("unknown-theme")
     })
 
     dispatchThemeChange({ theme: { id: "minimal" }, mode: "dark", isSystemChange: false })
 
     expect(mockApi.updateThemeSettings).toHaveBeenCalledExactlyOnceWith({
-      themeId: "locked-premium",
+      themeId: "unknown-theme",
       mode: "dark",
     }, "default")
-  })
-
-  it("refetches the catalog when the server selection resolves to a locked stub", async () => {
-    // The stale catalog only stubs the new selection, but the server serves
-    // the selected theme's CSS even pre-auth: the pull must force a refetch
-    // instead of sitting on the default until the hourly refresh.
-    themes.push({ id: "locked-premium", name: "Locked", locked: true, cssVars: { light: {}, dark: {} } })
-    mockApi.getThemeSettings.mockResolvedValue({ default: { themeId: "locked-premium", mode: "auto" } })
-    const { spiedWrapper, invalidateSpy } = makeWrapper()
-
-    renderHook(() => useThemeSettingsSync(), { wrapper: spiedWrapper })
-
-    await waitFor(() => {
-      expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ["builtin-themes"] })
-    })
   })
 
   it("does not refetch the catalog for a selection that resolves with CSS", async () => {
@@ -327,39 +312,22 @@ describe("useThemeSettingsSync", () => {
       expect(mockApi.updateThemeSettings).not.toHaveBeenCalled()
     })
 
-    it("refetches the catalog when the mobile slot resolves to a locked stub", async () => {
-      themes.push({ id: "locked-premium", name: "Locked", locked: true, cssVars: { light: {}, dark: {} } })
-      viewportWidth = 375
-      mockApi.getThemeSettings.mockResolvedValue({
-        default: { themeId: "minimal", mode: "auto" },
-        mobile: { themeId: "locked-premium", mode: "dark" },
-      })
-      const { spiedWrapper, invalidateSpy } = makeWrapper()
-
-      renderHook(() => useThemeSettingsSync(), { wrapper: spiedWrapper })
-
-      await waitFor(() => {
-        expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ["builtin-themes"] })
-      })
-      expect(localStorage.getItem("color-theme")).toBe("locked-premium")
-    })
-
     it("keeps the stored selection and skips duplicates in the mobile slot", async () => {
       viewportWidth = 375
       mockApi.getThemeSettings.mockResolvedValue({
         default: { themeId: "desk-theme", mode: "auto" },
-        mobile: { themeId: "locked-premium", mode: "dark" },
+        mobile: { themeId: "unknown-theme", mode: "dark" },
       })
       renderHook(() => useThemeSettingsSync(), { wrapper })
       await waitFor(() => {
-        expect(localStorage.getItem("color-theme")).toBe("locked-premium")
+        expect(localStorage.getItem("color-theme")).toBe("unknown-theme")
       })
 
       dispatchThemeChange({ theme: { id: "minimal" }, mode: "auto", isSystemChange: true })
       dispatchThemeChange({ theme: { id: "minimal" }, mode: "light", isSystemChange: false })
       dispatchThemeChange({ theme: { id: "minimal" }, mode: "light", isSystemChange: false })
 
-      expect(mockApi.updateThemeSettings).toHaveBeenCalledExactlyOnceWith({ themeId: "locked-premium", mode: "light" }, "mobile")
+      expect(mockApi.updateThemeSettings).toHaveBeenCalledExactlyOnceWith({ themeId: "unknown-theme", mode: "light" }, "mobile")
     })
   })
 })

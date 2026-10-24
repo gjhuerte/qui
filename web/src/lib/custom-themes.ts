@@ -45,7 +45,6 @@ export function parseCustomThemes(files: CustomThemeFile[]): ParsedCustomThemes 
       name: result.metadata.name,
       description: result.metadata.description,
       lightOnly: result.metadata.lightOnly,
-      isPremium: true,
       isCustom: true,
       rawCss: file.css,
       cssVars: result.cssVars,

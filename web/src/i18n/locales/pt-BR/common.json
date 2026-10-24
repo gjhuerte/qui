@@ -149,11 +149,9 @@
     "dark": "Escuro",
     "system": "Sistema",
     "theme": "Tema",
-    "premium": "Premium",
     "switchedToMode": "Alterado para o modo {{mode}}",
     "switchedToTheme": "Alterado para o tema {{theme}}",
-    "switchedToThemeVariation": "Alterado para o tema {{theme}} ({{variation}})",
-    "premiumThemeError": "Este é um tema premium. Abra Configurações → Temas para ativar uma licença."
+    "switchedToThemeVariation": "Alterado para o tema {{theme}} ({{variation}})"
   },
   "updateBanner": {
     "updateAvailable": "Atualização Disponível",

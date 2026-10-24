@@ -13,7 +13,6 @@ import type { BuiltinTheme } from "@/types"
 
 const TEST_CSS = `/* @name: Testfree
  * @description: A test theme
- * @premium: false
  */
 
 :root {
@@ -49,73 +48,31 @@ afterEach(() => {
 })
 
 describe("applyBuiltinThemesPayload", () => {
-  it("registers parsed themes and locked premium stubs", () => {
+  it("registers parsed themes", () => {
     applyBuiltinThemesPayload({
-      themes: [
-        { id: "testfree", name: "Testfree", premium: false, css: TEST_CSS },
-        {
-          id: "locked",
-          name: "Locked",
-          premium: true,
-          preview: { light: { "--primary": "gold" }, dark: { "--primary": "goldenrod" } },
-        },
-      ],
+      themes: [{ id: "testfree", name: "Testfree", css: TEST_CSS }],
     })
 
-    const free = getThemeById("testfree")
-    expect(free?.name).toBe("Testfree")
-    expect(free?.isPremium).toBe(false)
-    expect(free?.cssVars.dark["--primary"]).toBe("darkred")
-
-    const locked = getThemeById("locked")
-    expect(locked?.isPremium).toBe(true)
-    expect(locked?.locked).toBe(true)
-    expect(locked?.cssVars.light["--primary"]).toBe("gold")
-  })
-
-  it("trusts the server premium flag over the CSS header", () => {
-    // Directory-classified premium theme: full CSS (licensed), no @premium
-    // header. The server flag is the only premium signal.
-    applyBuiltinThemesPayload({
-      themes: [{ id: "dirpremium", name: "Dirpremium", premium: true, css: TEST_CSS }],
-    })
-
-    const theme = getThemeById("dirpremium")
-    expect(theme?.isPremium).toBe(true)
-    expect(theme?.locked).toBeUndefined()
+    const theme = getThemeById("testfree")
+    expect(theme?.name).toBe("Testfree")
+    expect(theme?.description).toBe("A test theme")
+    expect(theme?.cssVars.dark["--primary"]).toBe("darkred")
   })
 
   it("re-applies the stored selection once it resolves", () => {
     localStorage.setItem("color-theme", "testfree")
     applyBuiltinThemesPayload({
-      themes: [{ id: "testfree", name: "Testfree", premium: false, css: TEST_CSS }],
+      themes: [{ id: "testfree", name: "Testfree", css: TEST_CSS }],
     })
 
     // System change: hydration must never be pushed to the server.
     expect(mockSetTheme).toHaveBeenCalledWith("testfree", undefined, undefined, true)
   })
 
-  it("re-applies a stored selection that resolved to a locked stub without rewriting it", () => {
-    localStorage.setItem("color-theme", "locked")
-    // The server payload always contains the default theme (pinned server-side).
-    const minimalCss = TEST_CSS.replace("@name: Testfree", "@name: Minimal")
-    applyBuiltinThemesPayload({
-      themes: [
-        { id: "minimal", name: "Minimal", premium: false, css: minimalCss },
-        { id: "locked", name: "Locked", premium: true, preview: { light: {}, dark: {} } },
-      ],
-    })
-
-    // setTheme's locked fallback paints the default itself, without touching
-    // the stored selection, so the payload apply passes the stored id through.
-    expect(mockSetTheme).toHaveBeenCalledWith("locked", undefined, undefined, true)
-    expect(localStorage.getItem("color-theme")).toBe("locked")
-  })
-
   it("applies the fetched default on a fresh profile with no stored selection", () => {
     const minimalCss = TEST_CSS.replace("@name: Testfree", "@name: Minimal")
     applyBuiltinThemesPayload({
-      themes: [{ id: "minimal", name: "Minimal", premium: false, css: minimalCss }],
+      themes: [{ id: "minimal", name: "Minimal", css: minimalCss }],
     })
 
     // The boot paint used the bundled fallback; the fetched default is the
@@ -127,7 +84,7 @@ describe("applyBuiltinThemesPayload", () => {
   it("leaves an unresolvable stored selection alone", () => {
     localStorage.setItem("color-theme", "custom:missing")
     applyBuiltinThemesPayload({
-      themes: [{ id: "testfree", name: "Testfree", premium: false, css: TEST_CSS }],
+      themes: [{ id: "testfree", name: "Testfree", css: TEST_CSS }],
     })
 
     expect(mockSetTheme).not.toHaveBeenCalled()
@@ -148,7 +105,7 @@ describe("useBuiltinThemes", () => {
     unmount()
     await act(async () => {
       resolveRequest?.({
-        themes: [{ id: "stale", name: "Stale", premium: false, css: TEST_CSS }],
+        themes: [{ id: "stale", name: "Stale", css: TEST_CSS }],
       })
       await Promise.resolve()
     })
@@ -158,7 +115,7 @@ describe("useBuiltinThemes", () => {
 
   it("registers themes before observers render the committed data", async () => {
     mockApi.getBuiltinThemes.mockResolvedValue({
-      themes: [{ id: "testfree", name: "Testfree", premium: false, css: TEST_CSS }],
+      themes: [{ id: "testfree", name: "Testfree", css: TEST_CSS }],
     })
 
     const seenOnSuccess: boolean[] = []

@@ -11,7 +11,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"slices"
 	"strings"
 
 	"github.com/rs/zerolog/log"
@@ -27,12 +26,6 @@ const (
 	// maxCustomThemeFiles caps how many theme files are scanned/returned.
 	maxCustomThemeFiles = 100
 )
-
-// premiumChecker reports whether the instance has premium access.
-// Satisfied by premiumUnlocked in the api package.
-type premiumChecker interface {
-	HasPremiumAccess(ctx context.Context) (bool, error)
-}
 
 // themesDirProvider resolves (and creates) the custom themes directory.
 // Satisfied by *config.AppConfig.
@@ -50,24 +43,17 @@ type themeSettingsStore interface {
 
 type ThemesHandler struct {
 	themesDir themesDirProvider
-	premium   premiumChecker
 	settings  themeSettingsStore
-	// authed reports whether the caller has an authenticated session. The
-	// theme catalog is public so the login page can paint, but a public
-	// (unauthenticated) caller only receives full premium CSS for the one
-	// selected theme; the picker behind auth gets the whole set. nil means
-	// treat every caller as unauthenticated.
-	authed func(context.Context) bool
 	// activity signals stored-selection changes so open tabs refetch instead
 	// of polling.
 	activity activity.Publisher
 }
 
-func NewThemesHandler(themesDir themesDirProvider, premium premiumChecker, settings themeSettingsStore, authed func(context.Context) bool, publisher activity.Publisher) *ThemesHandler {
+func NewThemesHandler(themesDir themesDirProvider, settings themeSettingsStore, publisher activity.Publisher) *ThemesHandler {
 	if publisher == nil {
 		publisher = activity.NopPublisher{}
 	}
-	return &ThemesHandler{themesDir: themesDir, premium: premium, settings: settings, authed: authed, activity: publisher}
+	return &ThemesHandler{themesDir: themesDir, settings: settings, activity: publisher}
 }
 
 // CustomTheme is a single sideloaded theme file and its raw CSS contents.
@@ -84,21 +70,9 @@ type CustomThemesResponse struct {
 }
 
 // ListCustomThemes returns the sideloaded custom theme CSS files and their
-// contents. It is premium-gated: callers without an active premium-access
-// license receive 403. The directory is scanned fresh on every request so
-// edits are picked up without a restart.
-func (h *ThemesHandler) ListCustomThemes(w http.ResponseWriter, r *http.Request) {
-	hasPremium, err := h.premium.HasPremiumAccess(r.Context())
-	if err != nil {
-		log.Error().Err(err).Msg("Failed to check premium access for custom themes")
-		RespondError(w, http.StatusInternalServerError, "Failed to check premium access")
-		return
-	}
-	if !hasPremium {
-		RespondError(w, http.StatusForbidden, "Premium access required")
-		return
-	}
-
+// contents. The directory is scanned fresh on every request so edits are
+// picked up without a restart.
+func (h *ThemesHandler) ListCustomThemes(w http.ResponseWriter, _ *http.Request) {
 	themes := make([]CustomTheme, 0)
 
 	dir, err := h.themesDir.EnsureCustomThemesDir()
@@ -188,9 +162,7 @@ func themeSlotParam(r *http.Request) (string, bool) {
 	}
 }
 
-// UpdateThemeSettings stores the theme selection of one slot. Not
-// premium-gated: a stored premium id serves locked, so clients fall back to
-// the default.
+// UpdateThemeSettings stores the theme selection of one slot.
 func (h *ThemesHandler) UpdateThemeSettings(w http.ResponseWriter, r *http.Request) {
 	slot, ok := themeSlotParam(r)
 	if !ok {
@@ -246,74 +218,21 @@ func (h *ThemesHandler) DeleteThemeSettings(w http.ResponseWriter, r *http.Reque
 	w.WriteHeader(http.StatusNoContent)
 }
 
-// BuiltinTheme is one embedded theme as served to the frontend. Locked
-// premium themes carry preview swatch colors instead of CSS.
+// BuiltinTheme is one embedded theme as served to the frontend.
 type BuiltinTheme struct {
-	ID          string          `json:"id"`
-	Name        string          `json:"name"`
-	Description string          `json:"description,omitempty"`
-	Premium     bool            `json:"premium"`
-	CSS         string          `json:"css,omitempty"`
-	Preview     *themes.Preview `json:"preview,omitempty"`
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description,omitempty"`
+	CSS         string `json:"css"`
 }
 
-// buildBuiltinThemeList applies the premium gate: free themes always include
-// their CSS, premium themes only with a license, locked entries get preview
-// colors instead.
-func buildBuiltinThemeList(list []themes.Theme, hasPremium, authed bool, selectedIDs ...string) []BuiltinTheme {
-	out := make([]BuiltinTheme, 0, len(list))
-	for _, t := range list {
-		bt := BuiltinTheme{
-			ID:          t.ID,
-			Name:        t.Name,
-			Description: t.Description,
-			Premium:     t.Premium,
-		}
-		// Free themes always carry CSS. A premium theme needs a license, and
-		// for a public (unauthenticated) caller it carries CSS only when a slot
-		// selects it, because the login page must paint it; every other premium
-		// theme is a preview stub so a licensed instance does not hand its
-		// whole premium set to anonymous callers.
-		switch {
-		case t.Premium && !hasPremium:
-			bt.Preview = &t.Preview
-		case t.Premium && !authed && !slices.Contains(selectedIDs, t.ID):
-			bt.Preview = &t.Preview
-		default:
-			bt.CSS = t.CSS
-		}
-		out = append(out, bt)
+// ListThemes returns every built-in theme with its CSS. The endpoint is
+// public so the login page can paint the selected theme.
+func (h *ThemesHandler) ListThemes(w http.ResponseWriter, _ *http.Request) {
+	all := themes.All()
+	list := make([]BuiltinTheme, 0, len(all))
+	for _, t := range all {
+		list = append(list, BuiltinTheme{ID: t.ID, Name: t.Name, Description: t.Description, CSS: t.CSS})
 	}
-	return out
-}
-
-// ListThemes returns every built-in theme through buildBuiltinThemeList. The
-// endpoint is public so the login page can paint the selected theme.
-func (h *ThemesHandler) ListThemes(w http.ResponseWriter, r *http.Request) {
-	hasPremium, err := h.premium.HasPremiumAccess(r.Context())
-	if err != nil {
-		// Serve as unlicensed rather than failing: the login page depends on
-		// this endpoint and free themes never require the license check.
-		log.Warn().Err(err).Msg("Failed to check premium access for theme list; serving free themes only")
-		hasPremium = false
-	}
-
-	authed := h.authed != nil && h.authed(r.Context())
-
-	// The public login page paints the theme of the slot for its layout, so
-	// the slot themes are the only premium themes an unauthenticated caller
-	// receives with CSS. A failed read just means no premium CSS goes out
-	// anonymously.
-	var selectedIDs []string
-	if !authed {
-		if slots, err := h.settings.GetAll(r.Context()); err == nil {
-			for _, ts := range []*models.ThemeSettings{slots.Default, slots.Mobile} {
-				if ts != nil {
-					selectedIDs = append(selectedIDs, ts.ThemeID)
-				}
-			}
-		}
-	}
-
-	RespondJSON(w, http.StatusOK, map[string][]BuiltinTheme{"themes": buildBuiltinThemeList(themes.All(), hasPremium, authed, selectedIDs...)})
+	RespondJSON(w, http.StatusOK, map[string][]BuiltinTheme{"themes": list})
 }

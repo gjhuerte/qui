@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-import { SpreadsheetFormulaBar } from "@/components/spreadsheet/SpreadsheetFormulaBar"
-import { SpreadsheetSheetTabs } from "@/components/spreadsheet/SpreadsheetSheetTabs"
 import { FilterSidebar } from "@/components/torrents/FilterSidebar"
 import { TorrentCreationTasks } from "@/components/torrents/TorrentCreationTasks"
 import { TorrentCreatorDialog } from "@/components/torrents/TorrentCreatorDialog"
@@ -24,7 +22,6 @@ import { usePersistedUnifiedInstanceFilter } from "@/hooks/usePersistedUnifiedIn
 import { useTitleBarSpeeds } from "@/hooks/useTitleBarSpeeds"
 import { api } from "@/lib/api"
 import { isAllInstancesScope, normalizeUnifiedInstanceIds } from "@/lib/instances"
-import { useSpreadsheetDisguise } from "@/lib/spreadsheet-disguise"
 import { cn } from "@/lib/utils"
 import type { Category, CrossInstanceTorrent, Torrent, TorrentCounts } from "@/types"
 import { useNavigate } from "@tanstack/react-router"
@@ -55,7 +52,6 @@ export function Torrents({ instanceId, instanceName, isAllInstancesView = false,
   const { viewMode } = usePersistedCompactViewState("desktop")
   const { clearSelection } = useTorrentSelection()
   const { instances } = useInstances()
-  const spreadsheetDisguise = useSpreadsheetDisguise()
   const [persistedUnifiedFilter] = usePersistedUnifiedInstanceFilter()
   const activeInstanceIds = useMemo(
     () => (instances ?? []).filter(current => current.isActive).map(current => current.id),
@@ -554,7 +550,6 @@ export function Torrents({ instanceId, instanceName, isAllInstancesView = false,
         {/* Use React conditional rendering to avoid duplicate dialogs */}
         {!isMobile && (
           <div className="flex flex-col h-full">
-            {spreadsheetDisguise && <SpreadsheetFormulaBar />}
             <ResizablePanelGroup
               className="flex-1 min-h-0"
               direction="vertical"
@@ -621,7 +616,6 @@ export function Torrents({ instanceId, instanceName, isAllInstancesView = false,
                 </>
               )}
             </ResizablePanelGroup>
-            {spreadsheetDisguise && <SpreadsheetSheetTabs currentInstanceId={instanceId} />}
             <div id="qui-status-bar-container" className="flex-shrink-0 bg-background" />
           </div>
         )}

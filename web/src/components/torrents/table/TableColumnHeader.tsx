@@ -21,8 +21,6 @@ export interface TableColumnHeaderProps {
   setColumnFilters: Dispatch<SetStateAction<ColumnFilter[]>>
   minTableWidth: number
   viewMode: ViewMode
-  // Spreadsheet theme only: reserve the blank corner above the row-number gutter.
-  showRowGutter?: boolean
   // Column whose width is derived from the container (stretch mode); its resize handle is inert.
   stretchedColumnId?: string
 }
@@ -41,7 +39,6 @@ export function TableColumnHeader({
   setColumnFilters,
   minTableWidth,
   viewMode,
-  showRowGutter,
   stretchedColumnId,
 }: TableColumnHeaderProps) {
   if (viewMode === "compact") {
@@ -67,11 +64,12 @@ export function TableColumnHeader({
               strategy={horizontalListSortingStrategy}
             >
               <div className="flex" style={{ minWidth: `${minTableWidth}px` }}>
-                {showRowGutter && <div className="ss-corner" aria-hidden="true" />}
-                {headers.map(header => (
+                {headers.map((header, index) => (
                   <DraggableTableHeader
                     key={header.id}
                     header={header}
+                    previousHeader={headers[index - 1]}
+                    previousStretched={index > 0 && headers[index - 1].column.id === stretchedColumnId}
                     columnFilters={columnFilters}
                     viewMode={viewMode}
                     stretched={header.column.id === stretchedColumnId}

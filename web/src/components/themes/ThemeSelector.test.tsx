@@ -11,7 +11,7 @@ const fixture = vi.hoisted(() => {
   const makeTheme = (
     id: string,
     name: string,
-    options: Pick<Theme, "isPremium" | "isCustom"> = {}
+    options: Pick<Theme, "isCustom"> = {}
   ): Theme => ({
     id,
     name,
@@ -25,8 +25,8 @@ const fixture = vi.hoisted(() => {
 
   return {
     builtInThemes: [
-      makeTheme("premium", "Premium theme", { isPremium: true }),
       makeTheme("free", "Free theme"),
+      makeTheme("other", "Other theme"),
     ],
     customThemes: [
       makeTheme("custom:local", "Custom theme", { isCustom: true }),
@@ -101,7 +101,7 @@ describe("ThemeSelector", () => {
     expect(cards).toHaveLength(3)
     expect(cards.map((card) => card.textContent)).toEqual([
       expect.stringContaining("Free theme"),
-      expect.stringContaining("Premium theme"),
+      expect.stringContaining("Other theme"),
       expect.stringContaining("Custom theme"),
     ])
     expect(screen.getByText("themes.custom.title")).toBeTruthy()

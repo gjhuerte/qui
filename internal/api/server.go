@@ -104,12 +104,6 @@ type Server struct {
 	shuttingDown <-chan struct{}
 }
 
-// premiumUnlocked opens every theme feature to the themes handler. This build
-// has no license system, so nothing is gated.
-type premiumUnlocked struct{}
-
-func (premiumUnlocked) HasPremiumAccess(context.Context) (bool, error) { return true, nil }
-
 type Dependencies struct {
 	Config                           *config.AppConfig
 	Version                          string
@@ -384,10 +378,7 @@ func (s *Server) Handler() (*chi.Mux, error) {
 	backupsHandler := handlers.NewBackupsHandler(s.backupService)
 	trackerIconHandler := handlers.NewTrackerIconHandler(s.trackerIconService)
 	proxyHandler := proxy.NewHandler(s.clientPool, s.clientAPIKeyStore, s.instanceStore, s.syncManager, s.reannounceCache, s.reannounceService, s.config.Config.BaseURL)
-	themesHandler := handlers.NewThemesHandler(s.config, premiumUnlocked{}, s.themeSettingsStore, func(ctx context.Context) bool {
-		// Auth-disabled installs never carry a session flag; every caller is the trusted admin.
-		return s.config.Config.IsAuthDisabled() || s.sessionManager.GetBool(ctx, "authenticated")
-	}, s.activityHub)
+	themesHandler := handlers.NewThemesHandler(s.config, s.themeSettingsStore, s.activityHub)
 	crossSeedHandler := handlers.NewCrossSeedHandler(
 		s.crossSeedService,
 		s.instanceCrossSeedCompletionStore,

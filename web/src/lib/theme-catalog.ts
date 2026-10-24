@@ -9,8 +9,5 @@ export function buildThemeCatalog(
   builtInThemes: readonly Theme[],
   customThemes: readonly Theme[]
 ): Theme[] {
-  const freeThemes = builtInThemes.filter((theme) => !theme.isPremium)
-  const premiumThemes = builtInThemes.filter((theme) => theme.isPremium)
-
-  return [...freeThemes, ...premiumThemes, ...customThemes]
+  return [...builtInThemes, ...customThemes]
 }

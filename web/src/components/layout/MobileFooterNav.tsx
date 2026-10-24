@@ -23,7 +23,7 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { getThemeById, isThemePremium, themes } from "@/config/themes"
+import { getThemeById, themes } from "@/config/themes"
 import { useMobileScroll } from "@/contexts/MobileScrollContext"
 import { useTorrentSelection } from "@/contexts/TorrentSelectionContext"
 import { useAuth } from "@/hooks/useAuth"
@@ -206,24 +206,12 @@ export function MobileFooterNav() {
   }, [t])
 
   const handleThemeSelect = useCallback(async (themeId: string) => {
-    // The server is the authority: a premium theme without a license arrives
-    // as a locked stub with no CSS, so the locked flag is the gate.
-    if (getThemeById(themeId)?.locked) {
-      toast.error(t("themeToggle.premiumThemeError"))
-      return
-    }
-
     await setTheme(themeId)
     const theme = getThemeById(themeId)
     toast.success(t("themeToggle.switchedToTheme", { theme: theme?.name || themeId }))
   }, [t])
 
   const handleVariationSelect = useCallback(async (themeId: string, variationId: string): Promise<boolean> => {
-    if (getThemeById(themeId)?.locked) {
-      toast.error(t("themeToggle.premiumThemeError"))
-      return false
-    }
-
     await setTheme(themeId)
     await setThemeVariation(variationId)
     const theme = getThemeById(themeId)
@@ -666,8 +654,6 @@ export function MobileFooterNav() {
               <div className="text-sm font-medium mb-2">{t("themeToggle.theme")}</div>
               <div className="space-y-1">
                 {themeCatalog.map((theme) => {
-                  const isPremium = isThemePremium(theme.id)
-                  const isLocked = !!theme.locked
                   const colors = getThemeColors(theme)
                   const currentVariation = getThemeVariation(theme.id)
 
@@ -675,16 +661,12 @@ export function MobileFooterNav() {
                     <button
                       key={theme.id}
                       onClick={() => {
-                        if (!isLocked) {
-                          handleThemeSelect(theme.id)
-                          setShowThemeDialog(false)
-                        }
+                        handleThemeSelect(theme.id)
+                        setShowThemeDialog(false)
                       }}
-                      disabled={isLocked}
                       className={cn(
                         "w-full flex items-center gap-3 px-3 py-2 rounded-md transition-colors",
-                        currentTheme.id === theme.id ? "bg-accent" : "hover:bg-accent/50",
-                        isLocked && "opacity-60 cursor-not-allowed"
+                        currentTheme.id === theme.id ? "bg-accent" : "hover:bg-accent/50"
                       )}
                     >
                       <div className="flex-1">
@@ -699,11 +681,6 @@ export function MobileFooterNav() {
                           />
                           <div className="flex items-center gap-2 flex-1 min-w-0">
                             <span className="truncate">{theme.name}</span>
-                            {isPremium && (
-                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-secondary text-secondary-foreground font-medium flex-shrink-0">
-                                {t("themeToggle.premium")}
-                              </span>
-                            )}
                           </div>
                         </div>
 

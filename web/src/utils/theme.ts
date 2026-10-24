@@ -5,7 +5,6 @@
 
 import { themes, getThemeById, getDefaultTheme, type Theme } from "@/config/themes";
 import { isDemo } from "@/lib/demo";
-import { isSpreadsheetDocumentTitle, SPREADSHEET_THEME_IDS, spreadsheetDocumentTitle } from "@/lib/spreadsheet-disguise";
 import { loadThemeFonts } from "./fontLoader";
 import { getStoredVariation, setStoredVariation } from "@/hooks/usePersistedThemeVariation";
 
@@ -134,7 +133,6 @@ const cacheAppliedTheme = (theme: Theme): void => {
       id: theme.id,
       name: theme.name,
       description: theme.description,
-      isPremium: theme.isPremium,
       lightOnly: theme.lightOnly,
       variations: theme.variations,
       cssVars: theme.cssVars,
@@ -214,16 +212,6 @@ const applyTheme = async (theme: Theme, variation: string | null, isDark: boolea
   applyCriticalBackground(root, cssVars);
   cacheAppliedTheme(theme);
 
-  // Spreadsheet disguise: the tab title is a tell. Set/restore it on theme
-  // application so every page (not just those running useTitleBarSpeeds)
-  // carries the boring title.
-  if (SPREADSHEET_THEME_IDS.has(theme.id)) {
-    // data-theme is already stamped above, so this reads the right variant.
-    document.title = spreadsheetDocumentTitle();
-  } else if (isSpreadsheetDocumentTitle(document.title)) {
-    document.title = "qui";
-  }
-
   if (ENABLE_THEME_TRANSITIONS && withTransition) {
     setTimeout(() => {
       root.classList.remove(THEME_TRANSITION_CLASS);
@@ -279,15 +267,14 @@ const addMediaQueryListener = (
 
 // Public API
 
-// License enforcement lives server-side: premium CSS is never served to an
-// unlicensed install, so a premium theme id can only ever resolve to a locked
-// preview stub here. The stored id is kept so the theme comes back when the
-// registry can serve it (license activated, custom theme file restored).
+// An unknown stored id (a removed theme, or a custom theme file that is not
+// loaded yet) resolves to the default. The stored id is kept so a custom
+// theme comes back when its file is loaded.
 export const getCurrentTheme = (): Theme => {
   const storedThemeId = getStoredThemeId();
   if (storedThemeId) {
     const theme = getThemeById(storedThemeId);
-    if (theme && !theme.locked) {
+    if (theme) {
       return theme;
     }
   }
@@ -304,9 +291,9 @@ export const getCurrentThemeMode = (): ThemeMode => {
 export const setTheme = async (themeId: string, mode?: ThemeMode, variation?: string, isSystemChange = false): Promise<void> => {
   const theme = getThemeById(themeId);
 
-  // Unknown ids and locked premium stubs apply the default instead. The
-  // stored id is left alone so the selection survives until it resolves.
-  if (!theme || theme.locked) {
+  // Unknown ids apply the default instead. The stored id is left alone so the
+  // selection survives until it resolves.
+  if (!theme) {
     const defaultTheme = getDefaultTheme();
     const currentMode = mode || getCurrentThemeMode();
 

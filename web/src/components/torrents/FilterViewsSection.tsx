@@ -26,21 +26,27 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { usePersistedColumnFilters } from "@/hooks/usePersistedColumnFilters"
+import { usePersistedColumnSorting } from "@/hooks/usePersistedColumnSorting"
 import {
   useCreateFilterView,
   useDeleteFilterView,
   useFilterViews,
   useUpdateFilterView
 } from "@/hooks/useFilterViews"
-import { filterViewsEqual, toViewFilters } from "@/lib/filter-views"
+import { hasTableState, toViewFilters, toViewSnapshot, viewHasTableState, viewMatches, viewTableStateOf, type ViewTableState } from "@/lib/filter-views"
+import { navigateWithSearch } from "@/lib/router-search"
 import { cn } from "@/lib/utils"
 import type { FilterView, TorrentFilters } from "@/types"
 import { Bookmark, MoreVertical, Pencil, Plus, Save, Trash2 } from "lucide-react"
+import { useNavigate, useSearch } from "@tanstack/react-router"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
 interface FilterViewsSectionProps {
+  /** The instance whose table sort and column filters a view saves and restores. */
+  instanceId: number
   selectedFilters: TorrentFilters
   /** Must be the sidebar's applyFilterChange so subcategory expansion is recomputed. */
   onApply: (filters: TorrentFilters) => void
@@ -51,6 +57,7 @@ interface FilterViewsSectionProps {
 }
 
 export function FilterViewsSection({
+  instanceId,
   selectedFilters,
   onApply,
   hasActiveFilters,
@@ -63,6 +70,28 @@ export function FilterViewsSection({
   const createView = useCreateFilterView()
   const updateView = useUpdateFilterView()
   const deleteView = useDeleteFilterView()
+
+  // A view also saves the header search (the q URL parameter), the table sort,
+  // and the column filters. The table reads the same settings, so writing them
+  // here updates it.
+  const navigate = useNavigate()
+  const routeSearch = useSearch({ strict: false }) as { q?: string;[key: string]: unknown }
+  const [sorting, setSorting] = usePersistedColumnSorting([], instanceId)
+  const [columnFilters, setColumnFilters] = usePersistedColumnFilters(instanceId)
+  const tableState: ViewTableState = { search: routeSearch.q ?? "", sorting, columnFilters }
+  const canSave = hasActiveFilters || hasTableState(tableState)
+
+  const applyView = (view: FilterView) => {
+    onApply(toViewFilters(view.filters))
+    if (!viewHasTableState(view.filters)) return
+    const saved = viewTableStateOf(view.filters)
+    setSorting(saved.sorting)
+    setColumnFilters(saved.columnFilters)
+    const next = { ...routeSearch }
+    if (saved.search) next.q = saved.search
+    else delete next.q
+    navigateWithSearch({ navigate, search: next, replace: true })
+  }
 
   const [nameDialogOpen, setNameDialogOpen] = useState(false)
   const [renameTarget, setRenameTarget] = useState<FilterView | null>(null)
@@ -86,7 +115,7 @@ export function FilterViewsSection({
     const replaced = view.filters
     updateView.mutate({
       id: view.id,
-      data: { name: view.name, filters: toViewFilters(selectedFilters) },
+      data: { name: view.name, filters: toViewSnapshot(selectedFilters, tableState) },
     }, {
       onSuccess: () => {
         toast.success(t("filterSidebar.views.toasts.updated", { name: view.name }), {
@@ -111,7 +140,7 @@ export function FilterViewsSection({
         data: { name, filters: renameTarget.filters },
       }, opts)
     } else {
-      createView.mutate({ name, filters: toViewFilters(selectedFilters) }, opts)
+      createView.mutate({ name, filters: toViewSnapshot(selectedFilters, tableState) }, opts)
     }
   }
 
@@ -133,7 +162,7 @@ export function FilterViewsSection({
             )}
 
             {views?.map(view => {
-              const isActive = filterViewsEqual(selectedFilters, view.filters)
+              const isActive = viewMatches(view.filters, selectedFilters, tableState)
               return (
                 <div
                   key={view.id}
@@ -141,7 +170,7 @@ export function FilterViewsSection({
                 >
                   <button
                     type="button"
-                    onClick={() => onApply(toViewFilters(view.filters))}
+                    onClick={() => applyView(view)}
                     className={cn("flex-1 min-w-0 truncate text-left text-sm", itemClassName, isActive && "font-medium")}
                   >
                     {view.name}
@@ -157,7 +186,7 @@ export function FilterViewsSection({
                       </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem disabled={!hasActiveFilters} onSelect={() => updateViewFilters(view)}>
+                      <DropdownMenuItem disabled={!canSave} onSelect={() => updateViewFilters(view)}>
                         <Save className="h-4 w-4" />
                         {t("filterSidebar.views.updateFilters")}
                       </DropdownMenuItem>
@@ -177,7 +206,7 @@ export function FilterViewsSection({
 
             <button
               type="button"
-              disabled={!hasActiveFilters}
+              disabled={!canSave}
               onClick={openSaveDialog}
               className={cn(
                 "mt-1 flex items-center gap-1.5 self-start rounded text-xs text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground disabled:pointer-events-none disabled:opacity-50",

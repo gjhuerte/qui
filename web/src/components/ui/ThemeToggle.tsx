@@ -14,7 +14,7 @@ import {
   type ThemeMode
 } from "@/utils/theme";
 import { themes, getThemeById } from "@/config/themes";
-import { Sun, Moon, Monitor, Check, Lock, Palette } from "lucide-react";
+import { Sun, Moon, Monitor, Check, Palette } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
@@ -73,7 +73,7 @@ export const ThemeToggle: React.FC = () => {
 
   // Pure property reads over ~two dozen themes: cheap enough to recompute per
   // render, and a cache would go stale when the registry swaps an entry
-  // (license activation replacing a locked stub, custom theme refresh).
+  // (custom theme refresh).
   const modeKey = isDark ? "dark" : "light";
   const getPreviewColors = (theme: (typeof themes)[number]) => {
     const cssVars = modeKey === "dark" ? theme.cssVars.dark : theme.cssVars.light;
@@ -105,13 +105,6 @@ export const ThemeToggle: React.FC = () => {
   }, [t]);
 
   const handleThemeSelect = useCallback(async (themeId: string) => {
-    // The server is the authority: a premium theme without a license arrives
-    // as a locked stub with no CSS, so the locked flag is the gate.
-    if (getThemeById(themeId)?.locked) {
-      toast.error(t("themeToggle.premiumThemeError"));
-      return;
-    }
-
     await setTheme(themeId);
 
     const theme = getThemeById(themeId);
@@ -119,11 +112,6 @@ export const ThemeToggle: React.FC = () => {
   }, [t]);
 
   const handleVariationSelect = useCallback(async (themeId: string, variationId: string) => {
-    if (getThemeById(themeId)?.locked) {
-      toast.error(t("themeToggle.premiumThemeError"));
-      return;
-    }
-
     await setTheme(themeId);
     await setThemeVariation(variationId);
 
@@ -184,7 +172,6 @@ export const ThemeToggle: React.FC = () => {
         <div className="px-2 py-1.5 text-sm font-medium">{t("themeToggle.theme")}</div>
         <div className="max-h-[max(8rem,calc(var(--radix-dropdown-menu-content-available-height)-16rem))] overflow-y-auto overscroll-contain pr-1">
           {sortedThemes.map((theme) => {
-            const isLocked = !!theme.locked;
             const colors = getPreviewColors(theme);
             const isCurrentTheme = currentTheme.id === theme.id;
             const currentVariation = isCurrentTheme ? getThemeVariation(theme.id) : null;
@@ -197,11 +184,7 @@ export const ThemeToggle: React.FC = () => {
                   event.preventDefault();
                   void handleThemeSelect(theme.id);
                 }}
-                className={cn(
-                  "block min-w-0",
-                  isLocked && "opacity-60"
-                )}
-                disabled={isLocked}
+                className="block min-w-0"
               >
                 <div className="flex min-w-0 items-center gap-2">
                   <div
@@ -217,11 +200,7 @@ export const ThemeToggle: React.FC = () => {
                   </span>
 
                   <span className="flex size-4 shrink-0 items-center justify-center">
-                    {isLocked ? (
-                      <Lock className="size-3.5" />
-                    ) : isCurrentTheme ? (
-                      <Check className="size-4" />
-                    ) : null}
+                    {isCurrentTheme ? <Check className="size-4" /> : null}
                   </span>
                 </div>
 
