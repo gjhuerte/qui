@@ -10,9 +10,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/dbinterface"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/testutil/sshtest"
+	"github.com/gjhuerte/qui/internal/dbinterface"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/testutil/sshtest"
 )
 
 const (

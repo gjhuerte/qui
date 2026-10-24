@@ -13,7 +13,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/autobrr/qui/internal/dbinterface"
+	"github.com/gjhuerte/qui/internal/dbinterface"
 )
 
 var ErrNotificationTargetNotFound = errors.New("notification target not found")

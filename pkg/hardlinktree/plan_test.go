@@ -614,7 +614,7 @@ func TestValidateCandidatePathAcceptedStaysInsideBase(t *testing.T) {
 
 // NTFS reads "1:payload" as a stream of the file "1", which os.SameFile then
 // matches to the source, so a plan for it reports success without linking.
-// Native evidence on Windows: autobrr/qui#3140.
+// Native evidence on Windows: gjhuerte/qui#3140.
 func TestValidateCandidatePathWindowsNames(t *testing.T) {
 	t.Parallel()
 

@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 type searcheeWorkItem struct {

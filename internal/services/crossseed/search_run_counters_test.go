@@ -11,8 +11,8 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/services/jackett"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/services/jackett"
 )
 
 // Every completed candidate lands in exactly one bucket, so the three buckets

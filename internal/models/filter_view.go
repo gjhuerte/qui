@@ -10,7 +10,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/autobrr/qui/internal/dbinterface"
+	"github.com/gjhuerte/qui/internal/dbinterface"
 )
 
 // ErrDuplicateFilterViewName is returned when a user already has a view with the same name.

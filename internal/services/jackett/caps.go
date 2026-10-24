@@ -10,8 +10,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/autobrr/qui/internal/models"
-	gojackett "github.com/autobrr/qui/pkg/gojackett"
+	"github.com/gjhuerte/qui/internal/models"
+	gojackett "github.com/gjhuerte/qui/pkg/gojackett"
 )
 
 // TorznabCaps captures the parsed capability and category data from a Torznab caps response.

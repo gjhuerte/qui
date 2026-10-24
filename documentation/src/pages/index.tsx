@@ -84,12 +84,12 @@ export default function Home(): ReactNode {
             operatingSystem: "Linux, Windows, macOS, Docker",
             description: siteConfig.tagline,
             url: siteConfig.url,
-            downloadUrl: "https://github.com/autobrr/qui/releases",
+            downloadUrl: "https://github.com/gjhuerte/qui/releases",
             softwareHelp: `${siteConfig.url}/docs/intro/`,
             license: "https://www.gnu.org/licenses/gpl-2.0.html",
             offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-            author: { "@type": "Organization", name: "autobrr", url: "https://github.com/autobrr" },
-            sameAs: ["https://github.com/autobrr/qui", "https://discord.autobrr.com/qui"],
+            author: { "@type": "Person", name: "gjhuerte", url: "https://github.com/gjhuerte" },
+            sameAs: ["https://github.com/gjhuerte/qui"],
           })}
         </script>
       </Head>
@@ -103,7 +103,7 @@ export default function Home(): ReactNode {
             <Link className={styles.buttonPrimary} to="/docs/getting-started/installation">
               Get started
             </Link>
-            <Link className={styles.buttonSecondary} href="https://github.com/autobrr/qui">
+            <Link className={styles.buttonSecondary} href="https://github.com/gjhuerte/qui">
               GitHub
             </Link>
           </div>
@@ -129,8 +129,8 @@ export default function Home(): ReactNode {
           </p>
           <p>
             Download one binary or run the Docker image on Linux, macOS, or Windows. SQLite by default,
-            Postgres when you want it. Free and open source under GPL-2.0-or-later, made by the{" "}
-            <Link href="https://github.com/autobrr">autobrr</Link> team. The demo above runs the real
+            Postgres when you want it. Free and open source under GPL-2.0-or-later, maintained by{" "}
+            <Link href="https://github.com/gjhuerte">gjhuerte</Link>. The demo above runs the real
             interface on synthetic data.
           </p>
           <div className={styles.actions}>

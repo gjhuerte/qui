@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/sys/windows"
 
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 func TestDirScanStore_WindowsDirectoryIdentity(t *testing.T) {

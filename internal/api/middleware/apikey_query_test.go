@@ -11,8 +11,8 @@ import (
 	"github.com/alexedwards/scs/v2"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/auth"
-	"github.com/autobrr/qui/internal/testutil/testdb"
+	"github.com/gjhuerte/qui/internal/auth"
+	"github.com/gjhuerte/qui/internal/testutil/testdb"
 )
 
 func TestAPIKeyFromQuery_AllowsQueryParam(t *testing.T) {

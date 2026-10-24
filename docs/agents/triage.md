@@ -121,7 +121,7 @@ The report lacks a detail that blocks a decision. Post this comment, add `needs-
 - question 1
 ```
 
-If logs would help, ask the reporter to upload them at https://bin.getqui.com and post the Paste link in a comment.
+If logs would help, ask the reporter to post them as a secret gist at https://gist.github.com and to add the link in a comment.
 
 Each question must name the exact detail you need. Put everything you established into the first list, so the next pass does not repeat your work.
 
@@ -157,7 +157,7 @@ Every `enhancement` lands here too, and it stays a discussion. Post the agent br
 
 Decide from the code first. A log link alone does not change the outcome. If the outcome depends on what the logs show, and the workflow cannot read them, hand the discussion to a maintainer:
 
-1. Post one comment in the Triage Notes layout. List what triage established. In place of the questions for the reporter, name the question that the logs must answer. End with `@s0up4200 will read the logs that you shared. You do not need to do anything else.`
+1. Post one comment in the Triage Notes layout. List what triage established. In place of the questions for the reporter, name the question that the logs must answer. End with `@gjhuerte will read the logs that you shared. You do not need to do anything else.`
 2. Add `ready-for-human`. Remove `needs-info` or `needs-triage`.
 
 Do not post the agent brief. The maintainer fetches the logs, answers the question, and triages the discussion again.
@@ -220,4 +220,4 @@ Brief rules:
 
 ## Privacy
 
-Never repeat a tracker URL that has a path, query, or key. A Paste link on bin.getqui.com is not a tracker URL. Only maintainers can read it, so copy it into the brief. Never quote log lines in a public comment or issue. Summarize them. Never repeat a release name copied from the report. Describe the shape instead: "an anime season pack with a bracketed group tag".
+Never repeat a tracker URL that has a path, query, or key. A gist link is not a tracker URL, so copy it into the brief. Never quote log lines in a public comment or issue. Summarize them. Never repeat a release name copied from the report. Describe the shape instead: "an anime season pack with a bracketed group tag".

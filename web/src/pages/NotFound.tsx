@@ -29,7 +29,7 @@ export function NotFound() {
           <p>
             {t("notFound.reportTo")}{" "}
             <a
-              href="https://github.com/autobrr/qui/discussions/new?category=issue-triage"
+              href="https://github.com/gjhuerte/qui/discussions/new?category=issue-triage"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:text-primary/80 underline font-medium underline-offset-2 transition-colors"

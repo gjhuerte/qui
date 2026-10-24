@@ -12,8 +12,8 @@ import (
 
 	"github.com/autobrr/go-torrent/metainfo"
 
-	"github.com/autobrr/qui/pkg/pathutil"
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/pkg/pathutil"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 // MatchMode defines how strictly files are compared.

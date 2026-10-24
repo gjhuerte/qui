@@ -6,7 +6,7 @@ package crossseed
 import (
 	"slices"
 
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 // trigger is how a cross-seed was found.

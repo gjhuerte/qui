@@ -20,9 +20,9 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tmaxmax/go-sse"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/qbittorrent"
-	"github.com/autobrr/qui/internal/testutil/testdb"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/testutil/testdb"
 )
 
 func TestStreamManagerHandleSyncErrorPublishesErrorEvent(t *testing.T) {

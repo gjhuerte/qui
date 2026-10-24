@@ -13,8 +13,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/autobrr/qui/internal/dbinterface"
-	"github.com/autobrr/qui/internal/domain"
+	"github.com/gjhuerte/qui/internal/dbinterface"
+	"github.com/gjhuerte/qui/internal/domain"
 )
 
 var ErrInstanceNotFound = errors.New("instance not found")

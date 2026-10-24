@@ -16,8 +16,8 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/crypto/ssh"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/testutil/sshtest"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/testutil/sshtest"
 )
 
 // requireShell skips where the fake server cannot run commands through a

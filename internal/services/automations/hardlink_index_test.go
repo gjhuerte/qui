@@ -17,14 +17,14 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/database"
-	"github.com/autobrr/qui/internal/fsops"
-	localbackend "github.com/autobrr/qui/internal/fsops/local"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/qbittorrent"
-	"github.com/autobrr/qui/internal/services/filesmanager"
-	"github.com/autobrr/qui/internal/testutil/testdb"
-	"github.com/autobrr/qui/pkg/hardlink"
+	"github.com/gjhuerte/qui/internal/database"
+	"github.com/gjhuerte/qui/internal/fsops"
+	localbackend "github.com/gjhuerte/qui/internal/fsops/local"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/services/filesmanager"
+	"github.com/gjhuerte/qui/internal/testutil/testdb"
+	"github.com/gjhuerte/qui/pkg/hardlink"
 )
 
 func TestIsPathInsideBase(t *testing.T) {

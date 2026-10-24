@@ -15,13 +15,13 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/fsops"
-	localbackend "github.com/autobrr/qui/internal/fsops/local"
-	remotebackend "github.com/autobrr/qui/internal/fsops/remote"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/services/orphanscan"
-	"github.com/autobrr/qui/internal/testutil/sshtest"
-	"github.com/autobrr/qui/internal/testutil/testdb"
+	"github.com/gjhuerte/qui/internal/fsops"
+	localbackend "github.com/gjhuerte/qui/internal/fsops/local"
+	remotebackend "github.com/gjhuerte/qui/internal/fsops/remote"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/services/orphanscan"
+	"github.com/gjhuerte/qui/internal/testutil/sshtest"
+	"github.com/gjhuerte/qui/internal/testutil/testdb"
 )
 
 func TestOrphanScanSettings_CategoryPathsRequireDefaultSavePath(t *testing.T) {

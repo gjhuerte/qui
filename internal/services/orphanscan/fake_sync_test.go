@@ -9,8 +9,8 @@ import (
 
 	qbt "github.com/autobrr/go-qbittorrent"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
 )
 
 var errNotStubbed = errors.New("orphanscan test: call not stubbed")

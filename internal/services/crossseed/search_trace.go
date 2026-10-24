@@ -9,8 +9,8 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/autobrr/qui/internal/services/jackett"
-	"github.com/autobrr/qui/pkg/redact"
+	"github.com/gjhuerte/qui/internal/services/jackett"
+	"github.com/gjhuerte/qui/pkg/redact"
 )
 
 // Statuses for SearchIndexerOutcome.Status.

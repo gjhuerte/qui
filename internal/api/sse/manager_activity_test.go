@@ -13,7 +13,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/services/activity"
+	"github.com/gjhuerte/qui/internal/services/activity"
 )
 
 // connectActivityStream opens an activity-only SSE connection (no torrent

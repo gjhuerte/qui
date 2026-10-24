@@ -14,12 +14,12 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/internal/fsops/local"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/qbittorrent"
-	"github.com/autobrr/qui/pkg/hardlink"
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/fsops/local"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/pkg/hardlink"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 const (

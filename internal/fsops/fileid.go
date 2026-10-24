@@ -9,8 +9,8 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/pkg/hardlink"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/pkg/hardlink"
 )
 
 // FileKey is a FileID bound to the filesystem it came from. Two keys are

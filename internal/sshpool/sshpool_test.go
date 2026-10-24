@@ -17,8 +17,8 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/crypto/ssh"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/testutil/sshtest"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/testutil/sshtest"
 )
 
 var testClientKey = sshtest.PrivateKey("")

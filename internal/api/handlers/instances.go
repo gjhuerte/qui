@@ -17,11 +17,11 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/domain"
-	"github.com/autobrr/qui/internal/models"
-	internalqbittorrent "github.com/autobrr/qui/internal/qbittorrent"
-	"github.com/autobrr/qui/internal/services/reannounce"
-	"github.com/autobrr/qui/internal/sshpool"
+	"github.com/gjhuerte/qui/internal/domain"
+	"github.com/gjhuerte/qui/internal/models"
+	internalqbittorrent "github.com/gjhuerte/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/services/reannounce"
+	"github.com/gjhuerte/qui/internal/sshpool"
 )
 
 type InstancesHandler struct {

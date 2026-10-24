@@ -11,8 +11,8 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/fsops"
-	qbsync "github.com/autobrr/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/fsops"
+	qbsync "github.com/gjhuerte/qui/internal/qbittorrent"
 )
 
 const (

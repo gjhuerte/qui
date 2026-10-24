@@ -14,7 +14,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/pkg/redact"
+	"github.com/gjhuerte/qui/pkg/redact"
 )
 
 type Server struct {

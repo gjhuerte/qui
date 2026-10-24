@@ -19,9 +19,9 @@ import (
 	"github.com/stretchr/testify/require"
 	_ "modernc.org/sqlite"
 
-	"github.com/autobrr/qui/internal/database"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/testutil/testdb"
+	"github.com/gjhuerte/qui/internal/database"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/testutil/testdb"
 )
 
 // Helper function to insert a test instance with interned fields

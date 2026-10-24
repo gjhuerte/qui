@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 // Synthetic fixture per repo rule: yearless one-word title with a group tag

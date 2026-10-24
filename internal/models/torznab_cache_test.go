@@ -14,10 +14,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/database"
-	"github.com/autobrr/qui/internal/dbinterface"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/testutil/testdb"
+	"github.com/gjhuerte/qui/internal/database"
+	"github.com/gjhuerte/qui/internal/dbinterface"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/testutil/testdb"
 )
 
 // expiredCacheAt is before the synctest bubble clock (2000-01-01) and older

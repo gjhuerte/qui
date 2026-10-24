@@ -14,9 +14,9 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/services/crossseed"
-	"github.com/autobrr/qui/internal/services/jackett"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/services/crossseed"
+	"github.com/gjhuerte/qui/internal/services/jackett"
 )
 
 // timedSearcher answers each search after a fixed delay and records when each

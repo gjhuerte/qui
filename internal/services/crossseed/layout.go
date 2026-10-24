@@ -10,7 +10,7 @@ import (
 
 	qbt "github.com/autobrr/go-qbittorrent"
 
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 // TorrentLayout classifies how a torrent stores its payload so we can avoid

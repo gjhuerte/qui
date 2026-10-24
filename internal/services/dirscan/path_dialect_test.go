@@ -10,8 +10,8 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/fsops"
-	localbackend "github.com/autobrr/qui/internal/fsops/local"
+	"github.com/gjhuerte/qui/internal/fsops"
+	localbackend "github.com/gjhuerte/qui/internal/fsops/local"
 )
 
 // slashBackend answers like a remote: slash dialect, canned directory listing,

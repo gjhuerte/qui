@@ -15,9 +15,9 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/services/automations"
-	"github.com/autobrr/qui/internal/testutil/testdb"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/services/automations"
+	"github.com/gjhuerte/qui/internal/testutil/testdb"
 )
 
 func TestAutomationDecodePayload_Category(t *testing.T) {

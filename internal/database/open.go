@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/autobrr/qui/internal/domain"
+	"github.com/gjhuerte/qui/internal/domain"
 )
 
 type OpenOptions struct {

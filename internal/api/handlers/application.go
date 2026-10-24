@@ -11,9 +11,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/autobrr/qui/internal/buildinfo"
-	"github.com/autobrr/qui/internal/config"
-	"github.com/autobrr/qui/internal/domain"
+	"github.com/gjhuerte/qui/internal/buildinfo"
+	"github.com/gjhuerte/qui/internal/config"
+	"github.com/gjhuerte/qui/internal/domain"
 )
 
 type ApplicationHandler struct {

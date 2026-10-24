@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/testutil/sshtest"
+	"github.com/gjhuerte/qui/internal/testutil/sshtest"
 )
 
 const (

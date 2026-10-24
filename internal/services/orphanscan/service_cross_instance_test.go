@@ -15,8 +15,8 @@ import (
 
 	qbt "github.com/autobrr/go-qbittorrent"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 type stubHealthChecker struct {

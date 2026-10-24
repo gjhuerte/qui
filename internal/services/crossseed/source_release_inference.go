@@ -11,7 +11,7 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/autobrr/rls"
 
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 // deriveSourceReleaseForSearch enhances parsed torrent metadata with information inferred

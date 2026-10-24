@@ -15,7 +15,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/dbinterface"
+	"github.com/gjhuerte/qui/internal/dbinterface"
 )
 
 // MatchMode defines how files are matched to torrent files.

@@ -9,9 +9,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/testutil/testdb"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/testutil/testdb"
 )
 
 // Folder cleanup reads the ignore paths through this matcher, and they must

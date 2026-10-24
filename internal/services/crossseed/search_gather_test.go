@@ -11,7 +11,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/services/jackett"
+	"github.com/gjhuerte/qui/internal/services/jackett"
 )
 
 // fakeReply is one canned pass response, keyed by query, year, and indexers.

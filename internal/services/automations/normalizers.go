@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/autobrr/qui/pkg/pathcmp"
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/pkg/pathcmp"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 var (

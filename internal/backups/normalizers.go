@@ -3,7 +3,7 @@
 
 package backups
 
-import "github.com/autobrr/qui/pkg/stringutils"
+import "github.com/gjhuerte/qui/pkg/stringutils"
 
 var lowerTrimNormalizer = stringutils.NewDefaultNormalizer()
 

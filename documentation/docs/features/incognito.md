@@ -2,7 +2,7 @@
 sidebar_position: 18
 title: Incognito mode for screen sharing
 sidebar_label: Incognito Mode
-description: Disguise torrent names, trackers, and save paths for screen sharing, or turn the whole app into a spreadsheet with a disguise theme.
+description: Disguise torrent names, trackers, and save paths for screen sharing.
 ---
 
 # Incognito Mode
@@ -47,26 +47,4 @@ Sizes, speeds, progress, states, and dates stay real. Incognito mode is a visual
 
 :::warning
 If you export a `.torrent` file while incognito mode is on, qui renames the downloaded file with the fake name. The file still contains the real torrent data. Do not share exported files as if they were disguised.
-:::
-
-## Spreadsheet disguise themes
-
-The **Spreadsheet** and **Spreadsheet Classic** themes make qui look like a spreadsheet app. Spreadsheet Classic renders a 2003-era look and is light-only. Both are premium themes and need the same license that unlocks [custom themes](./custom-themes.md).
-
-Select them under **Settings > Premium Themes**. While one is active, qui renders spreadsheet chrome:
-
-| Element | What it does |
-|---------|--------------|
-| Ribbon tabs | Tabs such as **File**, **Home**, and **Data** across the top. Each tab is a real navigation target: **File** opens Settings, **Home** opens your first active instance, and the rest map to qui pages. Spreadsheet Classic renders a 2003-era menu bar with different names. There, **Data** opens your first active instance. |
-| Formula bar | The name box shows the cell reference `A1`, or the selected row count such as `3R`. The `fx` input filters the torrent list, the same as the header search. |
-| Sheet tabs | Tabs at the bottom, one per active instance. The **+** tab opens instance management. |
-| Tab title | The browser tab reads `Book1.xlsx` (`Book1.xls` for Classic) and the favicon becomes a spreadsheet grid. |
-| Renamed labels | Navigation entries, table headers, and filter labels use office words: Seeds becomes Sources, Peers becomes Links, Ratio becomes Yield, and ETA becomes Due. These strings stay English in every UI language. |
-
-The spreadsheet chrome only renders on desktop-width screens. The ribbon tabs render on every page. The formula bar and the sheet tabs render only on the torrent list. Dialogs, configuration pages, and toasts keep their real names.
-
-While a spreadsheet theme is active, incognito mode switches its vocabulary from Linux ISOs to office documents. Torrent names become spreadsheet files, for example `Q1 Budget Consolidation v3.xlsx`. Categories become departments such as `Finance`, and trackers become internal file servers such as `fileserver-01.corp.internal`.
-
-:::note
-A spreadsheet theme disguises the app chrome, not your data. Real torrent names stay visible until you also turn on incognito mode.
 :::

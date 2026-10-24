@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/services/crossseed"
+	"github.com/gjhuerte/qui/internal/services/crossseed"
 )
 
 func TestWebhookResponseStatus(t *testing.T) {

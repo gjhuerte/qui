@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/autobrr/qui/internal/dbinterface"
+	"github.com/gjhuerte/qui/internal/dbinterface"
 )
 
 // OrphanScanSettings represents orphan scan settings for an instance.

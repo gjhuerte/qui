@@ -11,7 +11,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/fsops/local"
+	"github.com/gjhuerte/qui/internal/fsops/local"
 )
 
 func TestScanner_WindowsJunctionsAreNotMediaFiles(t *testing.T) {

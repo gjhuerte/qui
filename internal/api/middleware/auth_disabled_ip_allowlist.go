@@ -11,7 +11,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/domain"
+	"github.com/gjhuerte/qui/internal/domain"
 )
 
 // RequireAuthDisabledIPAllowlist enforces authDisabledAllowedCIDRs when

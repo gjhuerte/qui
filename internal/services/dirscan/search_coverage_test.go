@@ -11,8 +11,8 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/services/jackett"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/services/jackett"
 )
 
 // stubJackettSearcher completes every search with a fixed response, including the

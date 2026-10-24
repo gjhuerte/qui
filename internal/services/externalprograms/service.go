@@ -23,9 +23,9 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/domain"
-	extargs "github.com/autobrr/qui/internal/externalprograms"
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/domain"
+	extargs "github.com/gjhuerte/qui/internal/externalprograms"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 // Activity action constant for external program execution.

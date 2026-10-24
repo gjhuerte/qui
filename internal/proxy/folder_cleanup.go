@@ -12,7 +12,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
 )
 
 // statusRecorder notes the status the proxied qBittorrent answered with. It

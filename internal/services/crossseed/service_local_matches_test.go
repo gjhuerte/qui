@@ -12,7 +12,7 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
 )
 
 // localMatchSyncManager is a minimal fake for testing file overlap logic.

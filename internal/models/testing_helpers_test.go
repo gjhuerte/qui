@@ -7,7 +7,7 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/autobrr/qui/internal/dbinterface"
+	"github.com/gjhuerte/qui/internal/dbinterface"
 )
 
 // mockQuerier wraps sql.DB to implement dbinterface.Querier for tests

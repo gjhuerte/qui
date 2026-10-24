@@ -13,7 +13,7 @@ const stubs = vi.hoisted(() => {
   return {
     translation: { t: (key: string) => key, i18n: { language: "en" } },
     api: new Proxy({}, { get: () => call }),
-    selfUpdate: { setConfirmOpen: () => {} },
+    restart: { setConfirmOpen: () => {} },
   }
 })
 
@@ -25,7 +25,7 @@ vi.mock("@/lib/api", () => ({
   api: stubs.api,
   APIError: class extends Error {},
 }))
-vi.mock("@/hooks/useSelfUpdate", () => ({ useSelfUpdate: () => stubs.selfUpdate }))
+vi.mock("@/hooks/useRestart", () => ({ useRestart: () => stubs.restart }))
 vi.mock("@/components/indexers/IndexersPage", () => ({ IndexersPage: () => <div data-testid="section-indexers" /> }))
 vi.mock("@/components/settings/GazelleSettingsCard", () => ({ GazelleSettingsCard: () => null }))
 vi.mock("@/components/settings/ArrInstancesManager", () => ({ ArrInstancesManager: () => <div data-testid="section-integrations" /> }))

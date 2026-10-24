@@ -15,9 +15,9 @@ import (
 	"github.com/autobrr/rls"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/pkg/releases"
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/pkg/releases"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 // The bracket-anime pack puts the fansub tag in Site and hands Group whatever

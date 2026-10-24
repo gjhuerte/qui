@@ -7,7 +7,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 // Pool resolves an instance ID to the appropriate Backend. For instances with

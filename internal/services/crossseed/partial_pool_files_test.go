@@ -13,7 +13,7 @@ import (
 	"github.com/autobrr/go-torrent/metainfo"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 func TestBuildPartialPoolFileDescriptorsJoinsV2RootsByPath(t *testing.T) {

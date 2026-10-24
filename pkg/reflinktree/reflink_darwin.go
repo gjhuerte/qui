@@ -12,7 +12,7 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/autobrr/qui/pkg/fsutil"
+	"github.com/gjhuerte/qui/pkg/fsutil"
 )
 
 // SupportsReflink tests whether the given directory supports reflinks

@@ -12,10 +12,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/internal/fsops/local"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/pkg/hardlink"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/fsops/local"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/pkg/hardlink"
 )
 
 // collidingIDBackend reports one identity for every directory, the way a

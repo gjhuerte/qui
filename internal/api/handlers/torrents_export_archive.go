@@ -17,8 +17,8 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/pkg/pathutil"
-	"github.com/autobrr/qui/pkg/torrentname"
+	"github.com/gjhuerte/qui/pkg/pathutil"
+	"github.com/gjhuerte/qui/pkg/torrentname"
 )
 
 type torrentArchiveExporter interface {

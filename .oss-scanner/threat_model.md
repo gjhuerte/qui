@@ -40,5 +40,5 @@ qui runs on Linux, macOS, and Windows. A path or command issue that occurs on Wi
 ## Anything to leave alone
 
 - A logged-in user can change qBittorrent settings, run external programs that they configured, and connect qui to any URL. These are features.
-- `documentation/` is the getqui.com website and is out of scope.
+- `documentation/` is the documentation website and is out of scope.
 - Do not report missing rate limits on routes that need a login.

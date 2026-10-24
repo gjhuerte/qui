@@ -8,10 +8,10 @@ import (
 	"github.com/prometheus/client_golang/prometheus/collectors"
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/database"
-	"github.com/autobrr/qui/internal/metrics/collector"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/database"
+	"github.com/gjhuerte/qui/internal/metrics/collector"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
 )
 
 type MetricsManager struct {

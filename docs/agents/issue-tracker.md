@@ -2,7 +2,7 @@
 
 Bug reports and feature requests arrive as GitHub Discussions in the categories Issue Triage and Feature Requests, Ideas. Discussions are the triage surface. Issues hold only work that an agent or a human can start: a confirmed bug gets a linked issue in `ready-for-agent` or `ready-for-human`. Specs and tickets from `/to-spec`, `/to-tickets`, and `/wayfinder` are issues.
 
-Use the `gh` CLI for all operations. GitHub shares one number space across discussions and issues. Resolve a bare `#42` in one call: `gh api graphql -f query='{repository(owner:"autobrr",name:"qui"){issueOrPullRequest(number:42){__typename} discussion(number:42){title}}}'`. The command exits non-zero when one side is missing; read `data` anyway. `__typename` tells an issue from a PR.
+Use the `gh` CLI for all operations. GitHub shares one number space across discussions and issues. Resolve a bare `#42` in one call: `gh api graphql -f query='{repository(owner:"gjhuerte",name:"qui"){issueOrPullRequest(number:42){__typename} discussion(number:42){title}}}'`. The command exits non-zero when one side is missing; read `data` anyway. `__typename` tells an issue from a PR.
 
 ## Discussions
 
@@ -13,7 +13,7 @@ Use the `gh` CLI for all operations. GitHub shares one number space across discu
 - **Close**: `gh discussion` has no close command. Use GraphQL with the discussion node id:
 
   ```bash
-  ID=$(gh api graphql -f query='query($n:Int!){repository(owner:"autobrr",name:"qui"){discussion(number:$n){id}}}' -F n=<number> --jq .data.repository.discussion.id)
+  ID=$(gh api graphql -f query='query($n:Int!){repository(owner:"gjhuerte",name:"qui"){discussion(number:$n){id}}}' -F n=<number> --jq .data.repository.discussion.id)
   gh api graphql -f query='mutation($id:ID!,$r:DiscussionCloseReason!){closeDiscussion(input:{discussionId:$id,reason:$r}){discussion{url}}}' -f id="$ID" -f r=RESOLVED
   ```
 
@@ -46,13 +46,12 @@ Run `gh issue view <number> --json title,state,labels,body,comments`. If the num
 
 ## Log links
 
-Reporters upload logs to brrbin at `bin.getqui.com` and post the Paste link (`https://bin.getqui.com/p/<id>`) in the Log link field of the discussion. An issue from triage copies the links into the **Logs** section of the agent brief.
+Reporters post long logs as a secret gist (`https://gist.github.com/...`) in the Log link field of the discussion. An issue from triage copies the links into the **Logs** section of the agent brief.
 
 1. Collect the log links from the issue body and comments. If the issue has none, open the discussion in its `From discussion #N` line and collect them there.
-2. Run `brrbin fetch <link>...` for each `bin.getqui.com` link. The command writes the files to `~/.cache/brrbin/<id>/` and prints one path per line. It needs `bin.getqui.com` in `BRRBIN_HOSTS` and a maintainer sign-in. The first sign-in needs a human to enter a GitHub device code.
-3. Open a link to another paste site in the browser, or ask the user to open it.
+2. Run `gh gist view <link> --raw` for each gist link. Open a link to another paste site in the browser, or ask the user to open it.
 
-If `brrbin fetch` prints `private paste`, the Paste expired or does not exist. Write that the logs are not available. Ask the reporter for a new upload only if the bug cannot be diagnosed without the logs.
+If a gist is gone, write that the logs are not available. Ask the reporter for a new upload only if the bug cannot be diagnosed without the logs.
 
 Never quote log lines in an issue, a discussion, or a pull request. They are public. Summarize the lines instead.
 
@@ -62,7 +61,7 @@ Used by `/wayfinder`. The **map** is a single issue with **child** issues as tic
 
 - **Map**: a single issue labelled `wayfinder:map`, holding the Notes / Decisions-so-far / Fog body. `gh issue create --label wayfinder:map`.
 - **Child ticket**: an issue linked to the map as a GitHub sub-issue (`gh api` on the sub-issues endpoint). Where sub-issues are not enabled, add the child to a task list in the map body and put `Part of #<map>` at the top of the child body. Labels: `wayfinder:<type>` (`research`/`prototype`/`grilling`/`task`). Once claimed, the ticket is assigned to the driving dev.
-- **Blocking**: GitHub native issue dependencies. Add an edge with `gh api --method POST repos/autobrr/qui/issues/<child>/dependencies/blocked_by -F issue_id=<blocker-db-id>`, where `<blocker-db-id>` is the numeric database id of the blocker (`gh api repos/autobrr/qui/issues/<n> --jq .id`, not the `#number` or `node_id`). GitHub reports `issue_dependencies_summary.blocked_by` (open blockers only). Where dependencies are not available, fall back to a `Blocked by: #<n>, #<n>` line at the top of the child body. A ticket is unblocked when every blocker is closed.
+- **Blocking**: GitHub native issue dependencies. Add an edge with `gh api --method POST repos/gjhuerte/qui/issues/<child>/dependencies/blocked_by -F issue_id=<blocker-db-id>`, where `<blocker-db-id>` is the numeric database id of the blocker (`gh api repos/gjhuerte/qui/issues/<n> --jq .id`, not the `#number` or `node_id`). GitHub reports `issue_dependencies_summary.blocked_by` (open blockers only). Where dependencies are not available, fall back to a `Blocked by: #<n>, #<n>` line at the top of the child body. A ticket is unblocked when every blocker is closed.
 - **Frontier query**: list the open children of the map, drop any with an open blocker or an assignee, first in map order wins.
 - **Claim**: `gh issue edit <n> --add-assignee @me`, the first write of the session.
 - **Resolve**: `gh issue comment <n> --body "<answer>"`, then `gh issue close <n>`, then append a context pointer to the Decisions-so-far of the map.

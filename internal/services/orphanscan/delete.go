@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"io/fs"
 
-	"github.com/autobrr/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/fsops"
 )
 
 // ErrInUse indicates a deletion target contains files currently in use by torrents.

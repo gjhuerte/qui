@@ -6,7 +6,7 @@ package testdb
 import (
 	"golang.org/x/sys/windows"
 
-	"github.com/autobrr/qui/pkg/pathutil"
+	"github.com/gjhuerte/qui/pkg/pathutil"
 )
 
 func publishTemplate(src, dst string) error {

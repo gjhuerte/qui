@@ -46,7 +46,6 @@ type Config struct {
 	DatabaseConnMaxLifetime  int    `toml:"databaseConnMaxLifetime" mapstructure:"databaseConnMaxLifetime"`
 	QbittorrentTimeout       int    `toml:"qbittorrentTimeout" mapstructure:"qbittorrentTimeout"`
 	CheckForUpdates          bool   `toml:"checkForUpdates" mapstructure:"checkForUpdates"`
-	DisableSelfUpdate        bool   `toml:"disableSelfUpdate" mapstructure:"disableSelfUpdate"`
 	PprofEnabled             bool   `toml:"pprofEnabled" mapstructure:"pprofEnabled"`
 	PprofAddr                string `toml:"pprofAddr" mapstructure:"pprofAddr"`
 	MetricsEnabled           bool   `toml:"metricsEnabled" mapstructure:"metricsEnabled"`

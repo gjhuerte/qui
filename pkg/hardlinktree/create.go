@@ -12,7 +12,7 @@ import (
 	"slices"
 	"syscall"
 
-	"github.com/autobrr/qui/pkg/fsutil"
+	"github.com/gjhuerte/qui/pkg/fsutil"
 )
 
 // ErrRollbackFailed marks a failed tree create whose rollback also failed, so

@@ -17,7 +17,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/autobrr/qui/pkg/httphelpers"
+	"github.com/gjhuerte/qui/pkg/httphelpers"
 )
 
 const (

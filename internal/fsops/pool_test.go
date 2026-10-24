@@ -11,8 +11,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/pkg/hardlinktree"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/pkg/hardlinktree"
 )
 
 // fakeInstanceStore implements instanceGetter for tests.

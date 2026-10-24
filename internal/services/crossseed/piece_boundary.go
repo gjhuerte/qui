@@ -9,7 +9,7 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/autobrr/go-torrent/metainfo"
 
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 // PieceBoundarySafetyResult contains the outcome of a piece-boundary safety check.

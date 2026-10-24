@@ -11,8 +11,8 @@ import (
 	"github.com/autobrr/rls"
 	"github.com/rs/zerolog/log"
 
-	internalqb "github.com/autobrr/qui/internal/qbittorrent"
-	"github.com/autobrr/qui/pkg/stringutils"
+	internalqb "github.com/gjhuerte/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 const contentPrefilterSizeTolerancePercent = 0.0

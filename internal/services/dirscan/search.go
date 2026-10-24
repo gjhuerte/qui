@@ -11,8 +11,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/autobrr/qui/internal/services/crossseed"
-	"github.com/autobrr/qui/internal/services/jackett"
+	"github.com/gjhuerte/qui/internal/services/crossseed"
+	"github.com/gjhuerte/qui/internal/services/jackett"
 )
 
 const (

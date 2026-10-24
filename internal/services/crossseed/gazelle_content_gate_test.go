@@ -10,8 +10,8 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/services/crossseed/gazellemusic"
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/internal/services/crossseed/gazellemusic"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 func TestGazellePlausibleContent(t *testing.T) {

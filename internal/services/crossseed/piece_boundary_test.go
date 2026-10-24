@@ -16,7 +16,7 @@ import (
 	"github.com/autobrr/go-torrent/metainfo"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 func mustLoadTorrent(t *testing.T, torrentData []byte) (metainfo.MetaInfo, metainfo.Info) {

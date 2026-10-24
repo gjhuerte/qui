@@ -11,10 +11,10 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/pkg/hardlinktree"
-	"github.com/autobrr/qui/pkg/reflinktree"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/pkg/hardlinktree"
+	"github.com/gjhuerte/qui/pkg/reflinktree"
 )
 
 // linkModeResult represents the outcome of hardlink or reflink mode processing.

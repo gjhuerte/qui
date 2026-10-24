@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-// In-memory library for the getqui.com demo build. Two instances of synthetic
+// In-memory library for the docs-site demo build. Two instances of synthetic
 // torrents, a query engine that answers the list endpoint, and the fake writes
 // behind bulk actions. Built once from a fixed seed, so every visitor sees the
 // same library and a reload resets it.

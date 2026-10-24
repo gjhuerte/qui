@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/fsops"
 )
 
 func TestResolveLocalTorrentFile(t *testing.T) {

@@ -14,10 +14,10 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/qbittorrent"
-	"github.com/autobrr/qui/pkg/releases"
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/pkg/releases"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 const maxConditionDepth = 20

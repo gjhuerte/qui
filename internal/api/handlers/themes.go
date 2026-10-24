@@ -16,9 +16,9 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/services/activity"
-	"github.com/autobrr/qui/internal/themes"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/services/activity"
+	"github.com/gjhuerte/qui/internal/themes"
 )
 
 const (
@@ -29,7 +29,7 @@ const (
 )
 
 // premiumChecker reports whether the instance has premium access.
-// Satisfied by *license.Service.
+// Satisfied by premiumUnlocked in the api package.
 type premiumChecker interface {
 	HasPremiumAccess(ctx context.Context) (bool, error)
 }

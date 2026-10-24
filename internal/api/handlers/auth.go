@@ -19,10 +19,10 @@ import (
 	"github.com/rs/zerolog/log"
 	"golang.org/x/time/rate"
 
-	"github.com/autobrr/qui/internal/auth"
-	"github.com/autobrr/qui/internal/domain"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/auth"
+	"github.com/gjhuerte/qui/internal/domain"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
 )
 
 type AuthHandler struct {

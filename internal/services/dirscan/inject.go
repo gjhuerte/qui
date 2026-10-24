@@ -15,14 +15,14 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/services/crossseed"
-	"github.com/autobrr/qui/internal/services/jackett"
-	"github.com/autobrr/qui/pkg/fsutil"
-	"github.com/autobrr/qui/pkg/hardlinktree"
-	"github.com/autobrr/qui/pkg/pathutil"
-	"github.com/autobrr/qui/pkg/reflinktree"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/services/crossseed"
+	"github.com/gjhuerte/qui/internal/services/jackett"
+	"github.com/gjhuerte/qui/pkg/fsutil"
+	"github.com/gjhuerte/qui/pkg/hardlinktree"
+	"github.com/gjhuerte/qui/pkg/pathutil"
+	"github.com/gjhuerte/qui/pkg/reflinktree"
 )
 
 const (

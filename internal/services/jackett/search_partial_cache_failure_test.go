@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 // Regression: a search across multiple indexers must not report total failure

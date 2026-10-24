@@ -25,9 +25,9 @@ WEB_DIR = web
 INTERNAL_WEB_DIR = internal/web
 
 # Go build flags
-LDFLAGS = -ldflags "-X github.com/autobrr/qui/internal/buildinfo.Version=$(VERSION) -X github.com/autobrr/qui/internal/buildinfo.Commit=$(GIT_COMMIT) -X github.com/autobrr/qui/internal/buildinfo.Date=$(BUILD_DATE)"
+LDFLAGS = -ldflags "-X github.com/gjhuerte/qui/internal/buildinfo.Version=$(VERSION) -X github.com/gjhuerte/qui/internal/buildinfo.Commit=$(GIT_COMMIT) -X github.com/gjhuerte/qui/internal/buildinfo.Date=$(BUILD_DATE)"
 
-.PHONY: all build frontend backend dev dev-backend dev-frontend dev-expose clean test test-postgres test-frontend help themes-fetch themes-clean lint lint-full lint-ratchet lint-json lint-fix fmt gofix-changed gofix-check-changed check-mojibake generate precommit deps docs-dev docs-build
+.PHONY: all build build/docker build/dockerx docker/dev docker/dev-down docker/prod docker/prod-postgres docker/prod-down frontend backend dev dev-backend dev-frontend dev-expose clean test test-postgres test-frontend help lint lint-full lint-ratchet lint-json lint-fix fmt gofix-changed gofix-check-changed check-mojibake generate precommit deps docs-dev docs-build
 
 # Default target
 all: build
@@ -37,31 +37,28 @@ build: frontend backend
 
 build/docker:
 	@echo "Building docker image..."
-	docker build -t ghcr.io/autobrr/qui:dev -f distrib/docker/Dockerfile . --build-arg GIT_TAG=$(GIT_TAG) --build-arg GIT_COMMIT=$(GIT_COMMIT) --build-arg BUILD_DATE=$(BUILD_DATE) --build-arg VERSION=$(VERSION)
+	docker build -t ghcr.io/gjhuerte/qui:dev -f docker-prod/Dockerfile . --build-arg GIT_COMMIT=$(GIT_COMMIT) --build-arg BUILD_DATE=$(BUILD_DATE) --build-arg VERSION=$(VERSION)
 
 build/dockerx:
-	docker buildx build -t ghcr.io/autobrr/qui:dev -f distrib/docker/Dockerfile . --build-arg GIT_TAG=$(GIT_TAG) --build-arg GIT_COMMIT=$(GIT_COMMIT) --build-arg BUILD_DATE=$(BUILD_DATE) --build-arg VERSION=$(VERSION) --platform=linux/amd64,linux/arm64 --pull --load
+	docker buildx build -t ghcr.io/gjhuerte/qui:dev -f docker-prod/Dockerfile . --build-arg GIT_COMMIT=$(GIT_COMMIT) --build-arg BUILD_DATE=$(BUILD_DATE) --build-arg VERSION=$(VERSION) --platform=linux/amd64,linux/arm64 --pull --load
 
-# Fetch premium themes from private repository
-themes-fetch:
-	@echo "Fetching premium themes..."
-	@if [ -n "$$THEMES_REPO_TOKEN" ]; then \
-		rm -rf .themes-temp && \
-		git clone --depth=1 --filter=blob:none --sparse \
-			https://x-access-token:$$THEMES_REPO_TOKEN@github.com/autobrr/qui-premium-themes.git .themes-temp && \
-		cd .themes-temp && git sparse-checkout set --cone themes && cd .. && \
-		mkdir -p internal/themes/assets/premium && \
-		cp .themes-temp/themes/*.css internal/themes/assets/premium/ && \
-		rm -rf .themes-temp && \
-		echo "Premium themes fetched successfully"; \
-	else \
-		echo "THEMES_REPO_TOKEN not set, skipping premium themes"; \
-	fi
+# Docker development stack (air + Vite hot reload), UI on http://localhost:5173
+docker/dev:
+	QUI_UID=$$(id -u) QUI_GID=$$(id -g) docker compose -f docker-dev/docker-compose.yml up --build
 
-# Clean premium themes
-themes-clean:
-	@echo "Cleaning premium themes..."
-	rm -f internal/themes/assets/premium/*.css
+docker/dev-down:
+	QUI_UID=$$(id -u) QUI_GID=$$(id -g) docker compose -f docker-dev/docker-compose.yml down
+
+# Docker production build from source, UI on http://localhost:7476
+docker/prod:
+	VERSION=$(VERSION) GIT_COMMIT=$(GIT_COMMIT) BUILD_DATE=$(BUILD_DATE) docker compose -f docker-prod/docker-compose.yml up -d --build
+
+docker/prod-postgres:
+	VERSION=$(VERSION) GIT_COMMIT=$(GIT_COMMIT) BUILD_DATE=$(BUILD_DATE) docker compose -f docker-prod/docker-compose.postgres.yml up -d --build
+
+# Stops the production stack, with or without Postgres. Data volumes stay.
+docker/prod-down:
+	docker compose -p qui-prod down
 
 # Build frontend
 frontend:
@@ -72,7 +69,7 @@ frontend:
 	cp -r $(WEB_DIR)/dist $(INTERNAL_WEB_DIR)/
 
 # Build backend
-backend: themes-fetch
+backend:
 	@echo "Building backend..."
 	go build $(LDFLAGS) -o $(BINARY_NAME) ./cmd/qui
 
@@ -102,7 +99,7 @@ dev-frontend-expose:
 	cd $(WEB_DIR) && pnpm dev --host
 
 # Clean build artifacts
-clean: themes-clean
+clean:
 	@echo "Cleaning..."
 	rm -rf $(WEB_DIR)/dist $(INTERNAL_WEB_DIR)/dist $(BINARY_NAME) $(BUILD_DIR)
 
@@ -282,6 +279,9 @@ help:
 	@echo "  make frontend       - Build frontend only"
 	@echo "  make backend        - Build backend only"
 	@echo "  make build/docker   - Build Docker image"
+	@echo "  make docker/dev     - Run the dev stack in Docker (hot reload, http://localhost:5173)"
+	@echo "  make docker/prod    - Build and run the production image (http://localhost:7476)"
+	@echo "  make docker/prod-postgres - Production image with Postgres"
 	@echo ""
 	@echo "Development:"
 	@echo "  make dev            - Run development servers (air + pnpm dev)"
@@ -314,8 +314,6 @@ help:
 	@echo "  make docs-build     - Build documentation for production"
 	@echo ""
 	@echo "Other:"
-	@echo "  make themes-fetch   - Fetch premium themes from private repository"
-	@echo "  make themes-clean   - Clean premium themes"
 	@echo "  make clean          - Clean build artifacts"
 	@echo "  make deps           - Install dependencies"
 	@echo "  make help           - Show this help message"

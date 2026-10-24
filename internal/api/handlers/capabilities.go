@@ -6,7 +6,7 @@ package handlers
 import (
 	"runtime"
 
-	internalqbittorrent "github.com/autobrr/qui/internal/qbittorrent"
+	internalqbittorrent "github.com/gjhuerte/qui/internal/qbittorrent"
 )
 
 // InstanceCapabilitiesResponse describes supported features for an instance.

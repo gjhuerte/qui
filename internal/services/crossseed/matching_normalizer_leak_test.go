@@ -10,7 +10,7 @@ import (
 	"github.com/autobrr/rls"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 // Regression test for the cross-seed RAM/goroutine explosion introduced in

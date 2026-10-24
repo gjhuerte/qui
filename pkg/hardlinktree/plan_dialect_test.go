@@ -9,8 +9,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/pkg/hardlinktree"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/pkg/hardlinktree"
 )
 
 // A plan for a remote is built in its slash grammar on every host. Host

@@ -18,9 +18,9 @@ import (
 
 	"github.com/autobrr/go-cache/ttlcache"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/services/jackett"
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/services/jackett"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 // The search path must not honor a cached filtering run computed for a

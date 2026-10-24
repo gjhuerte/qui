@@ -26,9 +26,9 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/internal/fsops/local"
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/fsops/local"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 // fakeRequirer hands out one backend and instance row, whatever the row's

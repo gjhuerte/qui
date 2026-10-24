@@ -27,11 +27,11 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/qbittorrent"
-	"github.com/autobrr/qui/internal/services/reannounce"
-	"github.com/autobrr/qui/pkg/httphelpers"
-	"github.com/autobrr/qui/pkg/redact"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/services/reannounce"
+	"github.com/gjhuerte/qui/pkg/httphelpers"
+	"github.com/gjhuerte/qui/pkg/redact"
 )
 
 // Handler manages reverse proxy requests to qBittorrent instances

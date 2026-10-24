@@ -25,12 +25,12 @@ import (
 	"github.com/autobrr/go-torrent/metainfo"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/internal/fsops/local"
-	"github.com/autobrr/qui/internal/models"
-	internalqb "github.com/autobrr/qui/internal/qbittorrent"
-	"github.com/autobrr/qui/internal/services/crossseed"
-	"github.com/autobrr/qui/pkg/hardlinktree"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/fsops/local"
+	"github.com/gjhuerte/qui/internal/models"
+	internalqb "github.com/gjhuerte/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/services/crossseed"
+	"github.com/gjhuerte/qui/pkg/hardlinktree"
 )
 
 // setServiceField injects unexported crossseed.Service test hooks that cannot be

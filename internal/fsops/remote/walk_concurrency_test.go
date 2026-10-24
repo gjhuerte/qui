@@ -15,7 +15,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/fsops"
 )
 
 // writeWideTree writes dirs sibling directories, one file each, under root.

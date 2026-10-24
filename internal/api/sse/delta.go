@@ -14,7 +14,7 @@ import (
 
 	qbt "github.com/autobrr/go-qbittorrent"
 
-	"github.com/autobrr/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
 )
 
 // buildUpdatePayload turns a freshly materialized page into the frame to broadcast

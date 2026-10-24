@@ -15,7 +15,7 @@ export function MigrationHint({ className }: { className?: string }) {
         components={{
           docs: (
             <a
-              href="https://getqui.com/docs/features/client-migration"
+              href="https://github.com/gjhuerte/qui/tree/main/documentation/docs/features/client-migration.md"
               target="_blank"
               rel="noopener noreferrer"
               className="underline underline-offset-2 hover:text-foreground"

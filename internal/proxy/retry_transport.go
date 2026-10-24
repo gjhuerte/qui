@@ -16,7 +16,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/pkg/redact"
+	"github.com/gjhuerte/qui/pkg/redact"
 )
 
 const (

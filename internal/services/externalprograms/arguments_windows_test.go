@@ -25,9 +25,9 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/sys/windows"
 
-	"github.com/autobrr/qui/internal/domain"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/testutil/testdb"
+	"github.com/gjhuerte/qui/internal/domain"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/testutil/testdb"
 )
 
 func TestBuildCommand_WindowsArgumentRoundTrip(t *testing.T) {

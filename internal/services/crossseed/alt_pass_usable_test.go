@@ -9,8 +9,8 @@ import (
 	"github.com/autobrr/rls"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/services/jackett"
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/internal/services/jackett"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 // TestSearchUsablePredicate covers the per-result usability decision that drives the

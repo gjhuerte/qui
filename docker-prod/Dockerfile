@@ -59,13 +59,13 @@ RUN case "${TARGETARCH}" in \
 
 # Build the application
 RUN CGO_ENABLED=0 go build \
-    -ldflags "-s -w -X github.com/autobrr/qui/internal/buildinfo.Version=${VERSION} -X github.com/autobrr/qui/internal/buildinfo.Commit=${GIT_COMMIT} -X github.com/autobrr/qui/internal/buildinfo.Date=${BUILD_DATE}" \
+    -ldflags "-s -w -X github.com/gjhuerte/qui/internal/buildinfo.Version=${VERSION} -X github.com/gjhuerte/qui/internal/buildinfo.Commit=${GIT_COMMIT} -X github.com/gjhuerte/qui/internal/buildinfo.Date=${BUILD_DATE}" \
     -o qui ./cmd/qui
 
 # Final stage
 FROM alpine:3.23
 
-LABEL org.opencontainers.image.source="https://github.com/autobrr/qui"
+LABEL org.opencontainers.image.source="https://github.com/gjhuerte/qui"
 
 # Set environment variables for config paths
 ENV HOME="/config" \
@@ -87,7 +87,7 @@ VOLUME /config
 
 # Copy binary and entrypoint
 COPY --from=go-builder /app/qui /usr/local/bin/
-COPY distrib/docker/entrypoint.sh /entrypoint.sh
+COPY docker-prod/entrypoint.sh /entrypoint.sh
 
 # Verify Compose user mode still works when shared PUID/PGID variables are present.
 RUN PUID=99 PGID=100 su-exec 99:100 /entrypoint.sh --version

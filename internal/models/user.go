@@ -8,7 +8,7 @@ import (
 	"database/sql"
 	"errors"
 
-	"github.com/autobrr/qui/internal/dbinterface"
+	"github.com/gjhuerte/qui/internal/dbinterface"
 )
 
 var ErrUserNotFound = errors.New("user not found")

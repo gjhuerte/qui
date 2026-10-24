@@ -12,9 +12,9 @@ builds:
       - -trimpath
     ldflags:
       - -s -w
-      - -X github.com/autobrr/qui/internal/buildinfo.Version={{.Version}}
-      - -X github.com/autobrr/qui/internal/buildinfo.Date={{.Date}}
-      - -X github.com/autobrr/qui/internal/buildinfo.Commit={{.Commit}}
+      - -X github.com/gjhuerte/qui/internal/buildinfo.Version={{.Version}}
+      - -X github.com/gjhuerte/qui/internal/buildinfo.Date={{.Date}}
+      - -X github.com/gjhuerte/qui/internal/buildinfo.Commit={{.Commit}}
     goos:
       - linux
       - windows
@@ -48,10 +48,10 @@ builds:
       - -trimpath
     ldflags:
       - -s -w -H windowsgui
-      - -X github.com/autobrr/qui/internal/buildinfo.Version={{.Version}}
-      - -X github.com/autobrr/qui/internal/buildinfo.Date={{.Date}}
-      - -X github.com/autobrr/qui/internal/buildinfo.Commit={{.Commit}}
-      - -X github.com/autobrr/qui/internal/buildinfo.Tray=true
+      - -X github.com/gjhuerte/qui/internal/buildinfo.Version={{.Version}}
+      - -X github.com/gjhuerte/qui/internal/buildinfo.Date={{.Date}}
+      - -X github.com/gjhuerte/qui/internal/buildinfo.Commit={{.Commit}}
+      - -X github.com/gjhuerte/qui/internal/buildinfo.Tray=true
     goos:
       - windows
     goarch:
@@ -106,7 +106,7 @@ release:
 
     ## What to do next?
 
-    - Join our [Discord server](https://discord.autobrr.com/qui)
+    - Join the [GitHub Discussions](https://github.com/gjhuerte/qui/discussions)
 
     Thank you for using qui!
 

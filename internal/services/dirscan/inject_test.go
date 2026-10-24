@@ -20,12 +20,12 @@ import (
 
 	qbt "github.com/autobrr/go-qbittorrent"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/internal/fsops/local"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/services/crossseed"
-	"github.com/autobrr/qui/internal/services/jackett"
-	"github.com/autobrr/qui/pkg/hardlinktree"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/fsops/local"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/services/crossseed"
+	"github.com/gjhuerte/qui/internal/services/jackett"
+	"github.com/gjhuerte/qui/pkg/hardlinktree"
 )
 
 func testBackendPool(instance *models.Instance) *fsops.Pool {

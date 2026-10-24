@@ -23,21 +23,20 @@ import (
 	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
 
-	"github.com/autobrr/qui/internal/auth"
-	"github.com/autobrr/qui/internal/backups"
-	"github.com/autobrr/qui/internal/config"
-	"github.com/autobrr/qui/internal/domain"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/qbittorrent"
-	"github.com/autobrr/qui/internal/services/dirscan"
-	"github.com/autobrr/qui/internal/services/jackett"
-	"github.com/autobrr/qui/internal/services/license"
-	"github.com/autobrr/qui/internal/services/notifications"
-	"github.com/autobrr/qui/internal/services/trackericons"
-	"github.com/autobrr/qui/internal/testutil/testdb"
-	"github.com/autobrr/qui/internal/update"
-	"github.com/autobrr/qui/internal/web"
-	"github.com/autobrr/qui/internal/web/swagger"
+	"github.com/gjhuerte/qui/internal/auth"
+	"github.com/gjhuerte/qui/internal/backups"
+	"github.com/gjhuerte/qui/internal/config"
+	"github.com/gjhuerte/qui/internal/domain"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/services/dirscan"
+	"github.com/gjhuerte/qui/internal/services/jackett"
+	"github.com/gjhuerte/qui/internal/services/notifications"
+	"github.com/gjhuerte/qui/internal/services/trackericons"
+	"github.com/gjhuerte/qui/internal/testutil/testdb"
+	"github.com/gjhuerte/qui/internal/update"
+	"github.com/gjhuerte/qui/internal/web"
+	"github.com/gjhuerte/qui/internal/web/swagger"
 )
 
 type routeKey struct {
@@ -194,7 +193,6 @@ func newTestDependencies(t *testing.T) *Dependencies {
 		ClientPool:                &qbittorrent.ClientPool{},
 		SyncManager:               qbittorrent.NewSyncManager(nil, trackerCustomizationStore),
 		WebHandler:                &web.Handler{},
-		LicenseService:            &license.Service{},
 		UpdateService:             &update.Service{},
 		TrackerIconService:        trackerIconService,
 		BackupService:             &backups.Service{},

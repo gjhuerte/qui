@@ -15,11 +15,11 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/qbittorrent"
-	"github.com/autobrr/qui/pkg/pathcmp"
-	"github.com/autobrr/qui/pkg/pathutil"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/pkg/pathcmp"
+	"github.com/gjhuerte/qui/pkg/pathutil"
 )
 
 // torrentDesiredState tracks accumulated actions for a single torrent across all matching rules.

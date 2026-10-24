@@ -7,8 +7,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/internal/fsops/local"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/fsops/local"
 )
 
 func newTestBackend() fsops.Backend {

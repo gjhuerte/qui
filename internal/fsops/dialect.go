@@ -10,7 +10,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/autobrr/qui/pkg/hardlinktree"
+	"github.com/gjhuerte/qui/pkg/hardlinktree"
 )
 
 // PathDialect is the path grammar of a backend's filesystem. A path that goes

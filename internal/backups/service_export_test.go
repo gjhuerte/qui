@@ -17,8 +17,8 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/pkg/torrentname"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/pkg/torrentname"
 )
 
 func TestCacheTorrentBlobAtomicWrite(t *testing.T) {

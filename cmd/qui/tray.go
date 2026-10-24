@@ -13,10 +13,10 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 
-	"github.com/autobrr/qui/internal/buildinfo"
-	"github.com/autobrr/qui/internal/config"
-	"github.com/autobrr/qui/internal/tray"
-	"github.com/autobrr/qui/internal/update"
+	"github.com/gjhuerte/qui/internal/buildinfo"
+	"github.com/gjhuerte/qui/internal/config"
+	"github.com/gjhuerte/qui/internal/tray"
+	"github.com/gjhuerte/qui/internal/update"
 )
 
 // runTray is main for qui-tray.exe. It always serves and takes only the serve

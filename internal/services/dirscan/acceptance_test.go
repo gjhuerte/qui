@@ -6,8 +6,8 @@ package dirscan
 import (
 	"testing"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/services/jackett"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/services/jackett"
 )
 
 func TestShouldAcceptDirScanMatch_PiecePercentThreshold(t *testing.T) {

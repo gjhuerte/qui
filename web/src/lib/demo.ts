@@ -7,7 +7,7 @@ import { FileText, Home } from "lucide-react"
 
 // i18n-namespace: common
 
-// The getqui.com demo build. vite.config.ts defines the value for every build,
+// The docs-site demo build. vite.config.ts defines the value for every build,
 // so production bundles fold each guard away. See src/demo/main.tsx.
 export const isDemo = import.meta.env.VITE_DEMO === "1"
 

@@ -24,7 +24,7 @@ export const Footer = () => {
         asChild
       >
         <a
-          href="https://github.com/autobrr/qui"
+          href="https://github.com/gjhuerte/qui"
           target="_blank"
           rel="noopener noreferrer"
           aria-label={t("sidebar.viewOnGitHub")}

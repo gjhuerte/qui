@@ -22,9 +22,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/models"
-	internalqbittorrent "github.com/autobrr/qui/internal/qbittorrent"
-	"github.com/autobrr/qui/internal/testutil/testdb"
+	"github.com/gjhuerte/qui/internal/models"
+	internalqbittorrent "github.com/gjhuerte/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/testutil/testdb"
 )
 
 // fakePreferencesQbit is a qBittorrent WebUI that serves a captured

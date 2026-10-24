@@ -21,8 +21,8 @@ import (
 	"github.com/nicholas-fedor/shoutrrr/pkg/types"
 	"github.com/rs/zerolog"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/pkg/redact"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/pkg/redact"
 )
 
 const (

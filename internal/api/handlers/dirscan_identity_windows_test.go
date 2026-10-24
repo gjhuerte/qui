@@ -16,11 +16,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/fsops"
-	localbackend "github.com/autobrr/qui/internal/fsops/local"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/services/dirscan"
-	"github.com/autobrr/qui/internal/testutil/testdb"
+	"github.com/gjhuerte/qui/internal/fsops"
+	localbackend "github.com/gjhuerte/qui/internal/fsops/local"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/services/dirscan"
+	"github.com/gjhuerte/qui/internal/testutil/testdb"
 )
 
 func TestWebhookTriggerScan_WindowsDirectoryIdentity(t *testing.T) {

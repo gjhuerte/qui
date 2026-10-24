@@ -54,7 +54,7 @@ beforeEach(() => {
   server.use(
     http.get("*/api/version", () => {
       versionCalls++
-      return HttpResponse.json({ version: "1.30.0", updateAvailable: false, selfUpdate: false, restart: restartAvailable })
+      return HttpResponse.json({ version: "1.30.0", updateAvailable: false, restart: restartAvailable })
     }),
     http.get("*/api/application/info", () => {
       infoCalls++
@@ -88,12 +88,12 @@ describe("RestartButton", () => {
   })
 
   it("shows a 409 message in the dialog and no overlay", async () => {
-    server.use(http.post("*/api/system/restart", () => HttpResponse.json({ error: "An update or restart is already running" }, { status: 409 })))
+    server.use(http.post("*/api/system/restart", () => HttpResponse.json({ error: "A restart is already running" }, { status: 409 })))
     renderButton()
 
     await confirmRestart()
 
-    expect(await screen.findByText("An update or restart is already running")).toBeTruthy()
+    expect(await screen.findByText("A restart is already running")).toBeTruthy()
     expect(screen.queryByText("application.restart.overlay.restartingTitle")).toBeNull()
   })
 

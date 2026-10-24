@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/autobrr/qui/internal/dbinterface"
+	"github.com/gjhuerte/qui/internal/dbinterface"
 )
 
 // MaxCompletionDelaySeconds caps the per-instance completion delay (10 minutes).

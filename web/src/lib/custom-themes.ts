@@ -66,17 +66,12 @@ export function isCustomThemeId(themeId: string | null | undefined): boolean {
  * is unit-testable without mounting the hook.
  */
 export type CustomThemeAction =
-  | "noop" // license still resolving (loading/error) - leave everything as-is
-  | "clear" // confirmed no premium, no custom selection to downgrade
-  | "clear-and-downgrade" // confirmed no premium, stored custom selection -> default
-  | "register" // premium: register list, active theme already matches
-  | "register-and-reapply" // premium: register list and (re)apply the active custom theme
-  | "register-and-downgrade" // premium: stored custom theme is gone -> default
+  | "noop" // the list is still loading - leave everything as-is
+  | "register" // register list, active theme already matches
+  | "register-and-reapply" // register list and (re)apply the active custom theme
+  | "register-and-downgrade" // stored custom theme is gone -> default
 
 export interface CustomThemeDecisionInput {
-  isLoading: boolean
-  isError: boolean
-  hasPremiumAccess: boolean
   /** Whether the custom-themes query has resolved data. */
   hasData: boolean
   storedThemeId: string | null
@@ -86,17 +81,9 @@ export interface CustomThemeDecisionInput {
 }
 
 export function decideCustomThemeAction(input: CustomThemeDecisionInput): CustomThemeAction {
-  const { isLoading, isError, hasPremiumAccess, hasData, storedThemeId, themes, appliedCustomCss } = input
+  const { hasData, storedThemeId, themes, appliedCustomCss } = input
 
-  // While the license check is in flight or errored, leave state untouched -
-  // downgrading here would clobber a premium user's selection before it resolves.
-  if (isLoading || isError) return "noop"
-
-  if (!hasPremiumAccess) {
-    return isCustomThemeId(storedThemeId) ? "clear-and-downgrade" : "clear"
-  }
-
-  // Premium, but the custom-themes list hasn't loaded yet.
+  // The custom-themes list hasn't loaded yet.
   if (!hasData) return "noop"
 
   if (!isCustomThemeId(storedThemeId)) return "register"

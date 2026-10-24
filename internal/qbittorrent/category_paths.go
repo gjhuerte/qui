@@ -10,7 +10,7 @@ import (
 
 	qbt "github.com/autobrr/go-qbittorrent"
 
-	"github.com/autobrr/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/fsops"
 )
 
 // CategoryPathRule is how an instance's qBittorrent turns a category name into

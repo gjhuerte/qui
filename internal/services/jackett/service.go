@@ -26,12 +26,12 @@ import (
 	"github.com/autobrr/rls"
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/pkg/timeouts"
-	"github.com/autobrr/qui/internal/services/activity"
-	"github.com/autobrr/qui/pkg/prowlarr"
-	"github.com/autobrr/qui/pkg/redact"
-	"github.com/autobrr/qui/pkg/releases"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/pkg/timeouts"
+	"github.com/gjhuerte/qui/internal/services/activity"
+	"github.com/gjhuerte/qui/pkg/prowlarr"
+	"github.com/gjhuerte/qui/pkg/redact"
+	"github.com/gjhuerte/qui/pkg/releases"
 )
 
 // IndexerStore defines the interface for indexer storage operations

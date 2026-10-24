@@ -91,33 +91,13 @@ describe("decideCustomThemeAction", () => {
   }
 
   const base: CustomThemeDecisionInput = {
-    isLoading: false,
-    isError: false,
-    hasPremiumAccess: true,
     hasData: true,
     storedThemeId: null,
     themes: [],
     appliedCustomCss: null,
   }
 
-  it("does nothing while the license check is loading or errored", () => {
-    expect(decideCustomThemeAction({ ...base, isLoading: true })).toBe("noop")
-    expect(decideCustomThemeAction({ ...base, isError: true })).toBe("noop")
-  })
-
-  it("clears and downgrades a stored custom theme when premium is lost", () => {
-    expect(
-      decideCustomThemeAction({ ...base, hasPremiumAccess: false, storedThemeId: "custom:ocean" })
-    ).toBe("clear-and-downgrade")
-  })
-
-  it("only clears (no downgrade) when not premium and the selection is built-in", () => {
-    expect(
-      decideCustomThemeAction({ ...base, hasPremiumAccess: false, storedThemeId: "minimal" })
-    ).toBe("clear")
-  })
-
-  it("waits for data before registering when premium", () => {
+  it("waits for data before registering", () => {
     expect(decideCustomThemeAction({ ...base, hasData: false, storedThemeId: "custom:ocean" })).toBe("noop")
   })
 

@@ -13,7 +13,7 @@
     "manageInstances": "Gérer les instances",
     "appearance": "Apparence",
     "instanceBackups": "Sauvegardes d'instances",
-    "backToSite": "Retour à getqui.com",
+    "backToSite": "Retour à la documentation",
     "docs": "Docs"
   },
   "sidebar": {
@@ -235,14 +235,5 @@
     },
     "perSecond": "{{unit}}/s",
     "valueWithUnit": "{{value}} {{unit}}"
-  },
-  "support": {
-    "title": "Soutenir qui",
-    "description": "Vous avez déjà les thèmes et vous voulez aider davantage ? Tout dans qui est déjà à vous. Un abonnement ne débloque aucune fonctionnalité, il finance le temps consacré à leur développement.",
-    "perkPrefix": "Les mécènes obtiennent le rôle",
-    "perkSuffix": "sur Discord et notre éternelle gratitude.",
-    "yearly": "{{price}} / an",
-    "monthly": "{{price}} / mois",
-    "notLicense": "Les thèmes premium font l'objet d'un achat unique distinct."
   }
 }

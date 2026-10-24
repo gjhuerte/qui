@@ -199,7 +199,7 @@ If qBittorrent and qui run as **different users that share a group** (a common h
 qui honors the `UMASK` environment variable (octal, for example `002`) and applies it at startup. It works on the official Docker image and on hotio or LinuxServer base images:
 
 ```bash
-docker run -e UMASK=002 ... ghcr.io/autobrr/qui
+docker run -e UMASK=002 ... ghcr.io/gjhuerte/qui
 ```
 
 :::note

@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/autobrr/qui/internal/dbinterface"
+	"github.com/gjhuerte/qui/internal/dbinterface"
 )
 
 // cacheMaintenanceTimeout bounds the detached touch write. It outlives the

@@ -13,7 +13,7 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
 )
 
 // captureTorrentWriter records the options passed to AddTorrent so restore

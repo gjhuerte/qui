@@ -11,7 +11,7 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
 )
 
 // tv builds a single-instance row with a hash and a name; the name drives the

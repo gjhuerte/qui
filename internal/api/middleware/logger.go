@@ -11,7 +11,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/rs/zerolog"
 
-	"github.com/autobrr/qui/pkg/redact"
+	"github.com/gjhuerte/qui/pkg/redact"
 )
 
 var slowRequestThreshold = time.Second

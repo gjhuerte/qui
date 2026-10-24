@@ -21,10 +21,10 @@ import (
 	"github.com/rs/zerolog/log"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/sshpool"
-	"github.com/autobrr/qui/pkg/hardlink"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/sshpool"
+	"github.com/gjhuerte/qui/pkg/hardlink"
 )
 
 const (

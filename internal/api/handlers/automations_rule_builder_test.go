@@ -17,9 +17,9 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/services/automations"
-	"github.com/autobrr/qui/internal/testutil/testdb"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/services/automations"
+	"github.com/gjhuerte/qui/internal/testutil/testdb"
 )
 
 // The rule builder reads the fields, operators and values from the condition field table. Build every condition

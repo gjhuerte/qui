@@ -5,16 +5,30 @@ sidebar_label: Docker
 description: Run qui with Docker Compose or docker run, with the volumes and environment variables it needs.
 ---
 
-import CodeBlock from '@theme/CodeBlock';
-import DockerCompose from '!!raw-loader!@site/../distrib/docker/docker-compose.yml';
-import DockerComposePostgres from '!!raw-loader!@site/../distrib/docker/docker-compose.postgres.yml';
 import LocalFilesystemDocker from "../_partials/_local-filesystem-docker.mdx";
 
 # Docker
 
 ## Docker Compose
 
-<CodeBlock language="yaml" title="docker-compose.yml">{DockerCompose}</CodeBlock>
+```yaml title="docker-compose.yml"
+services:
+  qui:
+    image: ghcr.io/gjhuerte/qui:latest
+    container_name: qui
+    restart: unless-stopped
+    ports:
+      - "7476:7476"
+    volumes:
+      - ./qui:/config
+    #environment:
+      # Run as this user/group and chown /config (set both or neither).
+      # Alternative to the standard "user:" option, see the Permissions docs.
+      #PUID: "1000"
+      #PGID: "1000"
+      # Permission mask for new files and directories, for example 002 for group write
+      #UMASK: "002"
+```
 
 ```bash
 docker compose up -d
@@ -22,11 +36,50 @@ docker compose up -d
 
 ## Docker Compose (Postgres)
 
-<CodeBlock language="yaml" title="docker-compose.postgres.yml">{DockerComposePostgres}</CodeBlock>
+```yaml title="docker-compose.postgres.yml"
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: qui-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: qui
+      POSTGRES_PASSWORD: qui
+      POSTGRES_DB: qui
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  qui:
+    image: ghcr.io/gjhuerte/qui:latest
+    container_name: qui
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "7476:7476"
+    volumes:
+      - ./qui:/config
+    environment:
+      QUI__DATABASE_ENGINE: postgres
+      QUI__DATABASE_DSN: postgres://qui:qui@postgres:5432/qui?sslmode=disable
+```
 
 ```bash
 docker compose -f docker-compose.postgres.yml up -d
 ```
+
+## Build from source
+
+The repository has two Compose setups:
+
+- `docker-dev/` runs the backend with air and the web UI with Vite hot reload. Start it with `make docker/dev` and open http://localhost:5173.
+- `docker-prod/` builds the production image from your checkout. Start it with `make docker/prod`, or `make docker/prod-postgres` for Postgres.
 
 ## Standalone
 
@@ -34,7 +87,7 @@ docker compose -f docker-compose.postgres.yml up -d
 docker run -d \
   -p 7476:7476 \
   -v $(pwd)/config:/config \
-  ghcr.io/autobrr/qui:latest
+  ghcr.io/gjhuerte/qui:latest
 ```
 
 ## macOS container
@@ -45,7 +98,7 @@ On macOS, [Apple Container](https://github.com/apple/container/releases) runs th
 container run -d \
   -p 7476:7476 \
   -v $(pwd)/config:/config \
-  ghcr.io/autobrr/qui:latest
+  ghcr.io/gjhuerte/qui:latest
 ```
 
 ## Permissions
@@ -61,7 +114,7 @@ Set `user:` in compose, or `--user` in docker run. Docker starts the container a
 ```yaml title="docker-compose.yml"
 services:
   qui:
-    image: ghcr.io/autobrr/qui:latest
+    image: ghcr.io/gjhuerte/qui:latest
     user: "1000:1000"
     volumes:
       - ./qui:/config
@@ -87,7 +140,7 @@ The result matches `user:`, but the entrypoint corrects the ownership of `/confi
 ```yaml title="docker-compose.yml"
 services:
   qui:
-    image: ghcr.io/autobrr/qui:latest
+    image: ghcr.io/gjhuerte/qui:latest
     environment:
       PUID: "1000"
       PGID: "1000"
@@ -103,7 +156,7 @@ docker run -d \
   -e PGID=1000 \
   -p 7476:7476 \
   -v $(pwd)/config:/config \
-  ghcr.io/autobrr/qui:latest
+  ghcr.io/gjhuerte/qui:latest
 ```
 
 :::note
@@ -141,18 +194,18 @@ Two exceptions:
 
 ## Unraid
 
-The release workflow builds images for `linux/amd64`, `linux/arm64`, and ARM v6/v7, and publishes them to `ghcr.io/autobrr/qui`. The container runs on Unraid without extra steps.
+The release workflow builds images for `linux/amd64`, `linux/arm64`, and ARM v6/v7, and publishes them to `ghcr.io/gjhuerte/qui`. The container runs on Unraid without extra steps.
 
 ### Deploy from the Docker tab
 
 1. Open **Docker → Add Container**
 2. Set **Name** to `qui`
-3. Set **Repository** to `ghcr.io/autobrr/qui:latest`
+3. Set **Repository** to `ghcr.io/gjhuerte/qui:latest`
 4. Keep the default **Network Type** (`bridge` works for most setups)
 5. Add a port mapping: **Host port** `7476` → **Container port** `7476`
 6. Add a path mapping: **Container Path** `/config` → **Host Path** `/mnt/user/appdata/qui`
 7. Enable **Advanced View** (top right)
-8. Set **Icon URL** to `https://raw.githubusercontent.com/autobrr/qui/main/web/public/icon.png`
+8. Set **Icon URL** to `https://raw.githubusercontent.com/gjhuerte/qui/main/web/public/icon.png`
 9. Set **WebUI** to `http://[IP]:[PORT:7476]`
 10. Add environment variables `PUID` = `99` and `PGID` = `100`. The entrypoint then corrects the ownership of `/config` and runs qui as uid 99 (`nobody` on Unraid). If **Extra Parameters** contains `--user`, remove it first. If qui ran as root before, fix your data directories once (see [Permissions](#permissions))
 11. (Optional) add environment variables for advanced configuration (for example `QUI__BASE_URL`, `QUI__LOG_LEVEL`, `TZ`)

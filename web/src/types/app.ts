@@ -37,15 +37,7 @@ export interface VersionInfo {
   version: string
   latestVersion?: string
   updateAvailable: boolean
-  selfUpdate: boolean
-  selfUpdateUnavailableReason: "" | "container" | "disabled" | "development" | "directory"
   restart: boolean
-}
-
-export interface SelfUpdateResult {
-  version: string
-  rollbackCommand: string
-  backupError: string
 }
 
 // One preference of the catalog view that GET /instances/{id}/preferences returns.

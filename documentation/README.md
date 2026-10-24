@@ -26,6 +26,6 @@ This command generates static content into the `build` directory.
 
 ## Deployment
 
-Netlify builds [getqui.com](https://getqui.com) from the `main` branch. A docs change merged to `develop` goes live when it reaches `main`: with the next release, or earlier as a cherry-pick of the squashed commit onto a branch from `main`.
+Netlify builds the documentation site from the `main` branch. A docs change merged to `develop` goes live when it reaches `main`: with the next release, or earlier as a cherry-pick of the squashed commit onto a branch from `main`.
 
 The Netlify configuration in [`netlify.toml`](netlify.toml) builds the web demo into `static/demo`, then runs `pnpm build`. The publish directory is `build`.

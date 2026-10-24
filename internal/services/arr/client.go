@@ -15,9 +15,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/autobrr/qui/internal/buildinfo"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/pkg/httphelpers"
+	"github.com/gjhuerte/qui/internal/buildinfo"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/pkg/httphelpers"
 )
 
 const (

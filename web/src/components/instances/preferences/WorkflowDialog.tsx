@@ -667,8 +667,8 @@ function hydrateShareLimit(storedValue: number | undefined): ShareLimitHydration
 // Kept out of the locale strings: i18next would treat "{{ }}" as interpolation.
 const PATH_TEMPLATE_EXAMPLE = "/data/{{ .Category }}"
 
-const MOVE_PATH_DOCS_URL = "https://getqui.com/docs/features/automations/#move-path-templates"
-const EXPORT_PATH_DOCS_URL = "https://getqui.com/docs/features/automations/#save-path-templates"
+const MOVE_PATH_DOCS_URL = "https://github.com/gjhuerte/qui/tree/main/documentation/docs/features/automations.md#move-path-templates"
+const EXPORT_PATH_DOCS_URL = "https://github.com/gjhuerte/qui/tree/main/documentation/docs/features/automations.md#save-path-templates"
 
 export function WorkflowDialog({ open, onOpenChange, instanceId, rule, onSuccess }: WorkflowDialogProps) {
   const { t } = useTranslation("instances")

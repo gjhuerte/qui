@@ -7,7 +7,7 @@ import (
 	"context"
 	"io/fs"
 
-	"github.com/autobrr/qui/pkg/hardlinktree"
+	"github.com/gjhuerte/qui/pkg/hardlinktree"
 )
 
 // Backend abstracts filesystem operations so services work identically against

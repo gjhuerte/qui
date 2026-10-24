@@ -1,8 +1,10 @@
+# Build context is the repo root; BuildKit applies this file to docker-prod/Dockerfile.
 .git
 .github
 documentation
 scripts
 web/node_modules
+web/dist
 **/*_test.go
 **/*.md
 !go.md
@@ -11,6 +13,8 @@ web/node_modules
 LICENSE
 AGENTS.md
 CLAUDE.md
-distrib/docker/docker-compose*.yml
-.themes-temp
+docker-dev
+docker-prod/*
+!docker-prod/entrypoint.sh
+tmp
 **/.env*

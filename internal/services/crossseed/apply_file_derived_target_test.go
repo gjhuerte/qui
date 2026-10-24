@@ -19,8 +19,8 @@ import (
 	"github.com/autobrr/rls"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 // Bracket-anime pack names parse as non-TV; the season structure lives only in

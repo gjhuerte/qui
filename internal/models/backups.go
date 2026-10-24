@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/autobrr/qui/internal/dbinterface"
+	"github.com/gjhuerte/qui/internal/dbinterface"
 )
 
 type BackupSettings struct {

@@ -15,8 +15,8 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/services/crossseed/gazellemusic"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/services/crossseed/gazellemusic"
 )
 
 // A banned client must stop calling the tracker after the first rejection,

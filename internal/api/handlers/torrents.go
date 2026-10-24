@@ -25,11 +25,11 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/qbittorrent"
-	"github.com/autobrr/qui/internal/services/jackett"
-	"github.com/autobrr/qui/pkg/redact"
-	"github.com/autobrr/qui/pkg/torrentname"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/services/jackett"
+	"github.com/gjhuerte/qui/pkg/redact"
+	"github.com/gjhuerte/qui/pkg/torrentname"
 )
 
 // Consumer slices of the sync manager and the indexer service. ADR 0005.

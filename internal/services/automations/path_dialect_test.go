@@ -8,7 +8,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/fsops"
 )
 
 // A remote unix path is joined and judged in slash form on every host: this is

@@ -11,7 +11,7 @@ import (
 
 	"github.com/autobrr/rls"
 
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 // variantOverrides lists release tags that must match on both torrents for

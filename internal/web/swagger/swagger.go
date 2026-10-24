@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/autobrr/qui/pkg/httphelpers"
+	"github.com/gjhuerte/qui/pkg/httphelpers"
 
 	"github.com/go-chi/chi/v5"
 	"gopkg.in/yaml.v3"

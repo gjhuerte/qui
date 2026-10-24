@@ -22,39 +22,37 @@ import (
 	"github.com/spf13/cobra"
 	"golang.org/x/term"
 
-	"github.com/autobrr/qui/internal/api"
-	"github.com/autobrr/qui/internal/auth"
-	"github.com/autobrr/qui/internal/backups"
-	"github.com/autobrr/qui/internal/buildinfo"
-	"github.com/autobrr/qui/internal/clientmigrate"
-	"github.com/autobrr/qui/internal/config"
-	"github.com/autobrr/qui/internal/database"
-	"github.com/autobrr/qui/internal/dodo"
-	"github.com/autobrr/qui/internal/domain"
-	"github.com/autobrr/qui/internal/fsops"
-	localbackend "github.com/autobrr/qui/internal/fsops/local"
-	remotebackend "github.com/autobrr/qui/internal/fsops/remote"
-	"github.com/autobrr/qui/internal/metrics"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/qbittorrent"
-	"github.com/autobrr/qui/internal/services/activity"
-	"github.com/autobrr/qui/internal/services/arr"
-	"github.com/autobrr/qui/internal/services/automations"
-	"github.com/autobrr/qui/internal/services/crossseed"
-	"github.com/autobrr/qui/internal/services/dirscan"
-	"github.com/autobrr/qui/internal/services/discscan"
-	"github.com/autobrr/qui/internal/services/externalprograms"
-	"github.com/autobrr/qui/internal/services/filesmanager"
-	"github.com/autobrr/qui/internal/services/jackett"
-	"github.com/autobrr/qui/internal/services/license"
-	"github.com/autobrr/qui/internal/services/notifications"
-	"github.com/autobrr/qui/internal/services/orphanscan"
-	"github.com/autobrr/qui/internal/services/reannounce"
-	"github.com/autobrr/qui/internal/services/trackericons"
-	"github.com/autobrr/qui/internal/sqlite3store"
-	"github.com/autobrr/qui/internal/sshpool"
-	"github.com/autobrr/qui/internal/tray"
-	"github.com/autobrr/qui/internal/update"
+	"github.com/gjhuerte/qui/internal/api"
+	"github.com/gjhuerte/qui/internal/auth"
+	"github.com/gjhuerte/qui/internal/backups"
+	"github.com/gjhuerte/qui/internal/buildinfo"
+	"github.com/gjhuerte/qui/internal/clientmigrate"
+	"github.com/gjhuerte/qui/internal/config"
+	"github.com/gjhuerte/qui/internal/database"
+	"github.com/gjhuerte/qui/internal/domain"
+	"github.com/gjhuerte/qui/internal/fsops"
+	localbackend "github.com/gjhuerte/qui/internal/fsops/local"
+	remotebackend "github.com/gjhuerte/qui/internal/fsops/remote"
+	"github.com/gjhuerte/qui/internal/metrics"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/services/activity"
+	"github.com/gjhuerte/qui/internal/services/arr"
+	"github.com/gjhuerte/qui/internal/services/automations"
+	"github.com/gjhuerte/qui/internal/services/crossseed"
+	"github.com/gjhuerte/qui/internal/services/dirscan"
+	"github.com/gjhuerte/qui/internal/services/discscan"
+	"github.com/gjhuerte/qui/internal/services/externalprograms"
+	"github.com/gjhuerte/qui/internal/services/filesmanager"
+	"github.com/gjhuerte/qui/internal/services/jackett"
+	"github.com/gjhuerte/qui/internal/services/notifications"
+	"github.com/gjhuerte/qui/internal/services/orphanscan"
+	"github.com/gjhuerte/qui/internal/services/reannounce"
+	"github.com/gjhuerte/qui/internal/services/trackericons"
+	"github.com/gjhuerte/qui/internal/sqlite3store"
+	"github.com/gjhuerte/qui/internal/sshpool"
+	"github.com/gjhuerte/qui/internal/tray"
+	"github.com/gjhuerte/qui/internal/update"
 )
 
 func main() {
@@ -85,7 +83,6 @@ multiple qBittorrent instances with support for 10k+ torrents.`,
 	rootCmd.AddCommand(RunDBCommand())
 	rootCmd.AddCommand(RunCreateUserCommand())
 	rootCmd.AddCommand(RunChangePasswordCommand())
-	rootCmd.AddCommand(RunUpdateCommand())
 	rootCmd.AddCommand(RunMigrateCommand())
 
 	if err := rootCmd.Execute(); err != nil {
@@ -407,31 +404,6 @@ If no --config-dir is specified, uses the OS-specific default location:
 	return command
 }
 
-func RunUpdateCommand() *cobra.Command {
-	var command = &cobra.Command{
-		Use:                   "update",
-		Short:                 "Update qui",
-		Long:                  `Update qui to the latest version.`,
-		DisableFlagsInUseLine: true,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			updater := update.NewUpdater(update.Config{
-				Repository: "autobrr/qui",
-				Version:    buildinfo.Version,
-			})
-			return updater.Run(cmd.Context())
-		},
-	}
-
-	command.SetUsageTemplate(`Usage:
-  {{.CommandPath}}
-
-Flags:
-{{.LocalFlags.FlagUsages | trimTrailingWhitespaces}}
-`)
-
-	return command
-}
-
 func RunMigrateCommand() *cobra.Command {
 	var command = &cobra.Command{
 		Use:   "migrate {deluge | rtorrent | transmission} --source-dir dir --qbit-dir dir2 [--skip-backup] [--dry-run]",
@@ -571,19 +543,6 @@ func (app *Application) runServer() {
 		log.Debug().Bool("enabled", conf.TrackerIconsFetchEnabled).Msg("Tracker icon fetch setting updated")
 	})
 
-	dodoEnv := os.Getenv("DODO_PAYMENTS_ENVIRONMENT")
-	if dodoEnv == "" {
-		dodoEnv = os.Getenv("DODO_ENVIRONMENT")
-	}
-	dodoClient := dodo.NewClient(
-		dodo.WithUserAgent(buildinfo.UserAgent),
-		dodo.WithEnvironment(dodoEnv),
-	)
-	log.Info().
-		Str("environment", dodoEnv).
-		Str("base_url", dodoClient.BaseURL()).
-		Msg("Initialized Dodo Payments client")
-
 	// Initialize database
 	db, err := database.OpenFromConfig(cfg.Config, cfg.GetDatabasePath())
 	if err != nil {
@@ -592,7 +551,6 @@ func (app *Application) runServer() {
 	defer db.Close()
 
 	// Initialize stores
-	licenseRepo := database.NewLicenseRepo(db)
 	encryptionKey := cfg.GetEncryptionKey()
 	legacyEncryptionKey := models.WithLegacyEncryptionKey(cfg.GetLegacyEncryptionKey())
 	instanceStore, err := models.NewInstanceStore(db, encryptionKey, legacyEncryptionKey)
@@ -625,13 +583,6 @@ func (app *Application) runServer() {
 
 	// Initialize services
 	authService := auth.NewService(db)
-	licenseService := license.NewLicenseService(licenseRepo, dodoClient, cfg.GetConfigDir())
-
-	go func() {
-		checker := license.NewLicenseChecker(licenseService)
-		checker.StartPeriodicChecks(context.Background())
-	}()
-
 	// Initialize qBittorrent client pool
 	clientPool, err := qbittorrent.NewClientPool(instanceStore, errorStore, time.Duration(cfg.Config.QbittorrentTimeout)*time.Second)
 	if err != nil {
@@ -884,13 +835,8 @@ func (app *Application) runServer() {
 	sessionManager.Cookie.Path = cfg.Config.BaseURL
 	sessionManager.Cookie.Persist = false
 
-	updateInputs := update.Measure(log.Logger, cfg.Config.DisableSelfUpdate, buildinfo.Version)
+	updateInputs := update.Measure(log.Logger)
 	restarter := update.NewRestarter(updateInputs.BinaryPath)
-	selfUpdater := update.NewUpdater(update.Config{
-		Repository: "autobrr/qui",
-		Version:    buildinfo.Version,
-		BinaryPath: updateInputs.BinaryPath,
-	})
 
 	// Start server in goroutine
 	httpServer := api.NewServer(&api.Dependencies{
@@ -907,11 +853,9 @@ func (app *Application) runServer() {
 		ExternalProgramService:           externalProgramService,
 		ClientPool:                       clientPool,
 		SyncManager:                      syncManager,
-		LicenseService:                   licenseService,
 		UpdateService:                    updateService,
 		UpdateAvailability:               update.Decide(updateInputs),
 		Restarter:                        restarter,
-		SelfUpdater:                      selfUpdater,
 		TrackerIconService:               trackerIconService,
 		BackupService:                    backupService,
 		FilesManager:                     filesManagerService,

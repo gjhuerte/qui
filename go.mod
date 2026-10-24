@@ -1,4 +1,4 @@
-module github.com/autobrr/qui
+module github.com/gjhuerte/qui
 
 go 1.27.3
 

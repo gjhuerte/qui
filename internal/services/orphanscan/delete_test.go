@@ -15,10 +15,10 @@ import (
 
 	_ "modernc.org/sqlite"
 
-	"github.com/autobrr/qui/internal/dbinterface"
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/internal/fsops/local"
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/dbinterface"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/fsops/local"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 type disappearingDirBackend struct {

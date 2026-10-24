@@ -29,10 +29,10 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"github.com/autobrr/qui/internal/backups"
-	"github.com/autobrr/qui/internal/database"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/testutil/testdb"
+	"github.com/gjhuerte/qui/internal/backups"
+	"github.com/gjhuerte/qui/internal/database"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/testutil/testdb"
 )
 
 func newRequestWithParams(method, path string, params map[string]string) *http.Request {

@@ -10,7 +10,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/services/metadata"
+	"github.com/gjhuerte/qui/internal/services/metadata"
 )
 
 func TestMetadataCredentialsFingerprint_IsOneWay(t *testing.T) {

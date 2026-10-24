@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 func TestDirScanStore_SettingsRoundTrip_MaxSearcheeAgeDays(t *testing.T) {

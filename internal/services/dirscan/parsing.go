@@ -10,7 +10,7 @@ import (
 
 	"github.com/autobrr/rls"
 
-	"github.com/autobrr/qui/pkg/releases"
+	"github.com/gjhuerte/qui/pkg/releases"
 )
 
 // TRaSHMetadata holds database IDs extracted from TRaSH Guides naming conventions.

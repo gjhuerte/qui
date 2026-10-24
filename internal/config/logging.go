@@ -15,7 +15,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"gopkg.in/natefinch/lumberjack.v2"
 
-	"github.com/autobrr/qui/internal/logstream"
+	"github.com/gjhuerte/qui/internal/logstream"
 )
 
 // LogManager handles log configuration with safe runtime reconfiguration.

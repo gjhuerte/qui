@@ -6,7 +6,7 @@ package crossseed
 import (
 	"math/bits"
 
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 // matchDifference is one release rule that a pair of Read releases fails. The

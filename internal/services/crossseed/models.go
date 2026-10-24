@@ -9,7 +9,7 @@ import (
 
 	qbt "github.com/autobrr/go-qbittorrent"
 
-	"github.com/autobrr/qui/internal/services/jackett"
+	"github.com/gjhuerte/qui/internal/services/jackett"
 )
 
 // Local match type constants for determineLocalMatchType.

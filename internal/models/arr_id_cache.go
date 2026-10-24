@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/autobrr/qui/internal/dbinterface"
+	"github.com/gjhuerte/qui/internal/dbinterface"
 )
 
 // ExternalIDs represents the external IDs resolved from ARR instances

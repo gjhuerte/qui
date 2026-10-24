@@ -16,8 +16,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/pkg/releases"
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/pkg/releases"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 // matching.go groups all heuristics and helpers that decide whether two torrents

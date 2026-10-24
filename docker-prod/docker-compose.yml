@@ -1,12 +1,27 @@
+# Production build of qui from this repository (multi-stage, static binary on Alpine).
+#
+#   docker compose -f docker-prod/docker-compose.yml up -d --build
+#
+# Without --build, Compose pulls the published image instead.
+name: qui-prod
+
 services:
   qui:
-    image: ghcr.io/autobrr/qui:latest
+    image: ghcr.io/gjhuerte/qui:${QUI_TAG:-latest}
+    build:
+      context: ..
+      dockerfile: docker-prod/Dockerfile
+      args:
+        VERSION: ${VERSION:-dev}
+        GIT_COMMIT: ${GIT_COMMIT:-}
+        BUILD_DATE: ${BUILD_DATE:-}
     container_name: qui
     restart: unless-stopped
     ports:
       - "7476:7476"
     volumes:
-      - ./qui:/config
+      # A named volume, so Docker never creates root-owned data in the repo.
+      - qui-config:/config
     #environment:
       # Run as this user/group and chown /config (set both or neither).
       # Alternative to the standard "user:" option, see the Permissions docs.
@@ -14,3 +29,6 @@ services:
       #PGID: "1000"
       # Permission mask for new files and directories, for example 002 for group write
       #UMASK: "002"
+
+volumes:
+  qui-config:

@@ -29,9 +29,9 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/ulikunitz/xz"
 
-	"github.com/autobrr/qui/internal/backups"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/pkg/torrentname"
+	"github.com/gjhuerte/qui/internal/backups"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/pkg/torrentname"
 )
 
 // ExtractedArchive represents the result of streaming extraction to disk.

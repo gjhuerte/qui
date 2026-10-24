@@ -6,7 +6,7 @@ package backups
 import (
 	"strings"
 
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 // resolveBackupSavePath decides which per-torrent save path (if any) to persist

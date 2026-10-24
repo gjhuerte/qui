@@ -16,7 +16,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"github.com/autobrr/qui/internal/config"
+	"github.com/gjhuerte/qui/internal/config"
 )
 
 func TestLogsHandler_GetLogSettings(t *testing.T) {

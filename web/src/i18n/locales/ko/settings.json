@@ -12,7 +12,7 @@
     "externalPrograms": "외부 프로그램",
     "notifications": "알림",
     "dateTime": "시간 및 언어",
-    "premiumThemes": "프리미엄 테마",
+    "themes": "테마",
     "security": "보안",
     "logs": "로그"
   },
@@ -421,156 +421,11 @@
   "themes": {
     "selector": {
       "title": "테마 선택",
-      "loadingDescription": "사용 가능한 테마 불러오는 중...",
-      "description": "사용 가능한 테마 중에서 선택하세요. 프리미엄 테마에는 유효한 라이선스가 필요합니다.",
-      "verificationUnavailable": "라이선스 확인을 사용할 수 없습니다. 프리미엄 테마 전환이 일시적으로 비활성화되었습니다.",
-      "notLoaded": "프리미엄 테마가 로드되지 않음",
-      "notLoadedDescription": "구성",
-      "notLoadedAnd": "한 후 실행",
-      "premium": "프리미엄",
-      "pro": "Pro",
-      "free": "무료",
-      "locked": "잠김",
-      "lock": "잠금"
-    },
-    "toasts": {
-      "premiumRequired": "프리미엄 라이선스가 필요합니다",
-      "premiumRequiredDescription": "유효한 프리미엄 라이선스를 추가하여 프리미엄 테마를 잠금 해제하세요."
-    },
-    "license": {
-      "loadingTitle": "라이선스 관리",
-      "loadingDescription": "테마 라이선스 불러오는 중...",
-      "managementTitle": "라이선스 관리",
-      "managementDescription": "테마 라이선스 및 프리미엄 접근을 관리합니다",
-      "providers": {
-        "licensePortal": "라이선스 포털"
-      },
-      "status": {
-        "unlockTitle": "프리미엄 테마 잠금 해제",
-        "unlockDescription": "원하는 만큼 지불(최소 $9.99) • 평생 라이선스 • 모든 테마",
-        "activeTitle": "프리미엄 접근 활성화됨",
-        "activeDescription": "현재 및 향후 모든 프리미엄 테마에 접근할 수 있습니다",
-        "activationRequiredTitle": "라이선스 활성화 필요",
-        "activationRequiredDescription": "이 컴퓨터에서 라이선스를 활성화해야 합니다"
-      },
-      "portalHelp": {
-        "prefix": "DodoPayments에서 구매한 다음, 여기에 라이선스 키를 입력하세요. 키를 분실한 경우",
-        "suffix": "에서 복구할 수 있습니다."
-      },
-      "discord": {
-        "title": "Discord 혜택",
-        "prefix": "비공개 채널에 접근하려면",
-        "afterRole": "역할을 받으세요.",
-        "openDiscord": "qui Discord 열기",
-        "opensInNewTab": "(새 탭에서 열림)",
-        "afterLink": "를 클릭한 다음,",
-        "copyVerifyAriaLabel": "/verify 명령 복사",
-        "copyVerifyTitle": "클릭하여 복사",
-        "verifyCommand": "/verify",
-        "afterVerify": "명령을",
-        "channel": "#qui",
-        "suffix": " 채널에서 실행하고, 라이선스 이메일로 로그인하세요."
-      },
-      "details": {
-        "productAdded": "{{productName}} • 추가됨 {{date}}",
-        "productStatusAndAdded": "{{productName}} • 상태: {{status}} • 추가됨 {{date}}"
-      },
-      "invalid": {
-        "dodo": "이 라이선스는 이 컴퓨터에서 활성화되지 않았습니다. 여기서 사용하려면 다시 활성화를 클릭하세요. 활성화 한도에 도달한 경우, <portal>licenses.getqui.com</portal>으로 이동하여 라이선스를 구매할 때 사용한 이메일로 가입하거나 로그인한 다음, Machine Instances에서 더 이상 사용하지 않는 컴퓨터를 비활성화하세요."
-      },
-      "errors": {
-        "expired": "라이선스 키가 만료되었습니다.",
-        "notActive": "이 라이선스 키는 더 이상 활성 상태가 아닙니다.",
-        "invalid": "이 라이선스 키는 유효하지 않습니다.",
-        "notFound": "입력한 라이선스 키가 유효하지 않습니다.",
-        "databaseCopied": "이 라이선스는 다른 컴퓨터에서 활성화되었습니다. 데이터베이스가 복사된 것으로 보입니다.",
-        "conditionsMismatch": "라이선스 키가 필요한 조건과 일치하지 않습니다.",
-        "activationLimit": "라이선스 활성화 한도에 도달했습니다. <portal>licenses.getqui.com</portal>으로 이동하여 라이선스를 구매할 때 사용한 이메일로 가입하거나 로그인하세요. Machine Instances를 열고 더 이상 사용하지 않는 컴퓨터를 비활성화한 다음 다시 시도하세요.",
-        "limitReached": "라이선스 활성화 한도에 도달했습니다.",
-        "usageLimit": "라이선스 사용 한도를 초과했습니다.",
-        "unreachable": "라이선스 서비스에 연결할 수 없습니다. 잠시 후 다시 시도하세요.",
-        "tooManyAttempts": "시도 횟수가 너무 많습니다. 잠시 기다린 후 다시 시도하세요.",
-        "rateLimited": "잠시 기다린 후 다시 시도하세요.",
-        "generic": "라이선스 키를 확인하지 못했습니다. 다시 시도하세요.",
-        "deleteFailed": "라이선스를 제거하지 못했습니다. 다시 시도하세요."
-      },
-      "actions": {
-        "addLicense": "라이선스 추가",
-        "remove": "제거",
-        "removing": "제거 중...",
-        "getPremium": "프리미엄 받기",
-        "reactivate": "라이선스 다시 활성화",
-        "activating": "활성화 중...",
-        "copyLicenseKey": "라이선스 키 복사",
-        "activate": "라이선스 활성화",
-        "validating": "검증 중...",
-        "openDodoCheckout": "DodoPayments 결제 열기",
-        "openLicensePortal": "라이선스 포털 열기"
-      },
-      "deleteDialog": {
-        "title": "라이선스를 제거하시겠습니까?",
-        "description": "이 컴퓨터에서 이 라이선스를 제거하시겠습니까? qui는 원격 활성화 슬롯도 해제하려고 시도하지만, 해당 요청이 실패하더라도 로컬 제거는 완료됩니다.",
-        "keyLabel": "제거할 라이선스 키:",
-        "recoverPrefix": "필요한 경우 나중에 다음에서 복구할 수 있습니다:"
-      },
-      "addDialog": {
-        "title": "프리미엄 라이선스 추가",
-        "description": "모든 프리미엄 테마를 잠금 해제하려면 프리미엄 테마 라이선스 키를 입력하세요.",
-        "label": "라이선스 키",
-        "placeholder": "프리미엄 테마 라이선스 키를 입력하세요",
-        "recoverKey": "키 복구?",
-        "validation": {
-          "required": "라이선스 키는 필수입니다"
-        }
-      },
-      "paymentDialog": {
-        "title": "프리미엄 라이선스 받기",
-        "description": "원하는 만큼 지불(최소 $9.99) • 평생 라이선스 • 모든 테마",
-        "steps": {
-          "choosePaymentMethod": {
-            "title": "결제 방법 선택",
-            "cardTitle": "카드 또는 현지 결제 수단",
-            "cardDescription": "DodoPayments에서 직접 결제합니다. 결제 후 qui로 돌아옵니다.",
-            "cryptoTitle": "암호화폐",
-            "cryptoDescription": "암호화폐 결제도 DodoPayments 결제에서 완료됩니다.",
-            "xmrHelp": "XMR은 수동입니다: Discord로 문의하거나 s0up4200@pm.me로 이메일을 보내세요.",
-            "cryptoSteps": {
-              "readmePrefix": "기부할 때는",
-              "readmeSuffix": "의 주소를 사용하세요.",
-              "verifyPrefix": "할인 코드를 받으려면",
-              "verifySuffix": "에서 인증하세요.",
-              "applyCode": "DodoPayments 결제를 열고, 할인 코드 칸에 코드를 붙여 넣은 다음, 적용을 클릭하세요.",
-              "completeCheckout": "총액이 $0.00인지 확인한 다음 결제를 완료하세요."
-            }
-          },
-          "findLicenseKey": {
-            "title": "라이선스 키 찾기",
-            "description": "라이선스 키는 결제 후 표시됩니다. 나중에 라이선스 포털에서도 복구할 수 있습니다."
-          },
-          "activateLicense": {
-            "title": "라이선스 활성화",
-            "description": "결제 후 여기로 돌아오면, 라이선스 추가를 사용하여 키를 활성화하세요."
-          }
-        }
-      },
-      "copiedVerify": "확인 명령이 복사되었습니다",
-      "failedCopyVerify": "확인 명령을 복사하지 못했습니다",
-      "toasts": {
-        "activationSuccessPremium": "프리미엄 접근이 활성화되었습니다! 감사합니다!",
-        "paymentCompleted": "결제가 완료되었습니다. 설정을 완료하려면 프리미엄 라이선스 키를 추가하세요.",
-        "paymentNotCompleted": "결제가 성공적으로 완료되지 않았습니다.",
-        "returnedFromCheckout": "결제에서 돌아왔습니다. 준비되면 프리미엄 라이선스 키를 추가하세요.",
-        "keyCopied": "라이선스 키가 클립보드에 복사되었습니다",
-        "copyFailed": "라이선스 키를 복사하지 못했습니다",
-        "removedFromMachine": "이 컴퓨터에서 라이선스가 제거되었습니다"
-      }
+      "description": "사용 가능한 테마 중에서 선택하세요."
     },
     "custom": {
       "badge": "사용자 지정",
       "title": "사용자 지정 테마",
-      "lockedTitle": "사용자 지정 테마는 프리미엄 기능입니다",
-      "lockedDescription": "프리미엄을 잠금 해제하면 디스크의 디렉터리에서 직접 만든 테마 CSS 파일을 불러올 수 있습니다.",
-      "unlockCta": "프리미엄 잠금 해제",
       "refresh": "새로 고침",
       "detectedCount": "찾은 테마: {{total}}개",
       "parseErrorsTitle": "다음 파일을 분석할 수 없습니다:",
@@ -1022,54 +877,7 @@
       }
     },
     "update": {
-      "support": {
-        "checkingTitle": "지원 확인 중",
-        "checkingDescription": "qui가 이 업데이트를 설치할 수 있는지 확인하고 있습니다.",
-        "failedTitle": "업데이트 지원을 확인할 수 없음",
-        "failedDescription": "자체 업데이트를 사용할 수 있는지 확인할 수 없습니다.",
-        "retryDescription": "업데이트를 설치하기 전에 지원 확인을 다시 시도하세요.",
-        "retry": "다시 시도"
-      },
-      "unavailable": {
-        "description": "이 환경에서는 자동 설치를 사용할 수 없습니다.",
-        "nextStep": "업데이트 방법",
-        "guide": "업데이트 가이드",
-        "container": {
-          "reason": "qui가 컨테이너에서 실행 중입니다. 업데이트는 컨테이너 이미지로 제공됩니다.",
-          "step": "새 qui 이미지를 내려받은 다음 기존 설정과 데이터 볼륨으로 컨테이너를 다시 생성하세요."
-        },
-        "disabled": {
-          "reason": "qui 설정에서 자체 업데이트가 비활성화되어 있습니다.",
-          "step": "qui를 설치할 때 사용한 패키지 관리자나 설치 방법으로 업데이트하세요."
-        },
-        "development": {
-          "reason": "이 qui 빌드는 릴리스 빌드가 아닙니다. 자동 설치에는 릴리스 빌드가 필요합니다.",
-          "step": "qui를 중지하고 바이너리를 공식 릴리스나 새 빌드로 교체한 다음 qui를 다시 시작하세요."
-        },
-        "directory": {
-          "reason": "qui가 바이너리 디렉터리에 접근하거나 쓸 수 없습니다.",
-          "step": "qui를 중지하고 쓰기 권한이 있는 계정으로 바이너리를 새 릴리스로 교체한 다음 qui를 다시 시작하세요."
-        }
-      },
-      "button": "업데이트 설치",
-      "confirmTitle": "업데이트를 설치할까요?",
-      "confirmDescription": "qui는 새 버전을 다운로드하고 서명을 확인한 뒤 현재 바이너리를 백업으로 보관합니다. 그런 다음 qui가 재시작합니다. qui가 돌아오면 페이지가 다시 로드됩니다.",
-      "runningWork": "크로스시드 검색, 자동화, 백업, 고아 파일 검사 같은 실행 중인 작업은 중지됩니다.",
-      "currentVersion": "현재 버전",
-      "targetVersion": "새 버전",
-      "releaseNotes": "릴리스 노트",
-      "confirm": "업데이트 설치",
-      "overlay": {
-        "notAppliedTitle": "업데이트가 적용되지 않았습니다",
-        "notAppliedDetail": "qui가 돌아왔지만 다른 버전으로 실행 중입니다. qui 로그를 확인하세요.",
-        "installedTitle": "qui가 업데이트되었습니다",
-        "installedDetail": "새 버전을 열려면 페이지를 새로고침하세요.",
-        "reload": "페이지 다시 로드",
-        "noBackup": "qui가 업데이트되었지만 백업을 보관하지 않았습니다: {{error}}. 롤백하려면 이전 버전을 직접 다운로드하세요.",
-        "rollbackIntro": "새 버전이 시작되지 않으면 이 명령을 실행한 뒤 qui를 다시 시작하세요:",
-        "rollbackLabel": "롤백 명령",
-        "rollbackDocs": "롤백 단계"
-      }
+      "releaseNotes": "릴리스 노트"
     },
     "runtime": {
       "title": "런타임",

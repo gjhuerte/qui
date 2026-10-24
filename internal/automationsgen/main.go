@@ -18,9 +18,9 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/autobrr/qui/internal/api/handlers"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/services/automations"
+	"github.com/gjhuerte/qui/internal/api/handlers"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/services/automations"
 )
 
 const (

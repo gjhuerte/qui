@@ -38,9 +38,9 @@ Frontend rules for work under `web/`. i18n and translation rules live in `web/sr
 
 `useSyncStream` listeners receive raw frames. A delta for unchanged rows carries an empty `torrents` list and the previous `total`, so a handler clears its row only on `total === 0` and keeps the previous row on an empty list.
 
-## getqui.com Demo
+## Docs Site Demo
 
-`pnpm build:demo` builds the unchanged app in Vite mode `demo` for the landing page at getqui.com/demo/. `web/src/demo/` replaces `window.fetch` and `window.EventSource` with an in-memory store; there is no backend.
+`pnpm build:demo` builds the unchanged app in Vite mode `demo` for the landing page of the documentation site at /demo/. `web/src/demo/` replaces `window.fetch` and `window.EventSource` with an in-memory store; there is no backend.
 
 - A new API call on the torrent list surface needs a route in `web/src/demo/api.ts`, or the demo answers `404 {"error": "not available in the demo"}` and the feature looks broken on the site.
 - Demo-only UI branches use `isDemo` from `web/src/lib/demo.ts`. Vite folds it, so production bundles carry none of them.

@@ -16,7 +16,7 @@ import { VitePWA } from "vite-plugin-pwa"
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const nodeMajor = Number(process.versions.node.split(".")[0] ?? 0)
 const workboxMode = nodeMajor >= 24 ? "development" : "production"
-// getqui.com demo (`vite build --mode demo`): the same index.html booted
+// docs-site demo (`vite build --mode demo`): the same index.html booted
 // through src/demo/main.tsx, served under /demo/ with a fake API and no service worker.
 // Runs before the anti-FOUC script. Docusaurus keeps its color mode under
 // "theme" on the same origin, so the demo mirrors it into its own key and

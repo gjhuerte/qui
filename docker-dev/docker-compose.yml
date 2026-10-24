@@ -1,0 +1,36 @@
+# Development stack with hot reload for the Go backend (air) and the web UI (Vite HMR).
+#
+#   make docker/dev
+#
+# or, without make (QUI_UID/QUI_GID keep files in the repo owned by you):
+#
+#   QUI_UID=$(id -u) QUI_GID=$(id -g) docker compose -f docker-dev/docker-compose.yml up --build
+#
+# Open http://localhost:5173 (Vite, proxies /api to the backend on 7476).
+name: qui-dev
+
+services:
+  qui:
+    image: qui:dev
+    build:
+      context: ..
+      dockerfile: docker-dev/Dockerfile
+    container_name: qui-dev
+    # Run as the host user, so tmp/ and web/dist/ in the repo are not root-owned.
+    user: "${QUI_UID:-1000}:${QUI_GID:-1000}"
+    ports:
+      - "7476:7476"
+      - "5173:5173"
+    volumes:
+      - ..:/app
+      # Named volumes keep container-built dependencies, caches, and qui data
+      # out of the repo. Docker seeds each one from the image, which makes it
+      # writable for any UID.
+      - web-node-modules:/app/web/node_modules
+      - go-cache:/go
+      - qui-config:/config
+
+volumes:
+  web-node-modules:
+  go-cache:
+  qui-config:

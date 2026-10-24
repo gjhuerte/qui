@@ -16,9 +16,9 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/services/notifications"
-	"github.com/autobrr/qui/pkg/redact"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/services/notifications"
+	"github.com/gjhuerte/qui/pkg/redact"
 )
 
 type NotificationsHandler struct {

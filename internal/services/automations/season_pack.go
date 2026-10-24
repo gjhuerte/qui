@@ -14,8 +14,8 @@ import (
 	"github.com/autobrr/rls"
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/pkg/releases"
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/pkg/releases"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 // explicitSeasonTag matches the original capture of a series tag that names a

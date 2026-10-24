@@ -17,10 +17,10 @@ import (
 	"github.com/autobrr/rls"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/services/jackett"
-	"github.com/autobrr/qui/internal/testutil/testdb"
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/services/jackett"
+	"github.com/gjhuerte/qui/internal/testutil/testdb"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 const musicQuerySourceHash = "5f2b1c4d3e6a7089bacd1122334455667788990a"

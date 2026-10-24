@@ -12,7 +12,7 @@
     "externalPrograms": "Programes externs",
     "notifications": "Notificacions",
     "dateTime": "Hora i idioma",
-    "premiumThemes": "Temes premium",
+    "themes": "Temes",
     "security": "Seguretat",
     "logs": "Registres"
   },
@@ -423,156 +423,11 @@
   "themes": {
     "selector": {
       "title": "Selecció de tema",
-      "loadingDescription": "S'estan carregant els temes disponibles...",
-      "description": "Tria entre els temes disponibles. Els temes premium necessiten una llicència vàlida.",
-      "verificationUnavailable": "La verificació de llicències no està disponible. El canvi a temes premium està desactivat temporalment.",
-      "notLoaded": "Els temes premium no s'han carregat",
-      "notLoadedDescription": "Configura",
-      "notLoadedAnd": "i executa",
-      "premium": "Premium",
-      "pro": "Pro",
-      "free": "Gratuït",
-      "locked": "Bloquejat",
-      "lock": "Bloqueja"
-    },
-    "toasts": {
-      "premiumRequired": "Cal una llicència premium",
-      "premiumRequiredDescription": "Desbloqueja els temes premium afegint-hi una llicència premium vàlida."
-    },
-    "license": {
-      "loadingTitle": "Gestió de llicències",
-      "loadingDescription": "S'estan carregant les llicències dels temes...",
-      "managementTitle": "Gestió de llicències",
-      "managementDescription": "Gestiona la llicència dels temes i l'accés premium",
-      "providers": {
-        "licensePortal": "portal de llicències"
-      },
-      "status": {
-        "unlockTitle": "Desbloqueja els temes premium",
-        "unlockDescription": "Paga el que vulguis (mín. 9,99 $) • Llicència vitalícia • Tots els temes",
-        "activeTitle": "Accés premium actiu",
-        "activeDescription": "Tens accés a tots els temes premium actuals i futurs",
-        "activationRequiredTitle": "Cal activar la llicència",
-        "activationRequiredDescription": "La teva llicència s'ha d'activar en aquesta màquina"
-      },
-      "portalHelp": {
-        "prefix": "Compra-ho a DodoPayments i després introdueix aquí la teva clau de llicència. Si perds la clau, recupera-la mitjançant el",
-        "suffix": "."
-      },
-      "discord": {
-        "title": "Avantatge de Discord",
-        "prefix": "Reclama el rol",
-        "afterRole": "per accedir a un canal privat.",
-        "openDiscord": "Obre el Discord de qui",
-        "opensInNewTab": "(s'obre en una pestanya nova)",
-        "afterLink": ", executa",
-        "copyVerifyAriaLabel": "Copia l'ordre /verify",
-        "copyVerifyTitle": "Fes clic per copiar-ho",
-        "verifyCommand": "/verify",
-        "afterVerify": "a",
-        "channel": "#qui",
-        "suffix": ", i inicia la sessió amb el correu de la llicència."
-      },
-      "details": {
-        "productAdded": "{{productName}} • Afegida el {{date}}",
-        "productStatusAndAdded": "{{productName}} • Estat: {{status}} • Afegida el {{date}}"
-      },
-      "invalid": {
-        "dodo": "Aquesta llicència no està activa en aquesta màquina. Fes clic a Reactiva la llicència per fer-la servir aquí. Si has arribat al límit d'activacions, ves a <portal>licenses.getqui.com</portal>, registra't o inicia la sessió amb el correu que vas fer servir per comprar la llicència i desactiva una màquina que ja no facis servir a Machine Instances."
-      },
-      "errors": {
-        "expired": "La teva clau de llicència ha caducat.",
-        "notActive": "Aquesta clau de llicència ja no està activa.",
-        "invalid": "Aquesta clau de llicència no és vàlida.",
-        "notFound": "La clau de llicència que has introduït no és vàlida.",
-        "databaseCopied": "Aquesta llicència es va activar en una altra màquina. Sembla que s'ha copiat la base de dades.",
-        "conditionsMismatch": "La clau de llicència no compleix les condicions requerides.",
-        "activationLimit": "S'ha arribat al límit d'activacions de la llicència. Ves a <portal>licenses.getqui.com</portal> i registra't o inicia la sessió amb el correu que vas fer servir per comprar la llicència. Obre Machine Instances, desactiva una màquina que ja no facis servir i torna-ho a provar.",
-        "limitReached": "S'ha arribat al límit d'activacions de la llicència.",
-        "usageLimit": "S'ha superat el límit d'ús de la llicència.",
-        "unreachable": "No es pot connectar amb el servei de llicències. Torna-ho a provar d'aquí a una estona.",
-        "tooManyAttempts": "Massa intents. Espera un moment i torna-ho a provar.",
-        "rateLimited": "Espera abans de tornar-ho a provar.",
-        "generic": "No s'ha pogut validar la clau de llicència. Torna-ho a provar.",
-        "deleteFailed": "No s'ha pogut eliminar la llicència. Torna-ho a provar."
-      },
-      "actions": {
-        "addLicense": "Afegeix una llicència",
-        "remove": "Suprimeix",
-        "removing": "S'està suprimint...",
-        "getPremium": "Aconsegueix premium",
-        "reactivate": "Reactiva la llicència",
-        "activating": "S'està activant...",
-        "copyLicenseKey": "Copia la clau de llicència",
-        "activate": "Activa la llicència",
-        "validating": "S'està validant...",
-        "openDodoCheckout": "Obre la pàgina de pagament de DodoPayments",
-        "openLicensePortal": "Obre el portal de llicències"
-      },
-      "deleteDialog": {
-        "title": "Vols suprimir la llicència?",
-        "description": "Segur que vols suprimir aquesta llicència d'aquesta màquina? qui també intentarà alliberar la ranura d'activació remota, però la supressió local es completarà igualment si aquesta petició falla.",
-        "keyLabel": "Clau de llicència que se suprimirà:",
-        "recoverPrefix": "Si cal, la pots recuperar més endavant des del teu"
-      },
-      "addDialog": {
-        "title": "Afegeix una llicència premium",
-        "description": "Introdueix la clau de llicència dels temes premium per desbloquejar-los tots.",
-        "label": "Clau de llicència",
-        "placeholder": "Introdueix la clau de llicència dels temes premium",
-        "recoverKey": "Has perdut la clau?",
-        "validation": {
-          "required": "La clau de llicència és obligatòria"
-        }
-      },
-      "paymentDialog": {
-        "title": "Aconsegueix una llicència premium",
-        "description": "Paga el que vulguis (mín. 9,99 $) • Llicència vitalícia • Tots els temes",
-        "steps": {
-          "choosePaymentMethod": {
-            "title": "Tria un mètode de pagament",
-            "cardTitle": "Targeta o mètodes locals",
-            "cardDescription": "Paga directament a DodoPayments. Després del pagament tornaràs a qui.",
-            "cryptoTitle": "Criptomonedes",
-            "cryptoDescription": "El pagament amb criptomonedes també es completa a la pàgina de pagament de DodoPayments.",
-            "xmrHelp": "L'XMR és manual: escriu-nos a Discord o al correu s0up4200@pm.me.",
-            "cryptoSteps": {
-              "readmePrefix": "Fes la donació a les adreces que trobaràs al",
-              "readmeSuffix": ".",
-              "verifyPrefix": "Verifica-ho a",
-              "verifySuffix": "per obtenir el teu codi de descompte.",
-              "applyCode": "Obre la pàgina de pagament de DodoPayments, enganxa el codi a «Discount code» i fes clic a «Apply».",
-              "completeCheckout": "Comprova que el total sigui 0,00 $ i completa el pagament."
-            }
-          },
-          "findLicenseKey": {
-            "title": "Troba la teva clau de llicència",
-            "description": "La clau de llicència es mostra després del pagament. També la pots recuperar més endavant des del portal de llicències."
-          },
-          "activateLicense": {
-            "title": "Activa la teva llicència",
-            "description": "Quan el pagament et retorni aquí, fes servir «Afegeix una llicència» per activar la clau."
-          }
-        }
-      },
-      "copiedVerify": "S'ha copiat l'ordre de verificació",
-      "failedCopyVerify": "No s'ha pogut copiar l'ordre de verificació",
-      "toasts": {
-        "activationSuccessPremium": "S'ha activat l'accés premium. Gràcies!",
-        "paymentCompleted": "S'ha completat el pagament. Afegeix la clau de llicència premium per acabar la configuració.",
-        "paymentNotCompleted": "El pagament no s'ha completat correctament.",
-        "returnedFromCheckout": "Has tornat de la pàgina de pagament. Afegeix la clau de llicència premium quan vulguis.",
-        "keyCopied": "S'ha copiat la clau de llicència al porta-retalls",
-        "copyFailed": "No s'ha pogut copiar la clau de llicència",
-        "removedFromMachine": "S'ha suprimit la llicència d'aquesta màquina"
-      }
+      "description": "Tria entre els temes disponibles."
     },
     "custom": {
       "badge": "Personalitzat",
       "title": "Temes personalitzats",
-      "lockedTitle": "Els temes personalitzats són una funció premium",
-      "lockedDescription": "Desbloqueja premium per carregar els teus propis fitxers CSS de tema des d'un directori del disc.",
-      "unlockCta": "Desbloqueja premium",
       "refresh": "Actualitza",
       "detectedCount": "Temes trobats: {{total}}",
       "parseErrorsTitle": "No s'han pogut analitzar aquests fitxers:",
@@ -1025,54 +880,7 @@
       }
     },
     "update": {
-      "support": {
-        "checkingTitle": "Comprovant la compatibilitat",
-        "checkingDescription": "Comprovant si qui pot instal·lar aquesta actualització.",
-        "failedTitle": "No s’ha pogut comprovar la compatibilitat de l’actualització",
-        "failedDescription": "No s’ha pogut comprovar si l’actualització automàtica està disponible.",
-        "retryDescription": "Torneu a comprovar la compatibilitat abans d’instal·lar l’actualització.",
-        "retry": "Torna-ho a provar"
-      },
-      "unavailable": {
-        "description": "La instal·lació automàtica no està disponible per a aquesta configuració.",
-        "nextStep": "Com actualitzar",
-        "guide": "Guia d’actualització",
-        "container": {
-          "reason": "qui s’executa en un contenidor. Les actualitzacions provenen de la imatge del contenidor.",
-          "step": "Baixeu la nova imatge de qui i torneu a crear el contenidor amb la configuració i els volums de dades existents."
-        },
-        "disabled": {
-          "reason": "L’actualització automàtica està desactivada a la configuració de qui.",
-          "step": "Actualitzeu qui amb el gestor de paquets o el mètode que vau utilitzar per instal·lar-lo."
-        },
-        "development": {
-          "reason": "Aquesta compilació de qui no és una versió publicada. La instal·lació automàtica requereix una versió publicada.",
-          "step": "Atureu qui, substituïu el binari per una versió oficial o una compilació nova i torneu a iniciar qui."
-        },
-        "directory": {
-          "reason": "qui no pot accedir al directori del seu binari o escriure-hi.",
-          "step": "Atureu qui, substituïu el binari per la versió nova amb un compte amb accés d’escriptura i torneu a iniciar qui."
-        }
-      },
-      "button": "Instal·la l'actualització",
-      "confirmTitle": "Voleu instal·lar l'actualització?",
-      "confirmDescription": "qui baixa la nova versió, en comprova la signatura i conserva el binari actual com a còpia de seguretat. Després qui es reinicia. La pàgina es recarrega quan qui torna.",
-      "runningWork": "La feina en curs, com les cerques de cross-seed, les automatitzacions, les còpies de seguretat i les anàlisis d'orfes, s'atura.",
-      "currentVersion": "Versió actual",
-      "targetVersion": "Versió nova",
-      "releaseNotes": "Notes de la versió",
-      "confirm": "Instal·la l'actualització",
-      "overlay": {
-        "notAppliedTitle": "L'actualització no s'ha aplicat",
-        "notAppliedDetail": "qui ha tornat, però amb una altra versió. Consulteu els registres de qui.",
-        "installedTitle": "qui s'ha actualitzat",
-        "installedDetail": "Torneu a carregar la pàgina per obrir la versió nova.",
-        "reload": "Recarrega la pàgina",
-        "noBackup": "qui s'ha actualitzat, però no ha conservat cap còpia de seguretat: {{error}}. Per tornar enrere, baixa la versió anterior manualment.",
-        "rollbackIntro": "Si la versió nova no s'inicia, executeu aquesta ordre i torneu a iniciar qui:",
-        "rollbackLabel": "Ordre per tornar enrere",
-        "rollbackDocs": "Passos per tornar enrere"
-      }
+      "releaseNotes": "Notes de la versió"
     },
     "runtime": {
       "title": "Execució",

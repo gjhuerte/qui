@@ -3,7 +3,7 @@
 
 package crossseed
 
-import "github.com/autobrr/qui/pkg/releases"
+import "github.com/gjhuerte/qui/pkg/releases"
 
 // ReleaseCache is preserved for backwards compatibility within the crossseed package.
 // It is an alias to the shared releases.Parser.

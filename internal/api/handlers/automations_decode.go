@@ -14,8 +14,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/services/automations"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/services/automations"
 )
 
 // ignoredRuleKeys are keys that the rule structs do not have but that clients send.

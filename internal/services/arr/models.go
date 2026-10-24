@@ -7,7 +7,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 // SystemStatusResponse represents the response from /api/v3/system/status (both Sonarr and Radarr)

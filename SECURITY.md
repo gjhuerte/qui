@@ -8,10 +8,7 @@ We fix security issues in the latest release only. If you run an older version, 
 
 Do not open a public issue, discussion, or pull request for a security issue.
 
-Report it in private with one of these methods:
-
-- Open a draft advisory at [github.com/autobrr/qui/security/advisories/new](https://github.com/autobrr/qui/security/advisories/new).
-- Send an email to [security@getqui.com](mailto:security@getqui.com).
+Report it in private: open a draft advisory at [github.com/gjhuerte/qui/security/advisories/new](https://github.com/gjhuerte/qui/security/advisories/new).
 
 Include the qui version, the steps to reproduce the issue, and the effect on a user. A proof of concept helps us fix the issue faster.
 

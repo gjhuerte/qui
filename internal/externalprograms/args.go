@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 // SplitArgs splits a command line string into arguments, respecting quoted strings.

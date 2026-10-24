@@ -18,7 +18,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/database"
+	"github.com/gjhuerte/qui/internal/database"
 )
 
 func TestPostgresDSNWithSearchPath(t *testing.T) {

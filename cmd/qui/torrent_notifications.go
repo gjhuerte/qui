@@ -11,7 +11,7 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/services/notifications"
+	"github.com/gjhuerte/qui/internal/services/notifications"
 )
 
 const (

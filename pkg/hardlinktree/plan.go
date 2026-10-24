@@ -13,7 +13,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/autobrr/qui/pkg/pathutil"
+	"github.com/gjhuerte/qui/pkg/pathutil"
 )
 
 // TorrentFile represents a file in a torrent.

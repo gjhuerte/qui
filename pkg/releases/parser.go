@@ -14,7 +14,7 @@ import (
 	"github.com/autobrr/go-cache/ttlcache"
 	"github.com/autobrr/rls"
 
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 const defaultParserTTL = 5 * time.Minute

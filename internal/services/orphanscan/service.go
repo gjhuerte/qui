@@ -21,11 +21,11 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/qbittorrent"
-	"github.com/autobrr/qui/internal/services/activity"
-	"github.com/autobrr/qui/internal/services/notifications"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/services/activity"
+	"github.com/gjhuerte/qui/internal/services/notifications"
 )
 
 // healthChecker is the subset of *qbittorrent.Client methods needed for readiness checks.

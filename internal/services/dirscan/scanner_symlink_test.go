@@ -14,7 +14,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	localbackend "github.com/autobrr/qui/internal/fsops/local"
+	localbackend "github.com/gjhuerte/qui/internal/fsops/local"
 )
 
 // A root-level symlinked media file is scanned via its target (develop

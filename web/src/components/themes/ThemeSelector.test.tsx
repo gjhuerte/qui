@@ -40,14 +40,6 @@ vi.mock("@/config/themes", () => ({
     fixture.builtInThemes.find((theme) => theme.id === id),
 }))
 
-vi.mock("@/hooks/useLicense.ts", () => ({
-  useHasPremiumAccess: () => ({
-    hasPremiumAccess: true,
-    isLoading: false,
-    isError: false,
-  }),
-}))
-
 const builtinsResult = vi.hoisted(() => ({ data: undefined, isSuccess: true, isError: false }))
 vi.mock("@/hooks/useBuiltinThemes", () => ({
   useBuiltinThemes: () => builtinsResult,

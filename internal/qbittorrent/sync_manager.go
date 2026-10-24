@@ -29,10 +29,10 @@ import (
 	"github.com/rs/zerolog/log"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/qbittorrent/prefcatalog"
-	"github.com/autobrr/qui/internal/services/trackericons"
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/qbittorrent/prefcatalog"
+	"github.com/gjhuerte/qui/internal/services/trackericons"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 // FilesManager interface for caching torrent files.

@@ -6,7 +6,7 @@ package middleware
 import (
 	"net/http"
 
-	"github.com/autobrr/qui/pkg/httphelpers"
+	"github.com/gjhuerte/qui/pkg/httphelpers"
 )
 
 // RequireAllowedHosts takes a startup snapshot of allowedHosts.

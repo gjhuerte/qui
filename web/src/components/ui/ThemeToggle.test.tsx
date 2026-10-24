@@ -75,14 +75,6 @@ vi.mock("@/utils/theme", () => ({
   setThemeVariation: vi.fn(),
 }))
 
-vi.mock("@/hooks/useLicense.ts", () => ({
-  useHasPremiumAccess: () => ({
-    hasPremiumAccess: false,
-    isLoading: false,
-    isError: false,
-  }),
-}))
-
 const builtinsResult = vi.hoisted(() => ({ data: undefined, isSuccess: true, isError: false }))
 vi.mock("@/hooks/useBuiltinThemes", () => ({
   useBuiltinThemes: () => builtinsResult,

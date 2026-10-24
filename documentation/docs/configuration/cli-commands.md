@@ -2,7 +2,7 @@
 sidebar_position: 5
 title: qui CLI commands for users, updates, and migration
 sidebar_label: CLI Commands
-description: "qui command-line reference: start the server, create users, change passwords, update, migrate torrents, and manage the database."
+description: "qui command-line reference: start the server, create users, change passwords, migrate torrents, and manage the database."
 ---
 
 # CLI Commands
@@ -114,16 +114,6 @@ docker exec -it <container-name> qui change-password --username admin
 ```
 
 Replace `admin` with your username. Enter a new password of at least 8 characters at the prompt.
-
-## update
-
-Update qui to the latest release:
-
-```bash
-./qui update
-```
-
-This command replaces the qui binary in place. It keeps the previous binary as `qui-v<old version>.bak` (`qui-v<old version>.bak.exe` on Windows) in the same directory, deletes older backups, and prints the command that restores the backup. For Docker, pull a new image instead (see [Docker](../getting-started/docker.md#updating)).
 
 ## Migrate From Other Torrent Clients
 

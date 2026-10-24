@@ -6,7 +6,7 @@ package crossseed
 import (
 	"golang.org/x/sys/windows"
 
-	"github.com/autobrr/qui/pkg/pathutil"
+	"github.com/gjhuerte/qui/pkg/pathutil"
 )
 
 func resolvePartialPoolExistingPath(path string) (string, error) {

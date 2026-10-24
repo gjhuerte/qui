@@ -16,7 +16,7 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/autobrr/qui/pkg/fsutil"
+	"github.com/gjhuerte/qui/pkg/fsutil"
 )
 
 const (

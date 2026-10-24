@@ -10,7 +10,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	internalqbittorrent "github.com/autobrr/qui/internal/qbittorrent"
+	internalqbittorrent "github.com/gjhuerte/qui/internal/qbittorrent"
 )
 
 // ErrorResponse represents an API error response

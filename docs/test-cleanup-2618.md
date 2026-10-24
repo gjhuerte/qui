@@ -2,7 +2,7 @@
 
 Recorded before implementation on 2026-09-07 at commit `411814e57ddb0bbe317e79b07a4a159d92cb2957`.
 Source references below use that commit's line numbers.
-The scope is [#2618](https://github.com/autobrr/qui/issues/2618), from the audit in [#2576](https://github.com/autobrr/qui/issues/2576).
+The scope is [#2618](https://github.com/gjhuerte/qui/issues/2618), from the audit in [#2576](https://github.com/gjhuerte/qui/issues/2576).
 
 ## Claim validation
 

@@ -13,11 +13,11 @@ import (
 	"github.com/autobrr/go-torrent/bencode"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 
-	"github.com/autobrr/qui/internal/models"
-	internalqb "github.com/autobrr/qui/internal/qbittorrent"
-	"github.com/autobrr/qui/internal/testutil/testdb"
+	"github.com/gjhuerte/qui/internal/models"
+	internalqb "github.com/gjhuerte/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/testutil/testdb"
 )
 
 // hashFilteringSyncManager honors the Hashes filter in GetTorrents so

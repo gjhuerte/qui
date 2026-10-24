@@ -9,8 +9,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/domain"
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/domain"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 func TestCrossSeedStore_GazelleKeys_EncryptedAndRedacted(t *testing.T) {

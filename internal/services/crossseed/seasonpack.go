@@ -21,12 +21,12 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/qbittorrent"
-	"github.com/autobrr/qui/pkg/hardlinktree"
-	"github.com/autobrr/qui/pkg/pathutil"
-	"github.com/autobrr/qui/pkg/releases"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/pkg/hardlinktree"
+	"github.com/gjhuerte/qui/pkg/pathutil"
+	"github.com/gjhuerte/qui/pkg/releases"
 )
 
 // videoExtensions lists playable video file extensions used to identify

@@ -4,7 +4,7 @@ body:
     attributes:
       value: |
         > [!IMPORTANT]
-        > Before opening a discussion, please check the [documentation](https://getqui.com) and search existing [Discussions](https://github.com/autobrr/qui/discussions) and [Issues](https://github.com/autobrr/qui/issues).
+        > Before opening a discussion, please check the [documentation](https://github.com/gjhuerte/qui/tree/main/documentation/docs) and search existing [Discussions](https://github.com/gjhuerte/qui/discussions) and [Issues](https://github.com/gjhuerte/qui/issues).
 
   - type: textarea
     attributes:
@@ -51,8 +51,8 @@ body:
     attributes:
       label: Log link
       description: |
-        For long logs, sign in with GitHub at https://bin.getqui.com, add the logs, select a Lifetime of 90 days, and paste the Paste link here. Only qui maintainers can read a Paste. Before you upload the logs, make sure that they contain no passkeys or API keys.
-      placeholder: https://bin.getqui.com/p/...
+        For long logs, create a secret gist at https://gist.github.com and paste its link here. A secret gist is not listed, but anyone with the link can read it. Before you upload the logs, make sure that they contain no passkeys, API keys, or private tracker URLs.
+      placeholder: https://gist.github.com/...
 
   - type: textarea
     attributes:

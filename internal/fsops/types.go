@@ -16,7 +16,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/autobrr/qui/pkg/hardlink"
+	"github.com/gjhuerte/qui/pkg/hardlink"
 )
 
 // FileInfo holds metadata from a Stat call.

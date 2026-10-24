@@ -12,7 +12,7 @@ import (
 	"maps"
 	"time"
 
-	"github.com/autobrr/qui/internal/dbinterface"
+	"github.com/gjhuerte/qui/internal/dbinterface"
 )
 
 // Default section order

@@ -20,8 +20,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"github.com/autobrr/qui/internal/config"
-	"github.com/autobrr/qui/internal/logstream"
+	"github.com/gjhuerte/qui/internal/config"
+	"github.com/gjhuerte/qui/internal/logstream"
 )
 
 // LogsHandler handles log settings and streaming endpoints.

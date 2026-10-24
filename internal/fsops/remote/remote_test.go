@@ -26,10 +26,10 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/crypto/ssh"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/sshpool"
-	"github.com/autobrr/qui/internal/testutil/sshtest"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/sshpool"
+	"github.com/gjhuerte/qui/internal/testutil/sshtest"
 )
 
 // fakeCreds stands in for the instance store: the row Get answers with, plus

@@ -7,7 +7,7 @@ import (
 	"slices"
 	"time"
 
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 // TorznabSearchRequest represents a general Torznab search request

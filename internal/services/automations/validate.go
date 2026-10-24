@@ -12,8 +12,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/pkg/pathcmp"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/pkg/pathcmp"
 )
 
 // RuleError is a validation failure. Message is safe to show the user.

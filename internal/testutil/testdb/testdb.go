@@ -24,7 +24,7 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"github.com/autobrr/qui/internal/database"
+	"github.com/gjhuerte/qui/internal/database"
 )
 
 // cacheDirEnv overrides the directory that holds the shared migrated template.

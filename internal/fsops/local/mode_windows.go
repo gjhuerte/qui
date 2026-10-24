@@ -9,7 +9,7 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/autobrr/qui/pkg/pathutil"
+	"github.com/gjhuerte/qui/pkg/pathutil"
 )
 
 // Data-file tags from WinNT.h. Unknown tags can represent special files.

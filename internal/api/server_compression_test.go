@@ -21,7 +21,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/config"
+	"github.com/gjhuerte/qui/internal/config"
 )
 
 func TestServerCompression(t *testing.T) {

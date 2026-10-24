@@ -6,7 +6,7 @@ package models
 import (
 	"context"
 
-	"github.com/autobrr/qui/internal/dbinterface"
+	"github.com/gjhuerte/qui/internal/dbinterface"
 )
 
 const (

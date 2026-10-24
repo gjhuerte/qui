@@ -11,7 +11,7 @@ import (
 
 	qbt "github.com/autobrr/go-qbittorrent"
 
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 // torrentSortFields maps the JSON name of each scalar qbt.Torrent field to its

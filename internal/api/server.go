@@ -19,35 +19,34 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/api/handlers"
-	"github.com/autobrr/qui/internal/api/middleware"
-	"github.com/autobrr/qui/internal/api/sse"
-	"github.com/autobrr/qui/internal/auth"
-	"github.com/autobrr/qui/internal/backups"
-	"github.com/autobrr/qui/internal/config"
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/proxy"
-	"github.com/autobrr/qui/internal/qbittorrent"
-	"github.com/autobrr/qui/internal/services/activity"
-	"github.com/autobrr/qui/internal/services/arr"
-	"github.com/autobrr/qui/internal/services/automations"
-	"github.com/autobrr/qui/internal/services/crossseed"
-	"github.com/autobrr/qui/internal/services/dirscan"
-	"github.com/autobrr/qui/internal/services/discscan"
-	"github.com/autobrr/qui/internal/services/externalprograms"
-	"github.com/autobrr/qui/internal/services/filesmanager"
-	"github.com/autobrr/qui/internal/services/jackett"
-	"github.com/autobrr/qui/internal/services/license"
-	"github.com/autobrr/qui/internal/services/notifications"
-	"github.com/autobrr/qui/internal/services/orphanscan"
-	"github.com/autobrr/qui/internal/services/reannounce"
-	"github.com/autobrr/qui/internal/services/trackericons"
-	"github.com/autobrr/qui/internal/sshpool"
-	"github.com/autobrr/qui/internal/update"
-	"github.com/autobrr/qui/internal/web"
-	"github.com/autobrr/qui/internal/web/swagger"
-	webfs "github.com/autobrr/qui/web"
+	"github.com/gjhuerte/qui/internal/api/handlers"
+	"github.com/gjhuerte/qui/internal/api/middleware"
+	"github.com/gjhuerte/qui/internal/api/sse"
+	"github.com/gjhuerte/qui/internal/auth"
+	"github.com/gjhuerte/qui/internal/backups"
+	"github.com/gjhuerte/qui/internal/config"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/proxy"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/services/activity"
+	"github.com/gjhuerte/qui/internal/services/arr"
+	"github.com/gjhuerte/qui/internal/services/automations"
+	"github.com/gjhuerte/qui/internal/services/crossseed"
+	"github.com/gjhuerte/qui/internal/services/dirscan"
+	"github.com/gjhuerte/qui/internal/services/discscan"
+	"github.com/gjhuerte/qui/internal/services/externalprograms"
+	"github.com/gjhuerte/qui/internal/services/filesmanager"
+	"github.com/gjhuerte/qui/internal/services/jackett"
+	"github.com/gjhuerte/qui/internal/services/notifications"
+	"github.com/gjhuerte/qui/internal/services/orphanscan"
+	"github.com/gjhuerte/qui/internal/services/reannounce"
+	"github.com/gjhuerte/qui/internal/services/trackericons"
+	"github.com/gjhuerte/qui/internal/sshpool"
+	"github.com/gjhuerte/qui/internal/update"
+	"github.com/gjhuerte/qui/internal/web"
+	"github.com/gjhuerte/qui/internal/web/swagger"
+	webfs "github.com/gjhuerte/qui/web"
 )
 
 type Server struct {
@@ -68,11 +67,9 @@ type Server struct {
 	externalProgramService           *externalprograms.Service
 	clientPool                       *qbittorrent.ClientPool
 	syncManager                      *qbittorrent.SyncManager
-	licenseService                   *license.Service
 	updateService                    *update.Service
 	updateAvailability               update.Availability
 	restarter                        *update.Restarter
-	selfUpdater                      *update.Updater
 	trackerIconService               *trackericons.Service
 	backupService                    *backups.Service
 	streamManager                    *sse.StreamManager
@@ -107,6 +104,12 @@ type Server struct {
 	shuttingDown <-chan struct{}
 }
 
+// premiumUnlocked opens every theme feature to the themes handler. This build
+// has no license system, so nothing is gated.
+type premiumUnlocked struct{}
+
+func (premiumUnlocked) HasPremiumAccess(context.Context) (bool, error) { return true, nil }
+
 type Dependencies struct {
 	Config                           *config.AppConfig
 	Version                          string
@@ -122,11 +125,9 @@ type Dependencies struct {
 	ClientPool                       *qbittorrent.ClientPool
 	SyncManager                      *qbittorrent.SyncManager
 	WebHandler                       *web.Handler
-	LicenseService                   *license.Service
 	UpdateService                    *update.Service
 	UpdateAvailability               update.Availability
 	Restarter                        *update.Restarter
-	SelfUpdater                      *update.Updater
 	TrackerIconService               *trackericons.Service
 	BackupService                    *backups.Service
 	FilesManager                     *filesmanager.Service
@@ -197,11 +198,9 @@ func NewServer(deps *Dependencies) *Server {
 		reannounceCache:                  deps.ReannounceCache,
 		clientPool:                       deps.ClientPool,
 		syncManager:                      deps.SyncManager,
-		licenseService:                   deps.LicenseService,
 		updateService:                    deps.UpdateService,
 		updateAvailability:               deps.UpdateAvailability,
 		restarter:                        deps.Restarter,
-		selfUpdater:                      deps.SelfUpdater,
 		trackerIconService:               deps.TrackerIconService,
 		backupService:                    deps.BackupService,
 		streamManager:                    streamManager,
@@ -378,14 +377,13 @@ func (s *Server) Handler() (*chi.Mux, error) {
 	externalProgramsHandler := handlers.NewExternalProgramsHandler(s.externalProgramStore, s.externalProgramService, s.clientPool, s.automationStore)
 	arrHandler := handlers.NewArrHandler(s.arrInstanceStore, s.arrService)
 	versionHandler := handlers.NewVersionHandler(s.updateService, s.version, s.updateAvailability)
-	systemHandler := handlers.NewSystemHandler(s.updateAvailability, s.restarter, s.selfUpdater)
+	systemHandler := handlers.NewSystemHandler(s.updateAvailability, s.restarter)
 	applicationHandler := handlers.NewApplicationHandler(s.config, s.started)
 	qbittorrentInfoHandler := handlers.NewQBittorrentInfoHandler(s.clientPool)
 	backupsHandler := handlers.NewBackupsHandler(s.backupService)
 	trackerIconHandler := handlers.NewTrackerIconHandler(s.trackerIconService)
 	proxyHandler := proxy.NewHandler(s.clientPool, s.clientAPIKeyStore, s.instanceStore, s.syncManager, s.reannounceCache, s.reannounceService, s.config.Config.BaseURL)
-	licenseHandler := handlers.NewLicenseHandler(s.licenseService)
-	themesHandler := handlers.NewThemesHandler(s.config, s.licenseService, s.themeSettingsStore, func(ctx context.Context) bool {
+	themesHandler := handlers.NewThemesHandler(s.config, premiumUnlocked{}, s.themeSettingsStore, func(ctx context.Context) bool {
 		// Auth-disabled installs never carry a session flag; every caller is the trusted admin.
 		return s.config.Config.IsAuthDisabled() || s.sessionManager.GetBool(ctx, "authenticated")
 	}, s.activityHub)
@@ -459,8 +457,8 @@ func (s *Server) Handler() (*chi.Mux, error) {
 		})
 
 		// Built-in theme catalog and stored selection: public so the login
-		// page can paint the selected theme before auth. Premium CSS is
-		// license-gated inside; writes stay authenticated.
+		// page can paint the selected theme before auth; writes stay
+		// authenticated.
 		r.Get("/themes", themesHandler.ListThemes)
 		r.Get("/themes/settings", themesHandler.GetThemeSettings)
 
@@ -486,9 +484,7 @@ func (s *Server) Handler() (*chi.Mux, error) {
 			r.Get("/auth/me", authHandler.GetCurrentUser)
 			r.Put("/auth/change-password", authHandler.ChangePassword)
 
-			r.Route("/license", licenseHandler.Routes)
-
-			// Sideloaded custom themes (premium-gated inside the handler)
+			// Sideloaded custom themes
 			r.Get("/themes/custom", themesHandler.ListCustomThemes)
 
 			// Persisted theme selection (reads are public above)
@@ -581,7 +577,6 @@ func (s *Server) Handler() (*chi.Mux, error) {
 			r.Get("/version/latest", versionHandler.GetLatestVersion)
 			r.Get("/application/info", applicationHandler.GetInfo)
 			r.Post("/system/restart", systemHandler.Restart)
-			r.Post("/system/update", systemHandler.Update)
 
 			// Instance management
 			r.Route("/instances", func(r chi.Router) {

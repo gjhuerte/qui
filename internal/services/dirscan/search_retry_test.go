@@ -12,7 +12,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/services/jackett"
+	"github.com/gjhuerte/qui/internal/services/jackett"
 )
 
 // recordingSearcher answers each search with the next scripted response, and

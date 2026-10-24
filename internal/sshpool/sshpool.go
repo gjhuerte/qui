@@ -21,7 +21,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"golang.org/x/crypto/ssh"
 
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 // dialTimeout bounds the TCP connect and the handshake always, and — on a

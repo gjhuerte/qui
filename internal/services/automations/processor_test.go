@@ -13,10 +13,10 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/qbittorrent"
-	"github.com/autobrr/qui/pkg/hardlink"
-	"github.com/autobrr/qui/pkg/pathutil"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/pkg/hardlink"
+	"github.com/gjhuerte/qui/pkg/pathutil"
 )
 
 func TestProcessTorrents_Uncategorized(t *testing.T) {

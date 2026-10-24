@@ -8,7 +8,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/autobrr/qui/internal/database"
+	"github.com/gjhuerte/qui/internal/database"
 )
 
 func RunDBCommand() *cobra.Command {

@@ -3,7 +3,7 @@
 # Claude, inserts them under "## Changelog", and publishes the draft release.
 # Usage: release-highlights.sh [--dry-run] <tag>
 # --dry-run prints the new body and does not edit or publish the release.
-# Needs gh with write access to autobrr/qui, jq, the tags in the local clone,
+# Needs gh with write access to gjhuerte/qui, jq, the tags in the local clone,
 # and Claude Code (claude) signed in, for example with CLAUDE_CODE_OAUTH_TOKEN.
 #
 # If the sections cannot be made, the script prints a ::warning:: line and
@@ -17,9 +17,7 @@ if [[ ${1:-} == --dry-run ]]; then
 	shift
 fi
 tag=$1
-repo=autobrr/qui
-skills_repo=s0up4200/skills
-skill_dirs=(skills/aminblg/simple-english skills/cursor/unslop)
+repo=gjhuerte/qui
 
 work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT
@@ -33,30 +31,9 @@ body=$(jq -j .body "$work/release.json"; printf x)
 body=${body%x}
 prerelease=$(jq -r .isPrerelease "$work/release.json")
 
-# Prints the skill files and the PR data that go into the prompt after the
-# instructions.
+# Prints the PR data that goes into the prompt after the instructions.
 collect_input() {
-	local tree dir path n prev_tag subjects subject json
-	tree=$(gh api "repos/$skills_repo/git/trees/main?recursive=1") || {
-		warn "cannot list ${skill_dirs[*]} in $skills_repo"
-		return 1
-	}
-	for dir in "${skill_dirs[@]}"; do
-		n=0
-		while IFS= read -r path; do
-			printf '\n### %s\n\n' "$path"
-			gh api -H 'Accept: application/vnd.github.raw' "repos/$skills_repo/contents/$path?ref=main" || {
-				warn "cannot read $path in $skills_repo"
-				return 1
-			}
-			n=$((n + 1))
-		done < <(jq -r --arg dir "$dir/" '.tree[] | select(.type == "blob" and (.path | startswith($dir))) | .path' <<<"$tree")
-		if ((n == 0)); then
-			warn "skill folder $dir is missing or empty in $skills_repo"
-			return 1
-		fi
-	done
-
+	local prev_tag subjects subject json
 	prev_tag=$(git describe --tags --abbrev=0 "$tag^") || {
 		warn "cannot find the tag before $tag"
 		return 1
@@ -102,7 +79,7 @@ collect_input() {
 write_sections() {
 	{
 		cat <<'EOF'
-You write two sections of the GitHub release notes for qui, a web UI that self-hosters use to manage qBittorrent instances. The input after these instructions has two writing skills and the pull requests (PRs) in the release. Write only Markdown, with no text before or after the sections.
+You write two sections of the GitHub release notes for qui, a web UI that self-hosters use to manage qBittorrent instances. The input after these instructions has the pull requests (PRs) in the release. Write only Markdown, with no text before or after the sections.
 
 Write only about changes that qui users get in the app, the API, the binary, or the Docker image. Leave out changes to CI, the release pipeline, the build, tests, linting, the documentation site, and the repository. A toolchain or dependency update goes in only when it fixes something for users, for example a security fix.
 
@@ -153,11 +130,6 @@ Use this example for the voice and the length (qui v1.21.0):
 - **Fixes and polish.** Postgres hardening, a `GET /api/version` endpoint, all-instances exports to the right instance, and UI polish.
 ```
 
-## Prose passes
-
-After you write the draft, apply the Document rules of the simple-english skill, then apply the unslop skill last. The passes change the sentences, not the headings, the bold lead-ins, or the length. Keep option names, version numbers, and other facts exact. The users know their app, so its terms need no definition.
-
-# Skills
 EOF
 		collect_input
 	} >"$work/prompt.md" || return 1

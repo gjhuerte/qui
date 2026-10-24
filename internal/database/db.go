@@ -69,7 +69,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"modernc.org/sqlite"
 
-	"github.com/autobrr/qui/internal/dbinterface"
+	"github.com/gjhuerte/qui/internal/dbinterface"
 )
 
 //go:embed migrations/*.sql

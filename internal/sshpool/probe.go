@@ -15,7 +15,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"golang.org/x/crypto/ssh"
 
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 // gnuProbeCommand asks the tools the remote file operations lean on for their

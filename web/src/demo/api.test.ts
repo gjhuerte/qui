@@ -36,9 +36,9 @@ describe("createDemoFetch", () => {
     await expect(res.json()).resolves.toBeDefined()
   })
 
-  it("offers no Restart and no Self-update", async () => {
+  it("offers no Restart", async () => {
     const res = await fetch("http://localhost/demo/api/version")
-    await expect(res.json()).resolves.toMatchObject({ selfUpdate: false, restart: false })
+    await expect(res.json()).resolves.toMatchObject({ restart: false })
   })
 
   it.each(["properties", "trackers", "files", "peers", "pieces", "webseeds"])("serves torrent %s", async (part) => {

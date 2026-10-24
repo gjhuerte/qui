@@ -10,8 +10,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus/testutil"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/autobrr/qui/internal/metrics/collector"
-	"github.com/autobrr/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/metrics/collector"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
 )
 
 func TestNewMetricsManager(t *testing.T) {

@@ -14,9 +14,9 @@ import (
 	"github.com/autobrr/go-torrent/metainfo"
 	"github.com/autobrr/rls"
 
-	"github.com/autobrr/qui/pkg/pathutil"
-	"github.com/autobrr/qui/pkg/releases"
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/pkg/pathutil"
+	"github.com/gjhuerte/qui/pkg/releases"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 // ContentTypeInfo contains all information about a torrent's detected content type

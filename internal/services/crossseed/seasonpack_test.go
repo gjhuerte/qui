@@ -20,13 +20,13 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/internal/fsops/local"
-	"github.com/autobrr/qui/internal/models"
-	internalqb "github.com/autobrr/qui/internal/qbittorrent"
-	"github.com/autobrr/qui/internal/services/arr"
-	"github.com/autobrr/qui/internal/testutil/testdb"
-	"github.com/autobrr/qui/pkg/hardlinktree"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/fsops/local"
+	"github.com/gjhuerte/qui/internal/models"
+	internalqb "github.com/gjhuerte/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/services/arr"
+	"github.com/gjhuerte/qui/internal/testutil/testdb"
+	"github.com/gjhuerte/qui/pkg/hardlinktree"
 )
 
 // stubSeasonPackRunStore satisfies the service's dependency without a real database.

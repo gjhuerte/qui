@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/autobrr/qui/internal/domain"
+	"github.com/gjhuerte/qui/internal/domain"
 
 	"github.com/stretchr/testify/require"
 )

@@ -12,7 +12,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 func TestProcessRootSearchee_SkipsItemAnotherRunFinished(t *testing.T) {

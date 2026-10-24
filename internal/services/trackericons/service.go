@@ -43,8 +43,8 @@ import (
 	"golang.org/x/sync/singleflight"
 	"golang.org/x/text/transform"
 
-	"github.com/autobrr/qui/internal/services/activity"
-	"github.com/autobrr/qui/pkg/httphelpers"
+	"github.com/gjhuerte/qui/internal/services/activity"
+	"github.com/gjhuerte/qui/pkg/httphelpers"
 )
 
 const (

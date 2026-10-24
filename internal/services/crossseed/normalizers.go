@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 var (

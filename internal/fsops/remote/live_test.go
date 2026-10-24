@@ -19,11 +19,11 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/crypto/ssh"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/sshpool"
-	"github.com/autobrr/qui/pkg/fsutil"
-	"github.com/autobrr/qui/pkg/hardlinktree"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/sshpool"
+	"github.com/gjhuerte/qui/pkg/fsutil"
+	"github.com/gjhuerte/qui/pkg/hardlinktree"
 )
 
 // liveCreds is fakeCreds for a real host: the key comes from a file and the

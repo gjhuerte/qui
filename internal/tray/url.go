@@ -9,7 +9,7 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/autobrr/qui/pkg/httphelpers"
+	"github.com/gjhuerte/qui/pkg/httphelpers"
 )
 
 // URL is the address that Open qui opens. A browser cannot open an address

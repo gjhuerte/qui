@@ -111,12 +111,6 @@ qui manages torrent-client state and workflows for a self-hosted installation.
 - **Cross-seed added**: One successful apply into the client. One Search candidate can produce several. _Avoid_: Match, torrent added.
 - **Due candidate**: A Search candidate that still needs a search. _Avoid_: Total torrents, pending, remaining.
 
-## Licenses
-
-- **Machine**: One qui config directory on one host. A license activation belongs to a Machine. A new database keeps the Machine but loses its activation record. _Avoid_: Instance (that is a qBittorrent instance), device.
-- **Activation**: One license key in use on one Machine. Each key allows a fixed number of Activations. _Avoid_: Seat.
-- **License portal**: The website at licenses.getqui.com where a buyer sees their license keys and deactivates a Machine. _Avoid_: Customer portal (that is the Dodo Payments portal).
-
 ## Instance configuration
 
 - **Preferences**: qBittorrent's own application preferences, which qui reads and writes through the qBittorrent WebAPI. _Avoid_: Settings (when qBittorrent stores the value).
@@ -131,10 +125,9 @@ qui manages torrent-client state and workflows for a self-hosted installation.
 
 ## Updating qui
 
-- **Self-update**: qui replaces its own binary with a verified release, then restarts. _Avoid_: Upgrade, auto-update.
 - **Restart**: qui shuts down the same way it does on SIGTERM and starts again as the same process. _Avoid_: Reload (suggests a config re-read without a restart).
-- **Install method**: How the qui binary got onto the host and who manages it: manual install, MSI, seedbox installer, swizzin, container image, or package manager. _Avoid_: Installation type, deployment.
-- **MSI**: The Windows package that installs qui for one Windows account, with a Start Menu entry and an uninstall entry. Self-update keeps working after it. _Avoid_: Installer (that is the seedbox installer), setup.exe.
+- **Install method**: How the qui binary got onto the host and who manages it: manual install, MSI, swizzin, container image, or package manager. _Avoid_: Installation type, deployment.
+- **MSI**: The Windows package that installs qui for one Windows account, with a Start Menu entry and an uninstall entry. _Avoid_: Installer, setup.exe.
 - **App container**: A container that runs qui as its application, such as Docker, Podman, or a Kubernetes pod. The image owns the binary, so an update means a new image. A system container with its own init, such as Proxmox LXC, is not an App container. _Avoid_: Container (when the difference matters), Docker install.
 
 ## Running on Windows

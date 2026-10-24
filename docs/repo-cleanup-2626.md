@@ -2,7 +2,7 @@
 
 Recorded before implementation at commit `67753dc51173c663420c0e48bda8ec990b39a7c1`.
 Source references below use that commit's line numbers.
-The scope is [#2626](https://github.com/autobrr/qui/issues/2626), findings 6, 37, and 39 from [#2576](https://github.com/autobrr/qui/issues/2576).
+The scope is [#2626](https://github.com/gjhuerte/qui/issues/2626), findings 6, 37, and 39 from [#2576](https://github.com/gjhuerte/qui/issues/2576).
 
 ## Claim validation
 

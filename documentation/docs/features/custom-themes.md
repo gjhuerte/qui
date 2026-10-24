@@ -2,28 +2,20 @@
 sidebar_position: 12
 title: Custom CSS themes for the qBittorrent web UI
 sidebar_label: Custom Themes
-description: Sideload your own CSS theme from a directory on disk with a premium license, with a design token reference and a Refresh button that loads edited files without a restart.
+description: Sideload your own CSS theme from a directory on disk, with a design token reference and a Refresh button that loads edited files without a restart.
 ---
 
 # Custom themes
-
-:::info Premium feature
-Custom themes require an active premium license. This license also unlocks the built-in premium themes. See [License Management](../licenses.md) to get a license.
-:::
 
 If you place your `.css` files into the custom themes directory, they appear in the theme picker next to the built-in themes. You do not need to rebuild qui.
 
 ## The theme picker
 
-The theme picker is under **Settings → Premium Themes**. It shows every theme in one grid: free themes, premium themes, and your custom themes. Each card displays a badge. Click a theme card to apply it.
-
-If you do not have an active license, premium themes appear as locked cards that show only preview colors. You cannot apply a locked theme. To get a license, click **Unlock premium** in the **Custom Themes** box below the grid.
+The theme picker is under **Settings → Themes**. It shows every theme in one grid: the built-in themes and your custom themes. Click a theme card to apply it.
 
 ## Theme selection syncs across devices
 
 qui stores your theme selection in its database, so it [syncs across devices](./dashboard.md#interface-preferences-sync) like other interface preferences. The login page also paints a selected built-in theme. A custom theme paints on the login page only in a browser that applied it before. The browser cannot load custom theme files until you log in.
-
-If your premium license lapses, qui applies the default theme instead. If you use a built-in premium theme, qui preserves your stored selection and restores the theme when you renew the license.
 
 ### A separate theme for the mobile layout
 
@@ -51,7 +43,6 @@ qui creates the directory on startup. If you want to use a different location, s
 
 Place each theme as a single, self-contained `.css` file directly in that directory. qui ignores subdirectories and symlinks, skips files larger than 1 MiB, and reads at most 100 theme files.
 
-You can find ready-made themes in [qui-community-themes](https://github.com/autobrr/qui-community-themes). The repository also accepts submissions.
 
 ## Authoring a theme
 
@@ -85,7 +76,7 @@ A theme file contains an optional metadata comment header, a `:root` (light mode
 
 If you want to build a complete theme, copy one of the free built-in themes in qui and adjust the values. The source files provide the authoritative starting point:
 
-[github.com/autobrr/qui/tree/main/internal/themes/assets](https://github.com/autobrr/qui/tree/main/internal/themes/assets)
+[github.com/gjhuerte/qui/tree/main/internal/themes/assets](https://github.com/gjhuerte/qui/tree/main/internal/themes/assets)
 (`minimal.css` is the neutral default and a good base).
 
 Copy the `:root` and `.dark` blocks into your own file. You do **not** need the `@theme inline { ... }` block from those files. qui maps the tokens to the UI internally.
@@ -117,7 +108,7 @@ Define any of these tokens in the `:root` (light) and `.dark` blocks. If you omi
 ## Using a custom theme
 
 1. Place your `.css` file into the themes directory.
-2. Open **Settings → Premium Themes**. Your theme appears in the theme grid with a **Custom** badge. The **Custom Themes** box below the grid shows the directory path and the number of discovered themes. Click **Refresh** in that box to load new or edited files without a restart of qui.
+2. Open **Settings → Themes**. Your theme appears in the theme grid with a **Custom** badge. The **Custom Themes** box below the grid shows the directory path and the number of discovered themes. Click **Refresh** in that box to load new or edited files without a restart of qui.
 3. Select the theme like any other theme.
 
-If you remove a custom theme file or your premium license lapses, qui falls back to the default theme. A built-in premium selection returns when you renew. A custom theme selection does not.
+If you remove a custom theme file, qui falls back to the default theme.

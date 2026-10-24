@@ -15,7 +15,7 @@ import (
 	"github.com/autobrr/go-qbittorrent/errors"
 	"github.com/avast/retry-go"
 
-	"github.com/autobrr/qui/pkg/redact"
+	"github.com/gjhuerte/qui/pkg/redact"
 )
 
 type responseError struct {

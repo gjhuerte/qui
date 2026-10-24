@@ -13,8 +13,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/update"
-	"github.com/autobrr/qui/pkg/version"
+	"github.com/gjhuerte/qui/internal/update"
+	"github.com/gjhuerte/qui/pkg/version"
 )
 
 // stubReleaseProvider lets the version handler tests control the cached release
@@ -69,8 +69,7 @@ func TestVersionHandler_GetVersion_Availability(t *testing.T) {
 		availability update.Availability
 	}{
 		{name: "none", availability: update.Availability{}},
-		{name: "restart only", availability: update.Availability{Restart: true, SelfUpdateUnavailableReason: "disabled"}},
-		{name: "both", availability: update.Availability{SelfUpdate: true, Restart: true}},
+		{name: "restart", availability: update.Availability{Restart: true}},
 	}
 
 	for _, tt := range tests {
@@ -85,9 +84,8 @@ func TestVersionHandler_GetVersion_Availability(t *testing.T) {
 
 			var resp map[string]any
 			require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
-			require.Equal(t, tt.availability.SelfUpdate, resp["selfUpdate"])
 			require.Equal(t, tt.availability.Restart, resp["restart"])
-			require.Equal(t, tt.availability.SelfUpdateUnavailableReason, resp["selfUpdateUnavailableReason"])
+			require.NotContains(t, resp, "selfUpdate")
 		})
 	}
 }

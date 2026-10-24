@@ -17,8 +17,8 @@ import (
 	"github.com/autobrr/go-bdinfo/pkg/bdinfo"
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/services/activity"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/services/activity"
 )
 
 // ErrRunNotFound is returned when a run does not exist for the instance.

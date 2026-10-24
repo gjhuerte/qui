@@ -9,7 +9,7 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/pkg/releases"
+	"github.com/gjhuerte/qui/pkg/releases"
 )
 
 func TestTorrentEffectiveName_TVKeys(t *testing.T) {

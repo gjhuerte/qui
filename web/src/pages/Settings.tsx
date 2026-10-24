@@ -20,10 +20,8 @@ import { supportedLanguages, languageNames, changeLanguage, type AppLanguage } f
 import { ExternalProgramsManager } from "@/components/settings/ExternalProgramsManager"
 import { LogSettingsPanel } from "@/components/settings/LogSettingsPanel"
 import { NotificationsManager } from "@/components/settings/NotificationsManager"
-import { InstallUpdateButton } from "@/components/settings/InstallUpdateButton"
+import { ReleaseNotesButton } from "@/components/settings/ReleaseNotesButton"
 import { RestartButton } from "@/components/settings/RestartButton"
-import { RestartOverlay } from "@/components/settings/RestartOverlay"
-import { LicenseManager } from "@/components/themes/LicenseManager.tsx"
 import { ThemeSelector } from "@/components/themes/ThemeSelector"
 import {
   AlertDialog,
@@ -60,7 +58,6 @@ import { Switch } from "@/components/ui/switch"
 import { useAuth } from "@/hooks/useAuth"
 import { useDateTimeFormatters } from "@/hooks/useDateTimeFormatters"
 import { useInstances } from "@/hooks/useInstances"
-import { useSelfUpdate } from "@/hooks/useSelfUpdate"
 import { usePersistedTitleBarSpeeds } from "@/hooks/usePersistedTitleBarSpeeds"
 import { APIError, api } from "@/lib/api"
 
@@ -954,7 +951,7 @@ function ApplicationSection({ title, description, fields, onCopy, headerAction }
   )
 }
 
-function ApplicationInfoPanel({ openUpdate, onUpdateOpened }: { openUpdate: boolean; onUpdateOpened: () => void }) {
+function ApplicationInfoPanel() {
   const { t } = useTranslation("settings")
   const { formatISOTimestamp, formatTimestamp } = useDateTimeFormatters()
   const appInfoQuery = useQuery({
@@ -974,16 +971,6 @@ function ApplicationInfoPanel({ openUpdate, onUpdateOpened }: { openUpdate: bool
     queryFn: () => api.getLatestVersion(),
     staleTime: 5 * 60 * 1000,
   })
-
-  const selfUpdate = useSelfUpdate()
-  const { setConfirmOpen } = selfUpdate
-
-  useEffect(() => {
-    if (openUpdate && latestVersionQuery.data) {
-      setConfirmOpen(true)
-      onUpdateOpened()
-    }
-  }, [openUpdate, latestVersionQuery.data, setConfirmOpen, onUpdateOpened])
 
   const info = appInfoQuery.data
   const user = currentUserQuery.data
@@ -1038,7 +1025,7 @@ function ApplicationInfoPanel({ openUpdate, onUpdateOpened }: { openUpdate: bool
   const updateCheckedAt = latestVersionQuery.dataUpdatedAt > 0 ? formatTimestamp(latestVersionQuery.dataUpdatedAt / 1000) : t("application.build.statuses.notCheckedYet")
 
   const updateControl = latestVersionQuery.data && (
-    <InstallUpdateButton selfUpdate={selfUpdate} release={latestVersionQuery.data} className="shrink-0" />
+    <ReleaseNotesButton release={latestVersionQuery.data} className="shrink-0" />
   )
 
   const buildFields: ApplicationField[] = info ? [
@@ -1164,7 +1151,6 @@ function ApplicationInfoPanel({ openUpdate, onUpdateOpened }: { openUpdate: bool
           />
         </>
       )}
-      <RestartOverlay state={selfUpdate.overlay} update={selfUpdate.update} />
     </div>
   )
 }
@@ -1197,7 +1183,7 @@ export function Settings({ search, onSearchChange }: SettingsProps) {
 
       <SectionedPage navLabel={t("title")} groups={navGroups} activeSection={activeTab} onSectionChange={handleTabChange}>
         {activeTab === "application" && (
-          <ApplicationInfoPanel openUpdate={search.modal === "install-update"} onUpdateOpened={() => onSearchChange({ ...search, modal: undefined })} />
+          <ApplicationInfoPanel />
         )}
 
         {activeTab === "instances" && (
@@ -1339,13 +1325,6 @@ export function Settings({ search, onSearchChange }: SettingsProps) {
         {activeTab === "themes" && (
           <>
             <ThemeSelector />
-            <div id="license-manager">
-              <LicenseManager
-                checkoutStatus={search.checkout}
-                checkoutPaymentStatus={search.status}
-                onCheckoutConsumed={() => onSearchChange({ tab: "themes" })}
-              />
-            </div>
           </>
         )}
 

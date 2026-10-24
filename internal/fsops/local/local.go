@@ -12,11 +12,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/pkg/fsutil"
-	"github.com/autobrr/qui/pkg/hardlink"
-	"github.com/autobrr/qui/pkg/hardlinktree"
-	"github.com/autobrr/qui/pkg/reflinktree"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/pkg/fsutil"
+	"github.com/gjhuerte/qui/pkg/hardlink"
+	"github.com/gjhuerte/qui/pkg/hardlinktree"
+	"github.com/gjhuerte/qui/pkg/reflinktree"
 )
 
 // Backend implements fsops.Backend using the local filesystem.

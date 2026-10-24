@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Writes the release notes page for one GitHub release to documentation/blog.
 # Usage: release-notes.sh <tag>
-# Needs gh with read access to autobrr/qui.
+# Needs gh with read access to gjhuerte/qui.
 set -euo pipefail
 
 tag=$1
-repo=autobrr/qui
+repo=gjhuerte/qui
 blog_dir="$(dirname "$0")/../blog"
 
 IFS=$'\t' read -r date prerelease < <(

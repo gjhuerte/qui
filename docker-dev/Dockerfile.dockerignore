@@ -1,0 +1,4 @@
+# The dev image only needs the Go module files; the source is bind-mounted at runtime.
+*
+!go.mod
+!go.sum

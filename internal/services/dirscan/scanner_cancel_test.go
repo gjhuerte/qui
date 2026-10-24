@@ -8,7 +8,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/autobrr/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/fsops"
 )
 
 type cancelingScannerBackend struct {

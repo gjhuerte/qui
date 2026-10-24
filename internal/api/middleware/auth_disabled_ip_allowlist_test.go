@@ -11,7 +11,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/autobrr/qui/internal/domain"
+	"github.com/gjhuerte/qui/internal/domain"
 )
 
 func TestRequireAuthDisabledIPAllowlist(t *testing.T) {

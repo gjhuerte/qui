@@ -10,7 +10,7 @@ import (
 
 	"github.com/autobrr/rls"
 
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 func TestSourceClass(t *testing.T) {

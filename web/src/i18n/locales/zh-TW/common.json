@@ -13,7 +13,7 @@
     "manageInstances": "管理實例",
     "appearance": "外觀",
     "instanceBackups": "實例備份",
-    "backToSite": "返回 getqui.com",
+    "backToSite": "返回文件",
     "docs": "文件"
   },
   "sidebar": {
@@ -228,14 +228,5 @@
     },
     "perSecond": "{{unit}}/s",
     "valueWithUnit": "{{value}} {{unit}}"
-  },
-  "support": {
-    "title": "支援 qui",
-    "description": "已經有主題了，還想再出一份力？qui 的一切已經屬於您。訂閱不會解鎖功能，它資助的是開發這些功能所投入的時間。",
-    "perkPrefix": "贊助者可在 Discord 獲得",
-    "perkSuffix": "身分組，以及我們永遠的感謝。",
-    "yearly": "{{price}} / 年",
-    "monthly": "{{price}} / 月",
-    "notLicense": "進階主題是單獨的一次性購買。"
   }
 }

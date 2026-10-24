@@ -9,14 +9,14 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/autobrr/qui/pkg/version"
+	"github.com/gjhuerte/qui/pkg/version"
 
 	"github.com/rs/zerolog"
 )
 
 const defaultCheckInterval = 2 * time.Hour
 
-// Service periodically checks api.autobrr.com for new qui releases and caches the latest result.
+// Service periodically checks api.github.com for new qui releases and caches the latest result.
 type Service struct {
 	log            zerolog.Logger
 	currentVersion string
@@ -34,7 +34,7 @@ func NewService(log zerolog.Logger, enabled bool, currentVersion, userAgent stri
 	svc := &Service{
 		log:            log.With().Str("component", "update").Logger(),
 		currentVersion: currentVersion,
-		releaseChecker: version.NewChecker("autobrr", "qui", userAgent),
+		releaseChecker: version.NewChecker("gjhuerte", "qui", userAgent),
 	}
 	svc.isEnabled.Store(enabled)
 	return svc

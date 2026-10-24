@@ -11,9 +11,9 @@ import (
 	"github.com/alexedwards/scs/v2"
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/api/ctxkeys"
-	"github.com/autobrr/qui/internal/auth"
-	"github.com/autobrr/qui/internal/domain"
+	"github.com/gjhuerte/qui/internal/api/ctxkeys"
+	"github.com/gjhuerte/qui/internal/auth"
+	"github.com/gjhuerte/qui/internal/domain"
 )
 
 // IsAuthenticated middleware checks if the user is authenticated

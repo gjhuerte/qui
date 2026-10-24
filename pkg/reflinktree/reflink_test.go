@@ -9,7 +9,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/autobrr/qui/pkg/hardlinktree"
+	"github.com/gjhuerte/qui/pkg/hardlinktree"
 )
 
 func TestSupportsReflink(t *testing.T) {

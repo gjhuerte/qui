@@ -11,7 +11,7 @@ import (
 
 	"github.com/autobrr/rls"
 
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 // searchCandidateClass identifies the search-only rule that admitted a result.

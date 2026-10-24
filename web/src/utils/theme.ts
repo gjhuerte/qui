@@ -10,7 +10,7 @@ import { loadThemeFonts } from "./fontLoader";
 import { getStoredVariation, setStoredVariation } from "@/hooks/usePersistedThemeVariation";
 
 // Theme constants
-// The demo shares getqui.com with Docusaurus, which stores its own color
+// The demo shares the docs-site origin with Docusaurus, which stores its own color
 // mode under "theme"; the demo build mirrors that key into its own at boot.
 const THEME_KEY = isDemo ? "qui-demo-theme" : "theme";
 const COLOR_THEME_KEY = "color-theme";

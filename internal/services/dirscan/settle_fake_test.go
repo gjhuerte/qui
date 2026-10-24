@@ -13,7 +13,7 @@ import (
 
 	qbt "github.com/autobrr/go-qbittorrent"
 
-	"github.com/autobrr/qui/internal/services/crossseed"
+	"github.com/gjhuerte/qui/internal/services/crossseed"
 )
 
 // settleFake is qBittorrent for the settle module that the injector calls.

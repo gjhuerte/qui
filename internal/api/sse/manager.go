@@ -23,9 +23,9 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/tmaxmax/go-sse"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/qbittorrent"
-	"github.com/autobrr/qui/internal/services/activity"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/services/activity"
 )
 
 const (

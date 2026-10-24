@@ -9,8 +9,8 @@ import (
 
 	qbt "github.com/autobrr/go-qbittorrent"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/pkg/releases"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/pkg/releases"
 )
 
 func TestEvaluateCondition_StringFields(t *testing.T) {

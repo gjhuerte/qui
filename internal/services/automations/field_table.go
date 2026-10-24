@@ -8,8 +8,8 @@ import (
 
 	qbt "github.com/autobrr/go-qbittorrent"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/pkg/releases"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/pkg/releases"
 )
 
 // ValueType is the kind of value that a condition field compares. Each value is a JSON string in the rule.

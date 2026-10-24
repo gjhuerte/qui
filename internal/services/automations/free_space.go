@@ -10,8 +10,8 @@ import (
 	"path"
 	"strings"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
 )
 
 // FreeSpaceSourceKeyQBittorrent is the source key for qBittorrent free space.

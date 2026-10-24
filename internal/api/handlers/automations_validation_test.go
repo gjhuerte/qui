@@ -6,7 +6,7 @@ package handlers
 import (
 	"testing"
 
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 func TestExternalProgramActionValidate(t *testing.T) {

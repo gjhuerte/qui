@@ -17,10 +17,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/services/activity"
-	"github.com/autobrr/qui/internal/testutil/testdb"
-	"github.com/autobrr/qui/internal/themes"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/services/activity"
+	"github.com/gjhuerte/qui/internal/testutil/testdb"
+	"github.com/gjhuerte/qui/internal/themes"
 )
 
 // stubPremium controls the premium-access result for the themes handler tests.

@@ -24,7 +24,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"golang.org/x/time/rate"
 
-	"github.com/autobrr/qui/internal/buildinfo"
+	"github.com/gjhuerte/qui/internal/buildinfo"
 )
 
 // sharedTransport enables connection pooling across clients.

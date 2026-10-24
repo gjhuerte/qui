@@ -15,9 +15,9 @@ import (
 	"github.com/autobrr/go-torrent/metainfo"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/services/jackett"
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/services/jackett"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 // buildSeasonPackTorrentB64 builds a minimal multi-file season pack torrent and

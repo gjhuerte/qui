@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 	_ "modernc.org/sqlite"
 
-	"github.com/autobrr/qui/internal/dbinterface"
+	"github.com/gjhuerte/qui/internal/dbinterface"
 )
 
 func setupInstanceErrorTestDB(t *testing.T) (*mockQuerier, *InstanceErrorStore) {

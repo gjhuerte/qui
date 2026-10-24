@@ -20,14 +20,14 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/database"
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/internal/fsops/remote"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/services/notifications"
-	"github.com/autobrr/qui/internal/sshpool"
-	"github.com/autobrr/qui/internal/testutil/sshtest"
-	"github.com/autobrr/qui/internal/testutil/testdb"
+	"github.com/gjhuerte/qui/internal/database"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/fsops/remote"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/services/notifications"
+	"github.com/gjhuerte/qui/internal/sshpool"
+	"github.com/gjhuerte/qui/internal/testutil/sshtest"
+	"github.com/gjhuerte/qui/internal/testutil/testdb"
 )
 
 // switchableInstance is instance 1 as both the pool and the service read it,

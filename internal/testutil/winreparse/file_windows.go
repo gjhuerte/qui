@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/sys/windows"
 
-	"github.com/autobrr/qui/pkg/pathutil"
+	"github.com/gjhuerte/qui/pkg/pathutil"
 )
 
 // File attaches a synthetic reparse tag to an existing fixture file.

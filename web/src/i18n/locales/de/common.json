@@ -13,7 +13,7 @@
     "manageInstances": "Instanzen verwalten",
     "appearance": "Darstellung",
     "instanceBackups": "Instanz-Backups",
-    "backToSite": "Zurück zu getqui.com",
+    "backToSite": "Zurück zur Dokumentation",
     "docs": "Doku"
   },
   "sidebar": {
@@ -235,14 +235,5 @@
     },
     "perSecond": "{{unit}}/s",
     "valueWithUnit": "{{value}} {{unit}}"
-  },
-  "support": {
-    "title": "qui unterstützen",
-    "description": "Hast du schon Designs und möchtest weiter helfen? Alles in qui gehört dir bereits. Ein Abo schaltet keine Funktionen frei, es finanziert die Zeit, die in ihre Entwicklung fließt.",
-    "perkPrefix": "Patrons erhalten die Rolle",
-    "perkSuffix": "in Discord und unsere ewige Dankbarkeit.",
-    "yearly": "{{price}} / Jahr",
-    "monthly": "{{price}} / Monat",
-    "notLicense": "Premium-Designs sind ein separater einmaliger Kauf."
   }
 }

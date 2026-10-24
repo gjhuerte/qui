@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/autobrr/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/fsops"
 )
 
 // protectedPaths answers, for one phase of a run, whether a path is a Protected

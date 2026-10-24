@@ -7,11 +7,11 @@
     Name="qui"
     Language="1033"
     Version="{{ .Major }}.{{ .Minor }}.{{ .Patch }}"
-    Manufacturer="autobrr"
+    Manufacturer="gjhuerte"
     UpgradeCode="dc15e280-733f-480a-a395-419b5f0de8bb">
     <Package
       Description="qui"
-      Manufacturer="autobrr"
+      Manufacturer="gjhuerte"
       InstallerVersion="500"
       Compressed="yes"
       InstallScope="perUser" />
@@ -23,7 +23,7 @@
 
     <Icon Id="qui.ico" SourceFile="internal/tray/qui.ico" />
     <Property Id="ARPPRODUCTICON" Value="qui.ico" />
-    <Property Id="ARPURLINFOABOUT" Value="https://getqui.com" />
+    <Property Id="ARPURLINFOABOUT" Value="https://github.com/gjhuerte/qui" />
 
     <Directory Id="TARGETDIR" Name="SourceDir">
       <!-- InstallScope only sets the summary flag in wixl, so the folder must
@@ -38,7 +38,7 @@
 
     <DirectoryRef Id="INSTALLFOLDER">
       <Component Id="Qui" Guid="1db679dd-79f1-4bb5-9339-6d44317fafc1">
-        <RegistryValue Root="HKCU" Key="Software\autobrr\qui" Name="Installed" Type="integer" Value="1" KeyPath="yes" />
+        <RegistryValue Root="HKCU" Key="Software\gjhuerte\qui" Name="Installed" Type="integer" Value="1" KeyPath="yes" />
         <File Id="QuiExe" Name="qui.exe" Source="qui.exe" />
         <File Id="QuiTrayExe" Name="qui-tray.exe" Source="qui-tray.exe" />
         <!-- An explicit Target keeps wixl from making an advertised shortcut. -->

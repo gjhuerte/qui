@@ -11,7 +11,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/services/crossseed"
+	"github.com/gjhuerte/qui/internal/services/crossseed"
 )
 
 // ManualMatchProposalsRequest asks for ranked Manual match target proposals.

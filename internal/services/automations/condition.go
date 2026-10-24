@@ -6,7 +6,7 @@
 package automations
 
 import (
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 // Re-export types from models for convenience

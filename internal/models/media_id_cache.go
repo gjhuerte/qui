@@ -9,7 +9,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/autobrr/qui/internal/dbinterface"
+	"github.com/gjhuerte/qui/internal/dbinterface"
 )
 
 // MediaIDCacheEntry is one cached MediaInfo external-ID extraction for a

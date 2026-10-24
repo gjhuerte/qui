@@ -18,7 +18,7 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/autobrr/qui/pkg/fsutil"
+	"github.com/gjhuerte/qui/pkg/fsutil"
 )
 
 const (

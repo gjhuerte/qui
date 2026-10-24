@@ -13,9 +13,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/buildinfo"
-	"github.com/autobrr/qui/internal/config"
-	"github.com/autobrr/qui/internal/domain"
+	"github.com/gjhuerte/qui/internal/buildinfo"
+	"github.com/gjhuerte/qui/internal/config"
+	"github.com/gjhuerte/qui/internal/domain"
 )
 
 func TestApplicationHandler_GetInfo(t *testing.T) {

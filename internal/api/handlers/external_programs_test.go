@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/autobrr/qui/internal/domain"
-	"github.com/autobrr/qui/internal/services/externalprograms"
+	"github.com/gjhuerte/qui/internal/domain"
+	"github.com/gjhuerte/qui/internal/services/externalprograms"
 )
 
 func TestExternalProgramsService_IsPathAllowed(t *testing.T) {

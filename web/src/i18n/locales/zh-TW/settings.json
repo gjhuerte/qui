@@ -12,7 +12,7 @@
     "externalPrograms": "外部程式",
     "notifications": "通知",
     "dateTime": "時間與語言",
-    "premiumThemes": "進階主題",
+    "themes": "主題",
     "security": "安全",
     "logs": "日誌"
   },
@@ -421,156 +421,11 @@
   "themes": {
     "selector": {
       "title": "主題選擇",
-      "loadingDescription": "正在載入可用主題...",
-      "description": "從可用主題中選擇。進階主題需要有效的授權。",
-      "verificationUnavailable": "授權驗證不可用。進階主題切換暫時停用。",
-      "notLoaded": "進階主題未載入",
-      "notLoadedDescription": "配置",
-      "notLoadedAnd": "並執行",
-      "premium": "進階",
-      "pro": "Pro",
-      "free": "免費",
-      "locked": "已鎖定",
-      "lock": "鎖定"
-    },
-    "toasts": {
-      "premiumRequired": "需要進階授權",
-      "premiumRequiredDescription": "新增有效的進階授權以解鎖進階主題。"
-    },
-    "license": {
-      "loadingTitle": "授權管理",
-      "loadingDescription": "正在載入主題授權...",
-      "managementTitle": "授權管理",
-      "managementDescription": "管理您的主題授權和進階存取權限",
-      "providers": {
-        "licensePortal": "授權門戶"
-      },
-      "status": {
-        "unlockTitle": "解鎖進階主題",
-        "unlockDescription": "隨心付費（最低 $9.99）· 終身授權 · 所有主題",
-        "activeTitle": "進階存取已啟用",
-        "activeDescription": "您可以存取所有目前和未來的進階主題",
-        "activationRequiredTitle": "需要啟用授權",
-        "activationRequiredDescription": "您的授權需要在此裝置上啟用"
-      },
-      "portalHelp": {
-        "prefix": "在 DodoPayments 購買，然後在此輸入您的授權金鑰。如果丟失了金鑰，可透過",
-        "suffix": "找回。"
-      },
-      "discord": {
-        "title": "Discord 福利",
-        "prefix": "領取",
-        "afterRole": "身分組以存取私密頻道。",
-        "openDiscord": "開啟 qui Discord",
-        "opensInNewTab": "（在新分頁中開啟）",
-        "afterLink": "，執行",
-        "copyVerifyAriaLabel": "複製 /verify 命令",
-        "copyVerifyTitle": "點選複製",
-        "verifyCommand": "/verify",
-        "afterVerify": "在",
-        "channel": "#qui",
-        "suffix": "，並使用您的授權電子郵件登入。"
-      },
-      "details": {
-        "productAdded": "{{productName}} · 新增於 {{date}}",
-        "productStatusAndAdded": "{{productName}} · 狀態：{{status}} · 新增於 {{date}}"
-      },
-      "invalid": {
-        "dodo": "此授權未在此裝置上啟用。點選重新啟用以在此使用。如果達到啟用上限，請前往 <portal>licenses.getqui.com</portal>，使用購買授權時的電子郵件註冊或登入，然後在 Machine Instances 中停用一臺不再使用的裝置。"
-      },
-      "errors": {
-        "expired": "您的授權金鑰已過期。",
-        "notActive": "此授權金鑰已不再有效。",
-        "invalid": "此授權金鑰無效。",
-        "notFound": "您輸入的授權金鑰無效。",
-        "databaseCopied": "此授權已在另一臺裝置上啟用。資料庫似乎是複製過來的。",
-        "conditionsMismatch": "授權金鑰不符合要求的條件。",
-        "activationLimit": "已達到授權啟用上限。請前往 <portal>licenses.getqui.com</portal>，使用購買授權時的電子郵件註冊或登入。開啟 Machine Instances，停用一臺不再使用的裝置，然後重試。",
-        "limitReached": "已達到授權啟用上限。",
-        "usageLimit": "已超出授權使用上限。",
-        "unreachable": "無法連線至授權服務。請稍後重試。",
-        "tooManyAttempts": "嘗試次數過多。請稍候再試。",
-        "rateLimited": "請稍候再試。",
-        "generic": "驗證授權金鑰失敗。請重試。",
-        "deleteFailed": "移除授權失敗。請重試。"
-      },
-      "actions": {
-        "addLicense": "新增授權",
-        "remove": "移除",
-        "removing": "移除中...",
-        "getPremium": "獲取進階版",
-        "reactivate": "重新啟用授權",
-        "activating": "啟用中...",
-        "copyLicenseKey": "複製授權金鑰",
-        "activate": "啟用授權",
-        "validating": "驗證中...",
-        "openDodoCheckout": "開啟 DodoPayments 結帳",
-        "openLicensePortal": "開啟授權門戶"
-      },
-      "deleteDialog": {
-        "title": "移除授權？",
-        "description": "確定要從此裝置移除此授權嗎？qui 也會嘗試釋放遠端啟用名額，但即使該請求失敗，本機移除仍會完成。",
-        "keyLabel": "要移除的授權金鑰：",
-        "recoverPrefix": "如有需要，您可以稍後從"
-      },
-      "addDialog": {
-        "title": "新增進階授權",
-        "description": "輸入您的進階主題授權金鑰以解鎖所有進階主題。",
-        "label": "授權金鑰",
-        "placeholder": "輸入您的進階主題授權金鑰",
-        "recoverKey": "找回金鑰？",
-        "validation": {
-          "required": "授權金鑰為必填項"
-        }
-      },
-      "paymentDialog": {
-        "title": "獲取進階授權",
-        "description": "隨心付費（最低 $9.99）· 終身授權 · 所有主題",
-        "steps": {
-          "choosePaymentMethod": {
-            "title": "選擇支付方式",
-            "cardTitle": "銀行卡或本機支付",
-            "cardDescription": "直接在 DodoPayments 中支付。支付完成後將返回 qui。",
-            "cryptoTitle": "加密貨幣",
-            "cryptoDescription": "加密貨幣支付仍在 DodoPayments 結帳中完成。",
-            "xmrHelp": "XMR 為手動支付：請在 Discord 上聯絡或發郵件至 s0up4200@pm.me。",
-            "cryptoSteps": {
-              "readmePrefix": "使用",
-              "readmeSuffix": "中的位址進行捐贈。",
-              "verifyPrefix": "在",
-              "verifySuffix": "進行驗證以獲取折扣碼。",
-              "applyCode": "開啟 DodoPayments 結帳，在折扣碼處貼上程式碼，然後點選應用。",
-              "completeCheckout": "確認總計為 $0.00，然後完成結帳。"
-            }
-          },
-          "findLicenseKey": {
-            "title": "找到您的授權金鑰",
-            "description": "授權金鑰會在結帳後顯示。您也可以稍後從授權門戶找回。"
-          },
-          "activateLicense": {
-            "title": "啟用您的授權",
-            "description": "從結帳返回後，使用「新增授權」來啟用您的金鑰。"
-          }
-        }
-      },
-      "copiedVerify": "驗證命令已複製",
-      "failedCopyVerify": "複製驗證命令失敗",
-      "toasts": {
-        "activationSuccessPremium": "進階存取已啟用！感謝您的支援！",
-        "paymentCompleted": "支付完成。請新增您的進階授權金鑰以完成設定。",
-        "paymentNotCompleted": "支付未成功完成。",
-        "returnedFromCheckout": "已從結帳返回。準備好後請新增您的進階授權金鑰。",
-        "keyCopied": "授權金鑰已複製到剪貼簿",
-        "copyFailed": "複製授權金鑰失敗",
-        "removedFromMachine": "授權已從此裝置移除"
-      }
+      "description": "從可用主題中選擇。"
     },
     "custom": {
       "badge": "自訂",
       "title": "自訂主題",
-      "lockedTitle": "自訂主題是進階功能",
-      "lockedDescription": "解鎖進階版即可從磁碟目錄載入您自己的主題 CSS 檔案。",
-      "unlockCta": "解鎖進階版",
       "refresh": "重新整理",
       "detectedCount": "找到的主題：{{total}}",
       "parseErrorsTitle": "無法解析以下檔案：",
@@ -1022,54 +877,7 @@
       }
     },
     "update": {
-      "support": {
-        "checkingTitle": "正在檢查支援情況",
-        "checkingDescription": "正在檢查 qui 是否可以安裝此更新。",
-        "failedTitle": "無法檢查更新支援情況",
-        "failedDescription": "無法檢查是否支援自我更新。",
-        "retryDescription": "安裝更新前，請重試支援檢查。",
-        "retry": "重試"
-      },
-      "unavailable": {
-        "description": "此環境不支援自動安裝。",
-        "nextStep": "如何更新",
-        "guide": "更新指南",
-        "container": {
-          "reason": "qui 在容器中執行。更新透過容器映像提供。",
-          "step": "拉取新的 qui 映像，然後使用現有設定和資料卷重新建立容器。"
-        },
-        "disabled": {
-          "reason": "qui 設定中已停用自我更新。",
-          "step": "使用安裝 qui 時所用的套件管理員或安裝方式進行更新。"
-        },
-        "development": {
-          "reason": "此 qui 組建不是發佈版本。自動安裝需要發佈版本。",
-          "step": "停止 qui，將二進位檔替換為官方發佈版本或新組建，然後重新啟動 qui。"
-        },
-        "directory": {
-          "reason": "qui 無法存取或寫入其二進位檔所在的目錄。",
-          "step": "停止 qui，使用有寫入權限的帳號將二進位檔替換為新版本，然後重新啟動 qui。"
-        }
-      },
-      "button": "安裝更新",
-      "confirmTitle": "安裝更新？",
-      "confirmDescription": "qui 會下載新版本，驗證其簽章，並將目前的二進位檔保留為備份。然後 qui 會重新啟動。qui 恢復後頁面會自動重新載入。",
-      "runningWork": "正在執行的工作，例如交叉做種搜尋、自動化、備份和孤立檔案掃描，都會停止。",
-      "currentVersion": "目前版本",
-      "targetVersion": "新版本",
-      "releaseNotes": "發行說明",
-      "confirm": "安裝更新",
-      "overlay": {
-        "notAppliedTitle": "更新未生效",
-        "notAppliedDetail": "qui 已恢復，但執行的是其他版本。請查看 qui 日誌。",
-        "installedTitle": "qui 已更新",
-        "installedDetail": "重新載入頁面以開啟新版本。",
-        "reload": "重新載入頁面",
-        "noBackup": "qui 已更新，但未保留備份：{{error}}。如需回復，請手動下載舊版本。",
-        "rollbackIntro": "如果新版本無法啟動，請執行此命令，然後再次啟動 qui：",
-        "rollbackLabel": "回復命令",
-        "rollbackDocs": "回復步驟"
-      }
+      "releaseNotes": "發行說明"
     },
     "runtime": {
       "title": "執行時",

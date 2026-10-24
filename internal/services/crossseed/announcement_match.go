@@ -9,7 +9,7 @@ import (
 
 	qbt "github.com/autobrr/go-qbittorrent"
 
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 // announceAliasLookupTimeout bounds the ARR alias lookup on announce paths.

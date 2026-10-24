@@ -12,7 +12,7 @@
     "externalPrograms": "External Programs",
     "notifications": "Notifications",
     "dateTime": "Time & Language",
-    "premiumThemes": "Premium Themes",
+    "themes": "Themes",
     "security": "Security",
     "logs": "Logs"
   },
@@ -423,156 +423,11 @@
   "themes": {
     "selector": {
       "title": "Theme Selection",
-      "loadingDescription": "Loading available themes...",
-      "description": "Choose from available themes. Premium themes require a valid license.",
-      "verificationUnavailable": "License verification unavailable. Premium theme switching is temporarily disabled.",
-      "notLoaded": "Premium themes not loaded",
-      "notLoadedDescription": "Configure",
-      "notLoadedAnd": "and run",
-      "premium": "Premium",
-      "pro": "Pro",
-      "free": "Free",
-      "locked": "Locked",
-      "lock": "Lock"
-    },
-    "toasts": {
-      "premiumRequired": "Premium license required",
-      "premiumRequiredDescription": "Unlock premium themes by adding a valid premium license."
-    },
-    "license": {
-      "loadingTitle": "License Management",
-      "loadingDescription": "Loading theme licenses...",
-      "managementTitle": "License Management",
-      "managementDescription": "Manage your theme license and premium access",
-      "providers": {
-        "licensePortal": "license portal"
-      },
-      "status": {
-        "unlockTitle": "Unlock Premium Themes",
-        "unlockDescription": "Pay what you want (min $9.99) • Lifetime license • All themes",
-        "activeTitle": "Premium Access Active",
-        "activeDescription": "You have access to all current and future premium themes",
-        "activationRequiredTitle": "License Activation Required",
-        "activationRequiredDescription": "Your license needs to be activated on this machine"
-      },
-      "portalHelp": {
-        "prefix": "Buy on DodoPayments, then enter your license key here. If you lose the key, recover it via the",
-        "suffix": "."
-      },
-      "discord": {
-        "title": "Discord perk",
-        "prefix": "Claim the",
-        "afterRole": "role for access to a private channel.",
-        "openDiscord": "Open qui Discord",
-        "opensInNewTab": "(opens in new tab)",
-        "afterLink": ", run",
-        "copyVerifyAriaLabel": "Copy /verify command",
-        "copyVerifyTitle": "Click to copy",
-        "verifyCommand": "/verify",
-        "afterVerify": "in",
-        "channel": "#qui",
-        "suffix": ", and sign in with your license email."
-      },
-      "details": {
-        "productAdded": "{{productName}} • Added {{date}}",
-        "productStatusAndAdded": "{{productName}} • Status: {{status}} • Added {{date}}"
-      },
-      "invalid": {
-        "dodo": "This license is not active on this machine. Click re-activate to use it here. If you hit the activation limit, go to <portal>licenses.getqui.com</portal>, sign up or sign in with the email you used to buy the license, and deactivate a machine you no longer use under Machine Instances."
-      },
-      "errors": {
-        "expired": "Your license key has expired.",
-        "notActive": "This license key is no longer active.",
-        "invalid": "This license key is invalid.",
-        "notFound": "The license key you entered is not valid.",
-        "databaseCopied": "This license was activated on a different machine. The database appears to have been copied.",
-        "conditionsMismatch": "License key does not match required conditions.",
-        "activationLimit": "License activation limit has been reached. Go to <portal>licenses.getqui.com</portal> and sign up or sign in with the email you used to buy the license. Open Machine Instances, deactivate a machine you no longer use, then try again.",
-        "limitReached": "License activation limit has been reached.",
-        "usageLimit": "License usage limit exceeded.",
-        "unreachable": "Unable to reach the license service. Please try again shortly.",
-        "tooManyAttempts": "Too many attempts. Please wait a moment and try again.",
-        "rateLimited": "Please wait before trying again.",
-        "generic": "Failed to validate license key. Please try again.",
-        "deleteFailed": "Failed to remove the license. Please try again."
-      },
-      "actions": {
-        "addLicense": "Add License",
-        "remove": "Remove",
-        "removing": "Removing...",
-        "getPremium": "Get Premium",
-        "reactivate": "Re-activate License",
-        "activating": "Activating...",
-        "copyLicenseKey": "Copy License Key",
-        "activate": "Activate License",
-        "validating": "Validating...",
-        "openDodoCheckout": "Open DodoPayments checkout",
-        "openLicensePortal": "Open license portal"
-      },
-      "deleteDialog": {
-        "title": "Remove license?",
-        "description": "Are you sure you want to remove this license from this machine? qui will try to free the remote activation slot too, but local removal will still finish if that request fails.",
-        "keyLabel": "License Key to Remove:",
-        "recoverPrefix": "If needed, you can recover it later from your"
-      },
-      "addDialog": {
-        "title": "Add Premium License",
-        "description": "Enter your premium theme license key to unlock all premium themes.",
-        "label": "License Key",
-        "placeholder": "Enter your premium theme license key",
-        "recoverKey": "Recover key?",
-        "validation": {
-          "required": "License key is required"
-        }
-      },
-      "paymentDialog": {
-        "title": "Get Premium License",
-        "description": "Pay what you want (min $9.99) • Lifetime license • All themes",
-        "steps": {
-          "choosePaymentMethod": {
-            "title": "Choose payment method",
-            "cardTitle": "Card or local methods",
-            "cardDescription": "Pay directly in DodoPayments. You will return to qui after payment.",
-            "cryptoTitle": "Crypto",
-            "cryptoDescription": "Crypto payment still completes in DodoPayments checkout.",
-            "xmrHelp": "XMR is manual: reach out on Discord or email s0up4200@pm.me.",
-            "cryptoSteps": {
-              "readmePrefix": "Donate using the addresses in the",
-              "readmeSuffix": ".",
-              "verifyPrefix": "Verify at",
-              "verifySuffix": "to get your discount code.",
-              "applyCode": "Open DodoPayments checkout, paste the code in Discount code, then click Apply.",
-              "completeCheckout": "Confirm total is $0.00, then complete checkout."
-            }
-          },
-          "findLicenseKey": {
-            "title": "Find your license key",
-            "description": "Your license key is shown after checkout. You can also recover it later from the license portal."
-          },
-          "activateLicense": {
-            "title": "Activate your license",
-            "description": "After checkout returns here, use Add License to activate your key."
-          }
-        }
-      },
-      "copiedVerify": "Verification command copied",
-      "failedCopyVerify": "Failed to copy verification command",
-      "toasts": {
-        "activationSuccessPremium": "Premium access activated! Thank you!",
-        "paymentCompleted": "Payment completed. Add your premium license key to finish setup.",
-        "paymentNotCompleted": "Payment did not complete successfully.",
-        "returnedFromCheckout": "Returned from checkout. Add your premium license key when ready.",
-        "keyCopied": "License key copied to clipboard",
-        "copyFailed": "Failed to copy license key",
-        "removedFromMachine": "License removed from this machine"
-      }
+      "description": "Choose from available themes."
     },
     "custom": {
       "badge": "Custom",
       "title": "Custom Themes",
-      "lockedTitle": "Custom themes are a premium feature",
-      "lockedDescription": "Unlock premium to sideload your own theme CSS files from a directory on disk.",
-      "unlockCta": "Unlock premium",
       "refresh": "Refresh",
       "detectedCount": "Themes found: {{total}}",
       "parseErrorsTitle": "Could not parse these files:",
@@ -1025,54 +880,7 @@
       }
     },
     "update": {
-      "support": {
-        "checkingTitle": "Checking support",
-        "checkingDescription": "Checking whether qui can install this update.",
-        "failedTitle": "Could not check update support",
-        "failedDescription": "Could not check whether self-update is available.",
-        "retryDescription": "Retry the support check before you install the update.",
-        "retry": "Retry"
-      },
-      "unavailable": {
-        "description": "Automatic installation is unavailable for this setup.",
-        "nextStep": "How to update",
-        "guide": "Update guide",
-        "container": {
-          "reason": "qui runs in a container. Updates come from the container image.",
-          "step": "Pull the new qui image, then recreate the container with your existing configuration and data volumes."
-        },
-        "disabled": {
-          "reason": "Self-update is disabled in the qui configuration.",
-          "step": "Update qui with the package manager or installation method that you used to install it."
-        },
-        "development": {
-          "reason": "This qui build is not a release build. Automatic installation requires a release build.",
-          "step": "Stop qui, replace the binary with an official release or a new build, then start qui again."
-        },
-        "directory": {
-          "reason": "qui cannot access or write to its binary directory.",
-          "step": "Stop qui, replace the binary with the new release using an account with write access, then start qui again."
-        }
-      },
-      "button": "Install update",
-      "confirmTitle": "Install update?",
-      "confirmDescription": "qui downloads the new version, checks its signature, and keeps the current binary as a backup. Then qui restarts. The page reloads when qui is back.",
-      "runningWork": "Running work, such as cross-seed searches, automations, backups, and orphan scans, stops.",
-      "currentVersion": "Current version",
-      "targetVersion": "New version",
-      "releaseNotes": "Release notes",
-      "confirm": "Install update",
-      "overlay": {
-        "notAppliedTitle": "Update did not apply",
-        "notAppliedDetail": "qui is back, but on a different version. Check the qui logs.",
-        "installedTitle": "qui updated",
-        "installedDetail": "Reload the page to open the new version.",
-        "reload": "Reload page",
-        "noBackup": "qui updated, but kept no backup: {{error}}. To roll back, download the old version by hand.",
-        "rollbackIntro": "If the new version does not start, run this command, then start qui again:",
-        "rollbackLabel": "Rollback command",
-        "rollbackDocs": "Rollback steps"
-      }
+      "releaseNotes": "Release notes"
     },
     "runtime": {
       "title": "Runtime",

@@ -1,3 +1,8 @@
+# Production build of qui backed by Postgres.
+#
+#   docker compose -f docker-prod/docker-compose.postgres.yml up -d --build
+name: qui-prod
+
 services:
   postgres:
     image: postgres:16-alpine
@@ -8,7 +13,7 @@ services:
       POSTGRES_PASSWORD: qui
       POSTGRES_DB: qui
     volumes:
-      - ./postgres:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 10s
@@ -16,7 +21,14 @@ services:
       retries: 5
 
   qui:
-    image: ghcr.io/autobrr/qui:latest
+    image: ghcr.io/gjhuerte/qui:${QUI_TAG:-latest}
+    build:
+      context: ..
+      dockerfile: docker-prod/Dockerfile
+      args:
+        VERSION: ${VERSION:-dev}
+        GIT_COMMIT: ${GIT_COMMIT:-}
+        BUILD_DATE: ${BUILD_DATE:-}
     container_name: qui
     restart: unless-stopped
     depends_on:
@@ -25,7 +37,12 @@ services:
     ports:
       - "7476:7476"
     volumes:
-      - ./qui:/config
+      # Named volumes, so Docker never creates root-owned data in the repo.
+      - qui-config:/config
     environment:
       QUI__DATABASE_ENGINE: postgres
       QUI__DATABASE_DSN: postgres://qui:qui@postgres:5432/qui?sslmode=disable
+
+volumes:
+  qui-config:
+  postgres-data:

@@ -3375,178 +3375,12 @@ paths:
                     type: boolean
                     description: New status of alternative speed limits
 
-  /api/license/activate:
-    post:
-      tags:
-        - Licenses
-      summary: Activate license
-      description: Activate a license key and store it for the current user
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - licenseKey
-              properties:
-                licenseKey:
-                  type: string
-      responses:
-        '200':
-          description: License activated successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  valid:
-                    type: boolean
-                  productName:
-                    type: string
-                  expiresAt:
-                    type: string
-                    format: date-time
-                  message:
-                    type: string
-                  error:
-                    type: string
-                    nullable: true
-        '400':
-          description: Invalid request payload
-        '403':
-          description: License activation failed
-
-  /api/license/validate:
-    post:
-      tags:
-        - Licenses
-      summary: Validate license
-      description: Validate a license key and ensure it remains active
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - licenseKey
-              properties:
-                licenseKey:
-                  type: string
-      responses:
-        '200':
-          description: License validated successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  valid:
-                    type: boolean
-                  productName:
-                    type: string
-                  expiresAt:
-                    type: string
-                    format: date-time
-                  message:
-                    type: string
-                  error:
-                    type: string
-                    nullable: true
-        '400':
-          description: Invalid request payload
-        '403':
-          description: License validation failed
-        '404':
-          description: License not found
-
-  /api/license/licensed:
-    get:
-      tags:
-        - Licenses
-      summary: Check premium access
-      description: Check if any active licenses grant premium access
-      responses:
-        '200':
-          description: Premium access status
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  hasPremiumAccess:
-                    type: boolean
-
-  /api/license/licenses:
-    get:
-      tags:
-        - Licenses
-      summary: List licenses
-      description: List all stored licenses
-      responses:
-        '200':
-          description: Licenses retrieved
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    licenseKey:
-                      type: string
-                    productName:
-                      type: string
-                    status:
-                      type: string
-                    createdAt:
-                      type: string
-                      format: date-time
-
-  /api/license/{licenseKey}:
-    delete:
-      tags:
-        - Licenses
-      summary: Delete license
-      description: Remove a stored license
-      parameters:
-        - name: licenseKey
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: License deleted successfully
-        '400':
-          description: Invalid license key
-
-  /api/license/refresh:
-    post:
-      tags:
-        - Licenses
-      summary: Refresh licenses
-      description: Refresh all stored licenses from the licensing service
-      responses:
-        '200':
-          description: Licenses refreshed successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-        '500':
-          description: Failed to refresh licenses
-
   /api/themes:
     get:
       tags:
         - Themes
       summary: List built-in themes
-      description: List every built-in theme. Free themes always include their CSS. On a licensed instance, premium themes include CSS for an authenticated caller; an unauthenticated caller only receives the selected theme's CSS so the login page can paint, and every other premium theme is a locked stub with preview colors. Without a license every premium theme is a locked stub. Public endpoint, no authentication required.
+      description: List every built-in theme with its CSS. Public endpoint, no authentication required.
       security: []
       responses:
         '200':
@@ -3590,7 +3424,7 @@ paths:
       tags:
         - Themes
       summary: List custom themes
-      description: List sideloaded custom theme CSS files and their contents. Requires premium access.
+      description: List sideloaded custom theme CSS files and their contents.
       responses:
         '200':
           description: Custom themes listed successfully. If the custom themes directory cannot be prepared, the response still succeeds with the resolved directory and an empty themes array.
@@ -3612,10 +3446,8 @@ paths:
                           type: string
                         css:
                           type: string
-        '403':
-          description: Premium access required
         '500':
-          description: Failed to check premium access or read the custom themes directory
+          description: Failed to read the custom themes directory
 
   /api/themes/settings:
     get:
@@ -5657,7 +5489,7 @@ paths:
       tags:
         - System
       summary: Restart qui
-      description: Runs the same graceful shutdown as SIGTERM, then restarts qui in place with the same process ID and command line. qui checks the binary before the shutdown. Only one update or restart runs at a time.
+      description: Runs the same graceful shutdown as SIGTERM, then restarts qui in place with the same process ID and command line. qui checks the binary before the shutdown. Only one restart runs at a time.
       responses:
         '202':
           description: The restart started
@@ -5668,69 +5500,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '409':
-          description: An update or restart is already running
+          description: A restart is already running
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: The binary is missing, is not a regular file, or is not executable. qui keeps running.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
-  /api/system/update:
-    post:
-      tags:
-        - System
-      summary: Install a release
-      description: Downloads the release with this exact tag, checks its signature, and replaces the binary. qui keeps the previous binary as qui-v<old version>.bak next to it and deletes older backups. After the 200 response qui restarts. On an install error the binary and the process do not change. When qui refuses the restart after the install, it returns 500, the new binary stays in place, and the old process keeps running. Only one update or restart runs at a time.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SelfUpdateRequest'
-      responses:
-        '200':
-          description: The new binary is in place. qui restarts next.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SelfUpdateResponse'
-        '400':
-          description: The version is missing or is not valid semver
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Self-update is not available, for example in an app container or for a development build
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: GitHub has no release with that tag, or no asset for this OS and architecture
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '409':
-          description: The tag is not newer than the running version, or an update or restart is already running
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: The binary swap failed, for example with a permission error, or the new binary is installed but qui refused the restart
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '502':
-          description: GitHub returned an error, such as a rate limit, or the signature check failed. The error carries the message word for word.
           content:
             application/json:
               schema:
@@ -6784,36 +6560,6 @@ components:
       properties:
         error:
           type: string
-
-    SelfUpdateRequest:
-      type: object
-      required:
-        - version
-      properties:
-        version:
-          type: string
-          description: The release tag to install
-          example: v1.31.0
-
-    SelfUpdateResponse:
-      type: object
-      required:
-        - version
-        - rollbackCommand
-        - backupError
-      properties:
-        version:
-          type: string
-          description: The installed version, without a v prefix, in the same format as GET /api/version
-          example: 1.31.0
-        rollbackCommand:
-          type: string
-          description: The command that restores the backup, one line for each replaced binary. Empty when qui found no backup.
-          example: mv '/home/user/bin/qui-v1.30.0.bak' '/home/user/bin/qui'
-        backupError:
-          type: string
-          description: Empty when the backup exists. Otherwise it names the path that qui checked and the cause.
-          example: ""
 
     TorznabSearchRequest:
       type: object
@@ -7948,7 +7694,7 @@ components:
           type: string
           format: uri
           description: URL to the GitHub release page
-          example: "https://github.com/autobrr/qui/releases/tag/v1.2.3"
+          example: "https://github.com/gjhuerte/qui/releases/tag/v1.2.3"
         published_at:
           type: string
           format: date-time
@@ -7961,8 +7707,6 @@ components:
       required:
         - version
         - updateAvailable
-        - selfUpdate
-        - selfUpdateUnavailableReason
         - restart
       properties:
         version:
@@ -7977,15 +7721,6 @@ components:
           type: boolean
           description: Whether a newer release than the running version is available
           example: true
-        selfUpdate:
-          type: boolean
-          description: Whether qui can replace its own binary with a release. False in an app container, for a build that is not a release, when the directory of the binary is not writable, or when `disableSelfUpdate` is set.
-          example: true
-        selfUpdateUnavailableReason:
-          type: string
-          enum: ["", container, disabled, development, directory]
-          description: The first blocker for Self-update, in container, configuration, release build, and binary directory order. Empty when Self-update is available.
-          example: container
         restart:
           type: boolean
           description: Whether qui can restart itself. False in an app container.
@@ -10581,9 +10316,7 @@ tags:
     description: BDInfo scans of Blu-ray Discs (BDMV folders and .iso files) in torrents
   - name: RSS
     description: RSS feed and auto-download rule management
-  - name: Theme Licenses
-    description: Theme license management (optional feature)
   - name: Themes
-    description: Sideloaded custom theme listing (premium)
+    description: Built-in and sideloaded custom themes
   - name: Proxy
     description: qBittorrent-compatible proxy endpoints authenticated by client API key

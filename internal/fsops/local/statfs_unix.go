@@ -11,7 +11,7 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/autobrr/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/fsops"
 )
 
 func (b *Backend) Statfs(ctx context.Context, path string) (*fsops.StatfsResult, error) {

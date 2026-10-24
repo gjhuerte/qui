@@ -10,7 +10,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/autobrr/qui/internal/dbinterface"
+	"github.com/gjhuerte/qui/internal/dbinterface"
 )
 
 type OptFunc func(*SQLite3Store)

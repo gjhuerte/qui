@@ -12,7 +12,7 @@ import (
 	"github.com/autobrr/go-torrent/bencode"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 func multiTrackerTorrentData(t *testing.T, announce string, announceList [][]string) []byte {

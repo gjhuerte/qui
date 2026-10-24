@@ -16,8 +16,8 @@ import (
 	"strings"
 	"time"
 
-	gojackett "github.com/autobrr/qui/pkg/gojackett"
-	"github.com/autobrr/qui/pkg/redact"
+	gojackett "github.com/gjhuerte/qui/pkg/gojackett"
+	"github.com/gjhuerte/qui/pkg/redact"
 )
 
 // Config holds the options for constructing a Client.

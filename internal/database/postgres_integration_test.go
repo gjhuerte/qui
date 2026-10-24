@@ -17,7 +17,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/services/filesmanager"
+	"github.com/gjhuerte/qui/internal/services/filesmanager"
 )
 
 func TestCleanupUnusedStringsPostgresIntegration(t *testing.T) {

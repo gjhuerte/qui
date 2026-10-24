@@ -45,12 +45,13 @@ const config: Config = {
     "A fast web UI for qBittorrent. Manage one or many instances with cross-seed, automations, and backups in a single binary.",
   favicon: "img/favicon.png",
 
-  url: "https://getqui.com",
+  // Netlify sets URL to the primary URL of the site at build time.
+  url: process.env.URL ?? "http://localhost:3000",
   baseUrl: "/",
   // Netlify serves /docs/x as /docs/x/ (301). Match it so canonical, og:url, and sitemap URLs resolve without a redirect.
   trailingSlash: true,
 
-  organizationName: "autobrr",
+  organizationName: "gjhuerte",
   projectName: "qui",
 
   onBrokenLinks: "throw",
@@ -107,7 +108,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: "./sidebars.ts",
-          editUrl: "https://github.com/autobrr/qui/tree/main/documentation/",
+          editUrl: "https://github.com/gjhuerte/qui/tree/main/documentation/",
           routeBasePath: "docs",
           showLastUpdateTime: true,
         },
@@ -158,13 +159,7 @@ const config: Config = {
         },
         { to: "/release-notes", label: "Release notes", position: "left" },
         {
-          href: "https://discord.autobrr.com/qui",
-          position: "right",
-          className: "header-discord-link",
-          "aria-label": "Discord",
-        },
-        {
-          href: "https://github.com/autobrr/qui",
+          href: "https://github.com/gjhuerte/qui",
           position: "right",
           className: "header-github-link",
           "aria-label": "GitHub",
@@ -195,12 +190,8 @@ const config: Config = {
           title: "Community",
           items: [
             {
-              label: "Discord",
-              href: "https://discord.autobrr.com/qui",
-            },
-            {
               label: "GitHub Discussions",
-              href: "https://github.com/autobrr/qui/discussions",
+              href: "https://github.com/gjhuerte/qui/discussions",
             },
           ],
         },
@@ -209,24 +200,24 @@ const config: Config = {
           items: [
             {
               label: "GitHub",
-              href: "https://github.com/autobrr/qui",
+              href: "https://github.com/gjhuerte/qui",
             },
             {
               label: "Releases",
-              href: "https://github.com/autobrr/qui/releases",
+              href: "https://github.com/gjhuerte/qui/releases",
             },
             {
               label: "llms.txt",
-              href: "https://getqui.com/llms.txt",
+              href: "pathname:///llms.txt",
             },
             {
               label: "llms-full.txt",
-              href: "https://getqui.com/llms-full.txt",
+              href: "pathname:///llms-full.txt",
             },
           ],
         },
       ],
-      copyright: `Copyright ${new Date().getFullYear()} autobrr. GPL-2.0-or-later.`,
+      copyright: `Copyright ${new Date().getFullYear()} gjhuerte. GPL-2.0-or-later.`,
     },
     prism: {
       theme: minimalLightTheme,

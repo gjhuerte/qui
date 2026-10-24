@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 func TestSplitArgs(t *testing.T) {

@@ -9,7 +9,7 @@ import (
 	"github.com/autobrr/rls"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/pkg/releases"
+	"github.com/gjhuerte/qui/pkg/releases"
 )
 
 func TestBuildTorznabQueryKeepsParsedSeasonAndEpisode(t *testing.T) {

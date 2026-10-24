@@ -6,7 +6,6 @@
 import { useEffect, useMemo } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { api } from "@/lib/api"
-import { useHasPremiumAccess } from "@/hooks/useLicense"
 import { parseCustomThemes, decideCustomThemeAction, type ParsedCustomThemes } from "@/lib/custom-themes"
 import { registerCustomThemes, getDefaultTheme } from "@/config/themes"
 import { setTheme, getAppliedCustomThemeCss } from "@/utils/theme"
@@ -14,18 +13,16 @@ import { setTheme, getAppliedCustomThemeCss } from "@/utils/theme"
 const EMPTY: ParsedCustomThemes = { themes: [], errors: [] }
 
 /**
- * Loads sideloaded custom themes (premium-gated). It fetches the directory
- * listing only when the user has premium access, parses each file with the
- * shared theme parser, registers the results so they resolve in the picker,
- * and re-applies / downgrades the stored selection as the registry changes.
+ * Loads sideloaded custom themes. It fetches the directory listing, parses
+ * each file with the shared theme parser, registers the results so they
+ * resolve in the picker, and re-applies / downgrades the stored selection as
+ * the registry changes.
  */
 export function useCustomThemes() {
-  const { hasPremiumAccess, isLoading, isError } = useHasPremiumAccess()
 
   const query = useQuery({
     queryKey: ["custom-themes"],
     queryFn: () => api.getCustomThemes(),
-    enabled: hasPremiumAccess,
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
     retry: false,
@@ -40,9 +37,6 @@ export function useCustomThemes() {
   useEffect(() => {
     const storedThemeId = localStorage.getItem("color-theme")
     const action = decideCustomThemeAction({
-      isLoading,
-      isError,
-      hasPremiumAccess,
       hasData: !!query.data,
       storedThemeId,
       themes: parsed.themes,
@@ -50,13 +44,6 @@ export function useCustomThemes() {
     })
 
     switch (action) {
-      case "clear":
-        registerCustomThemes([])
-        break
-      case "clear-and-downgrade":
-        registerCustomThemes([])
-        void setTheme(getDefaultTheme().id)
-        break
       case "register":
         registerCustomThemes(parsed.themes)
         break
@@ -75,7 +62,7 @@ export function useCustomThemes() {
       case "noop":
         break
     }
-  }, [hasPremiumAccess, isLoading, isError, query.data, parsed])
+  }, [query.data, parsed])
 
   return {
     customThemes: parsed.themes,

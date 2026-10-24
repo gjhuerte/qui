@@ -12,8 +12,8 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/autobrr/rls"
 
-	"github.com/autobrr/qui/pkg/releases"
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/pkg/releases"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 func parsedTorrentRelease(t qbt.Torrent, ctx *EvalContext) *rls.Release {

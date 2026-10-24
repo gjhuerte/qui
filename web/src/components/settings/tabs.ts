@@ -12,7 +12,7 @@ export const SETTINGS_NAV_GROUPS = [
     tabs: [
       { tab: "application", labelKey: "tabs.application" },
       { tab: "datetime", labelKey: "tabs.dateTime" },
-      { tab: "themes", labelKey: "tabs.premiumThemes" },
+      { tab: "themes", labelKey: "tabs.themes" },
     ],
   },
   {

@@ -16,8 +16,8 @@ import (
 	"github.com/autobrr/rls"
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/qbittorrent"
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 type fileRenameInstruction struct {

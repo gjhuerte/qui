@@ -13,9 +13,9 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/autobrr/qui/internal/database"
-	"github.com/autobrr/qui/internal/dbinterface"
-	"github.com/autobrr/qui/internal/testutil/testdb"
+	"github.com/gjhuerte/qui/internal/database"
+	"github.com/gjhuerte/qui/internal/dbinterface"
+	"github.com/gjhuerte/qui/internal/testutil/testdb"
 )
 
 type testDBOpener func(testing.TB, string) *database.DB

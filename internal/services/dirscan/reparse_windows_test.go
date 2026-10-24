@@ -10,8 +10,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/fsops/local"
-	"github.com/autobrr/qui/internal/testutil/winreparse"
+	"github.com/gjhuerte/qui/internal/fsops/local"
+	"github.com/gjhuerte/qui/internal/testutil/winreparse"
 )
 
 func TestScanner_WindowsNonSurrogateReparseFiles(t *testing.T) {

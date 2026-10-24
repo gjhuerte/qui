@@ -6,7 +6,7 @@ package automations
 import (
 	"strings"
 
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 // RuleNeeds is the prepared data that a rule set reads. buildEvalContext loads

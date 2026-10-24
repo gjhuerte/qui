@@ -15,8 +15,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/pkg/hardlink"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/pkg/hardlink"
 )
 
 func TestScanWalker_ShouldSkipDuplicate(t *testing.T) {

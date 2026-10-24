@@ -12,7 +12,7 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/pkg/torrentname"
+	"github.com/gjhuerte/qui/pkg/torrentname"
 )
 
 func TestSanitizeTorrentExportFilename_UTF8Boundary(t *testing.T) {

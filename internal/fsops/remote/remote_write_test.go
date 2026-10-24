@@ -15,11 +15,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/testutil/sshtest"
-	"github.com/autobrr/qui/pkg/fsutil"
-	"github.com/autobrr/qui/pkg/hardlinktree"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/testutil/sshtest"
+	"github.com/gjhuerte/qui/pkg/fsutil"
+	"github.com/gjhuerte/qui/pkg/hardlinktree"
 )
 
 func TestMkdirAll_WalksUpOverExistingPrefix(t *testing.T) {

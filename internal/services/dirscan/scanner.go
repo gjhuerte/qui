@@ -12,8 +12,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/pkg/hardlink"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/pkg/hardlink"
 )
 
 // mediaExtensions defines common video/audio file extensions to scan.

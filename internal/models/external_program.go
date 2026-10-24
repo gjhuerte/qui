@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/autobrr/qui/internal/dbinterface"
+	"github.com/gjhuerte/qui/internal/dbinterface"
 )
 
 var ErrExternalProgramNotFound = errors.New("external program not found")

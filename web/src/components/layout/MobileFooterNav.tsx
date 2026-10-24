@@ -428,7 +428,7 @@ export function MobileFooterNav() {
               <>
                 <DropdownMenuItem asChild>
                   {/* Settings holds the Install update button. */}
-                  <Link to="/settings" search={{ tab: "application", modal: "install-update" }} className={updateItemClass}>{updateItemLabel}</Link>
+                  <Link to="/settings" search={{ tab: "application" }} className={updateItemClass}>{updateItemLabel}</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
               </>
@@ -531,7 +531,7 @@ export function MobileFooterNav() {
                 </div>
               </div>
               <a
-                href="https://github.com/autobrr/qui"
+                href="https://github.com/gjhuerte/qui"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={t("mobileNav.viewOnGitHub")}

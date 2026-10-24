@@ -12,7 +12,7 @@ import (
 	"github.com/yuin/goldmark/ast"
 	"github.com/yuin/goldmark/text"
 
-	"github.com/autobrr/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/models"
 )
 
 // TestAutomationDocsExamples runs each json block on the automations docs page through the rule check, so a docs example cannot drift from the code.

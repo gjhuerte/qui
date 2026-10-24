@@ -22,12 +22,12 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/crypto/ssh"
 
-	"github.com/autobrr/qui/internal/database"
-	"github.com/autobrr/qui/internal/models"
-	internalqbittorrent "github.com/autobrr/qui/internal/qbittorrent"
-	"github.com/autobrr/qui/internal/sshpool"
-	"github.com/autobrr/qui/internal/testutil/sshtest"
-	"github.com/autobrr/qui/internal/testutil/testdb"
+	"github.com/gjhuerte/qui/internal/database"
+	"github.com/gjhuerte/qui/internal/models"
+	internalqbittorrent "github.com/gjhuerte/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/sshpool"
+	"github.com/gjhuerte/qui/internal/testutil/sshtest"
+	"github.com/gjhuerte/qui/internal/testutil/testdb"
 )
 
 // sshFixture is a handler wired to a real store and dialer, plus an in-process

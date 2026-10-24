@@ -12,8 +12,8 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
 )
 
 // categoryPaths returns the on-disk destination of every qBittorrent category,

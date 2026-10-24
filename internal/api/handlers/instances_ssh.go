@@ -14,8 +14,8 @@ import (
 	"github.com/rs/zerolog/log"
 	"golang.org/x/crypto/ssh"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/sshpool"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/sshpool"
 )
 
 // SSHCredentialsRequest is the endpoint and key qui dials the instance's host

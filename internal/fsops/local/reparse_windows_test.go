@@ -11,9 +11,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/autobrr/qui/internal/fsops"
-	"github.com/autobrr/qui/internal/testutil/winreparse"
-	"github.com/autobrr/qui/pkg/pathutil"
+	"github.com/gjhuerte/qui/internal/fsops"
+	"github.com/gjhuerte/qui/internal/testutil/winreparse"
+	"github.com/gjhuerte/qui/pkg/pathutil"
 )
 
 func TestBackend_WindowsReparseFileTypes(t *testing.T) {

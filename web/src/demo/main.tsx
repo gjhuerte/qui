@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-// Entry for the getqui.com demo build. Installs the fake API before the app
+// Entry for the docs-site demo build. Installs the fake API before the app
 // modules evaluate, then boots the unchanged App. Production main.tsx never
 // imports this file.
 

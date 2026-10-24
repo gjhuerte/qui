@@ -10,8 +10,8 @@ import (
 	qbt "github.com/autobrr/go-qbittorrent"
 	"github.com/autobrr/rls"
 
-	"github.com/autobrr/qui/internal/qbittorrent"
-	"github.com/autobrr/qui/pkg/stringutils"
+	"github.com/gjhuerte/qui/internal/qbittorrent"
+	"github.com/gjhuerte/qui/pkg/stringutils"
 )
 
 // sameDataFiles holds the files of a torrent that decide whether another

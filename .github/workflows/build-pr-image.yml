@@ -4,9 +4,8 @@ name: Build PR image
 # release.yml only pushes images for in-repo PRs. The workflow file comes from
 # the ref it is dispatched on; only the build context is checked out from the
 # fork, so fork code never changes what runs with the repository token.
-# Premium themes are skipped: make themes-fetch would run the fork's Makefile
-# with THEMES_REPO_TOKEN. Caches are restore-only: fork code runs before a
-# save, and release.yml restores the same keys.
+# Caches are restore-only: fork code runs before a save, and release.yml
+# restores the same keys.
 on:
   workflow_dispatch:
     inputs:
@@ -117,7 +116,7 @@ jobs:
         uses: docker/build-push-action@v7.4.0
         with:
           context: .
-          file: ./distrib/docker/ci.Dockerfile
+          file: ./docker-prod/ci.Dockerfile
           platforms: ${{ inputs.platforms }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}

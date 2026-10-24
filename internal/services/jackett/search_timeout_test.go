@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/autobrr/qui/internal/models"
-	"github.com/autobrr/qui/internal/pkg/timeouts"
+	"github.com/gjhuerte/qui/internal/models"
+	"github.com/gjhuerte/qui/internal/pkg/timeouts"
 )
 
 func TestComputeSearchTimeoutHonorsIndexerTimeouts(t *testing.T) {

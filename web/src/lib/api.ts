@@ -127,7 +127,6 @@ import type {
   TrackerCustomizationInput,
   TransferInfo,
   BuiltinTheme,
-  SelfUpdateResult,
   ThemeSettings,
   ThemeSlot,
   ThemeSlots,
@@ -2175,37 +2174,7 @@ class ApiClient {
     return this.request(`/client-api-keys/${id}`, { method: "DELETE" })
   }
 
-  // License endpoints
-  async activateLicense(licenseKey: string): Promise<{
-    valid: boolean
-    expiresAt?: string
-    message?: string
-    error?: string
-  }> {
-    return this.request("/license/activate", {
-      method: "POST",
-      body: JSON.stringify({ licenseKey }),
-    })
-  }
-
-  async getLicensedThemes(): Promise<{ hasPremiumAccess: boolean }> {
-    return this.request("/license/licensed")
-  }
-
-  async getAllLicenses(): Promise<Array<{
-    licenseKey: string
-    productName: string
-    status: string
-    createdAt: string
-  }>> {
-    return this.request("/license/licenses")
-  }
-
-  async deleteLicense(licenseKey: string): Promise<{ message: string }> {
-    return this.request(`/license/${licenseKey}`, { method: "DELETE" })
-  }
-
-  // Built-in themes (public; premium CSS license-gated server-side)
+  // Built-in themes (public)
   async getBuiltinThemes(signal?: AbortSignal): Promise<{ themes: BuiltinTheme[] }> {
     return this.request("/themes", { signal })
   }
@@ -2283,13 +2252,6 @@ class ApiClient {
 
   async restartQui(): Promise<void> {
     await this.request<void>("/system/restart", { method: "POST" })
-  }
-
-  async selfUpdateQui(version: string): Promise<SelfUpdateResult> {
-    return this.request<SelfUpdateResult>("/system/update", {
-      method: "POST",
-      body: JSON.stringify({ version }),
-    })
   }
 
   async getLatestVersion(): Promise<{

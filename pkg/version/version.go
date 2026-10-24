@@ -62,7 +62,7 @@ type Asset struct {
 	BrowserDownloadURL string    `json:"browser_download_url"`
 }
 
-// Checker talks to api.autobrr.com to determine whether a newer release is available.
+// Checker talks to api.github.com to determine whether a newer release is available.
 type Checker struct {
 	Owner     string
 	Repo      string
@@ -84,7 +84,7 @@ func NewChecker(owner, repo, userAgent string) *Checker {
 }
 
 func (c *Checker) get(ctx context.Context) (*Release, error) {
-	url := fmt.Sprintf("https://api.autobrr.com/repos/%s/%s/releases/latest", c.Owner, c.Repo)
+	url := fmt.Sprintf("https://api.github.com/repos/%s/%s/releases/latest", c.Owner, c.Repo)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {

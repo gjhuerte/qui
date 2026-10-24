@@ -17,11 +17,11 @@ import {
   AlertDialogTitle
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import { useSelfUpdate } from "@/hooks/useSelfUpdate"
+import { useRestart } from "@/hooks/useRestart"
 
 export function RestartButton() {
   const { t } = useTranslation("settings")
-  const { restartAvailable, confirmOpen, setConfirmOpen, restart, pending, error, overlay } = useSelfUpdate()
+  const { restartAvailable, confirmOpen, setConfirmOpen, restart, pending, error, overlay } = useRestart()
 
   if (!restartAvailable) {
     return null
