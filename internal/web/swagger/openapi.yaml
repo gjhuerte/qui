@@ -5761,6 +5761,367 @@ paths:
         '404':
           description: Not found
 
+  /api/media-sync/status:
+    get:
+      tags:
+        - Media Sync
+      summary: Status of every enabled media server
+      description: Version, library counts, libraries and active streams. Cached for 20 seconds.
+      parameters:
+        - name: refresh
+          in: query
+          schema:
+            type: string
+            enum: ['1']
+          description: Skip the cache
+      responses:
+        '200':
+          description: One entry per enabled server
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MediaServerStatus'
+
+  /api/media-sync/servers:
+    get:
+      tags:
+        - Media Sync
+      summary: List media servers
+      responses:
+        '200':
+          description: Servers (tokens are never returned)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MediaServer'
+    post:
+      tags:
+        - Media Sync
+      summary: Add a media server
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MediaServerInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaServer'
+        '400':
+          description: Invalid input
+
+  /api/media-sync/servers/test:
+    post:
+      tags:
+        - Media Sync
+      summary: Test a media server connection
+      description: With id set and no token, the stored token is used.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/MediaServerInput'
+                - type: object
+                  properties:
+                    id:
+                      type: integer
+      responses:
+        '200':
+          description: Status; online is false when the server could not be reached
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaServerStatus'
+        '400':
+          description: Invalid input
+
+  /api/media-sync/servers/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    put:
+      tags:
+        - Media Sync
+      summary: Update a media server
+      description: An empty token keeps the stored token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MediaServerInput'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaServer'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+    delete:
+      tags:
+        - Media Sync
+      summary: Delete a media server
+      description: Also deletes the sync pairs that use it.
+      responses:
+        '204':
+          description: Deleted
+        '404':
+          description: Not found
+
+  /api/media-sync/servers/{id}/users:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Media Sync
+      summary: List the accounts on a media server
+      description: On Plex, the owner and every account the server is shared with (read from plex.tv).
+      responses:
+        '200':
+          description: Accounts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MediaServerUser'
+        '404':
+          description: Not found
+        '502':
+          description: The server or plex.tv answered with an error
+
+  /api/media-sync/pairs:
+    get:
+      tags:
+        - Media Sync
+      summary: List sync pairs
+      responses:
+        '200':
+          description: Pairs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SyncPair'
+    post:
+      tags:
+        - Media Sync
+      summary: Add a sync pair
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SyncPairInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyncPair'
+        '400':
+          description: Invalid input
+
+  /api/media-sync/pairs/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    put:
+      tags:
+        - Media Sync
+      summary: Update the direction and schedule of a sync pair
+      description: The servers of a pair are fixed; serverAId and serverBId are ignored.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SyncPairInput'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyncPair'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+    delete:
+      tags:
+        - Media Sync
+      summary: Delete a sync pair
+      responses:
+        '204':
+          description: Deleted
+        '404':
+          description: Not found
+
+  /api/media-sync/pairs/{id}/users:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Media Sync
+      summary: List the account maps of a sync pair
+      responses:
+        '200':
+          description: Account maps
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SyncUserMap'
+        '404':
+          description: Not found
+    put:
+      tags:
+        - Media Sync
+      summary: Replace the account maps of a sync pair
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/SyncUserMap'
+      responses:
+        '200':
+          description: The saved maps
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SyncUserMap'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+
+  /api/media-sync/pairs/{id}/run:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    post:
+      tags:
+        - Media Sync
+      summary: Sync a pair now
+      description: The sync runs in the background. Poll the run for its outcome.
+      responses:
+        '202':
+          description: The new run, in the running state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyncRun'
+        '404':
+          description: Not found
+        '409':
+          description: The pair is already syncing
+
+  /api/media-sync/pairs/{id}/cancel:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    post:
+      tags:
+        - Media Sync
+      summary: Stop the sync of a pair
+      description: The run keeps the titles it marked before it stopped.
+      responses:
+        '204':
+          description: Stopping
+        '400':
+          description: The pair is not syncing
+
+  /api/media-sync/runs:
+    get:
+      tags:
+        - Media Sync
+      summary: List sync runs, newest first
+      parameters:
+        - name: pairId
+          in: query
+          schema:
+            type: integer
+          description: Only this pair
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+            maximum: 200
+      responses:
+        '200':
+          description: Runs without their items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SyncRun'
+
+  /api/media-sync/runs/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Media Sync
+      summary: Get a sync run with the titles it marked
+      responses:
+        '200':
+          description: Run
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyncRun'
+        '404':
+          description: Not found
+
   /api/log-exclusions:
     get:
       tags:
@@ -8233,6 +8594,213 @@ components:
         loadedAt:
           type: string
           format: date-time
+    MediaServer:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          enum: [jellyfin, plex]
+        name:
+          type: string
+        baseUrl:
+          type: string
+        enabled:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    MediaServerInput:
+      type: object
+      required:
+        - type
+        - name
+        - baseUrl
+      properties:
+        type:
+          type: string
+          enum: [jellyfin, plex]
+        name:
+          type: string
+        baseUrl:
+          type: string
+          description: For example http://192.168.1.10:8096 or http://192.168.1.10:32400
+        token:
+          type: string
+          description: Jellyfin API key, or the Plex token of the server owner
+        enabled:
+          type: boolean
+    MediaServerUser:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        admin:
+          type: boolean
+    MediaServerStatus:
+      type: object
+      properties:
+        server:
+          $ref: '#/components/schemas/MediaServer'
+        online:
+          type: boolean
+        error:
+          type: string
+        serverName:
+          type: string
+        version:
+          type: string
+        platform:
+          type: string
+        movies:
+          type: integer
+        series:
+          type: integer
+        episodes:
+          type: integer
+        users:
+          type: integer
+          description: 0 on Plex
+        libraries:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              type:
+                type: string
+              items:
+                type: integer
+                description: Absent on Jellyfin
+        sessions:
+          type: array
+          items:
+            type: object
+            properties:
+              user:
+                type: string
+              title:
+                type: string
+              client:
+                type: string
+              state:
+                type: string
+                enum: [playing, paused]
+              progress:
+                type: number
+                description: 0 to 1
+              transcoding:
+                type: boolean
+    SyncPair:
+      type: object
+      properties:
+        id:
+          type: integer
+        serverAId:
+          type: integer
+        serverBId:
+          type: integer
+        direction:
+          type: string
+          enum: [both, a_to_b, b_to_a]
+        enabled:
+          type: boolean
+          description: Sync on a schedule. Manual runs work either way.
+        intervalMinutes:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    SyncPairInput:
+      type: object
+      required:
+        - direction
+        - intervalMinutes
+      properties:
+        serverAId:
+          type: integer
+        serverBId:
+          type: integer
+        direction:
+          type: string
+          enum: [both, a_to_b, b_to_a]
+        enabled:
+          type: boolean
+        intervalMinutes:
+          type: integer
+          minimum: 5
+          maximum: 10080
+    SyncUserMap:
+      type: object
+      required:
+        - userAId
+        - userBId
+      properties:
+        userAId:
+          type: string
+        userAName:
+          type: string
+        userBId:
+          type: string
+        userBName:
+          type: string
+    SyncRun:
+      type: object
+      properties:
+        id:
+          type: integer
+        pairId:
+          type: integer
+        source:
+          type: string
+          enum: [schedule, manual]
+        status:
+          type: string
+          enum: [running, success, partial, failed]
+        users:
+          type: integer
+        markedA:
+          type: integer
+        markedB:
+          type: integer
+        failed:
+          type: integer
+        notFound:
+          type: integer
+          description: Watched titles the other server does not have, or has without a matching IMDb, TMDB or TVDB ID
+        message:
+          type: string
+        startedAt:
+          type: string
+          format: date-time
+        finishedAt:
+          type: string
+          format: date-time
+        items:
+          type: array
+          description: Only on GET /api/media-sync/runs/{id}
+          items:
+            type: object
+            properties:
+              userName:
+                type: string
+              target:
+                type: string
+                enum: [a, b]
+              title:
+                type: string
+              error:
+                type: string
     AppInstance:
       type: object
       properties:
@@ -11108,6 +11676,8 @@ tags:
     description: MyAnonamouse dynamic seedbox IP updates
   - name: Media Apps
     description: Sonarr, Radarr, Prowlarr, Bazarr and Tautulli instances tracked on the Services page
+  - name: Media Sync
+    description: Jellyfin and Plex servers and the watched-state sync between them
   - name: Gluetun
     description: Gluetun VPN status, logs and restarts
   - name: Notifications

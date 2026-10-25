@@ -13,6 +13,11 @@ import { GluetunConnection } from "@/components/services/GluetunConnection"
 import { GluetunLogs } from "@/components/services/GluetunLogs"
 import { GluetunOverview } from "@/components/services/GluetunOverview"
 import { MoviesView, SeriesView, SubtitlesView } from "@/components/services/LibraryViews"
+import { MediaServersDashboard } from "@/components/services/MediaServersDashboard"
+import { MediaServersManage } from "@/components/services/MediaServersManage"
+import { MediaSyncAccounts } from "@/components/services/MediaSyncAccounts"
+import { MediaSyncActivity } from "@/components/services/MediaSyncActivity"
+import { MediaSyncPairs } from "@/components/services/MediaSyncPairs"
 import { SeedboxActivity } from "@/components/services/SeedboxActivity"
 import { SeedboxOverview } from "@/components/services/SeedboxOverview"
 import { ToneBadge } from "@/components/services/shared"
@@ -63,6 +68,11 @@ export function ServicesPage({ activeTab, onTabChange }: ServicesPageProps) {
         {activeTab === "apps-series" && <SeriesView onNavigate={onTabChange} />}
         {activeTab === "apps-subtitles" && <SubtitlesView onNavigate={onTabChange} />}
         {activeTab === "apps-manage" && <AppsManage />}
+        {activeTab === "media-servers" && <MediaServersDashboard onNavigate={onTabChange} />}
+        {activeTab === "media-servers-manage" && <MediaServersManage />}
+        {activeTab === "media-sync" && <MediaSyncPairs onNavigate={onTabChange} />}
+        {activeTab === "media-sync-accounts" && <MediaSyncAccounts onNavigate={onTabChange} />}
+        {activeTab === "media-sync-activity" && <MediaSyncActivity onNavigate={onTabChange} />}
       </SectionedPage>
     </div>
   )

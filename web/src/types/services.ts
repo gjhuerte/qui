@@ -270,3 +270,112 @@ export interface AppWantedSubtitle {
   languages: string[]
   link: string
 }
+
+export const MEDIA_SERVER_TYPES = ["jellyfin", "plex"] as const
+export type MediaServerType = (typeof MEDIA_SERVER_TYPES)[number]
+
+export interface MediaServer {
+  id: number
+  type: MediaServerType
+  name: string
+  baseUrl: string
+  enabled: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+export interface MediaServerInput {
+  type: MediaServerType
+  name: string
+  baseUrl: string
+  /** Empty on update keeps the stored token. */
+  token: string
+  enabled: boolean
+}
+
+export interface MediaServerUser {
+  id: string
+  name: string
+  admin: boolean
+}
+
+export interface MediaServerSession {
+  user: string
+  title: string
+  client: string
+  state: "playing" | "paused"
+  /** 0 to 1 */
+  progress: number
+  transcoding: boolean
+}
+
+export interface MediaServerStatus {
+  server: MediaServer
+  online: boolean
+  error?: string
+  serverName?: string
+  version?: string
+  platform?: string
+  movies: number
+  series: number
+  episodes: number
+  /** 0 on Plex. */
+  users: number
+  libraries: { name: string; type: string; items?: number }[]
+  sessions: MediaServerSession[]
+}
+
+export const SYNC_DIRECTIONS = ["both", "a_to_b", "b_to_a"] as const
+export type SyncDirection = (typeof SYNC_DIRECTIONS)[number]
+
+export interface SyncPair {
+  id: number
+  serverAId: number
+  serverBId: number
+  direction: SyncDirection
+  /** Sync on a schedule. Manual runs work either way. */
+  enabled: boolean
+  intervalMinutes: number
+  createdAt: string
+  updatedAt: string
+}
+
+export interface SyncPairInput {
+  serverAId: number
+  serverBId: number
+  direction: SyncDirection
+  enabled: boolean
+  intervalMinutes: number
+}
+
+export interface SyncUserMap {
+  userAId: string
+  userAName: string
+  userBId: string
+  userBName: string
+}
+
+export type SyncRunStatus = "running" | "success" | "partial" | "failed"
+
+export interface SyncRunItem {
+  userName: string
+  target: "a" | "b"
+  title: string
+  error?: string
+}
+
+export interface SyncRun {
+  id: number
+  pairId: number
+  source: "schedule" | "manual"
+  status: SyncRunStatus
+  users: number
+  markedA: number
+  markedB: number
+  failed: number
+  notFound: number
+  message: string
+  startedAt: string
+  finishedAt?: string
+  items?: SyncRunItem[]
+}

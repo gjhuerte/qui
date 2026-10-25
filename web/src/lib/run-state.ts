@@ -55,3 +55,18 @@ export function libraryRunState(input: LibraryRunInput, t: Translate): RunState 
   if (!input.hasSearchSource) return { kind: "blocked", reason: t("toast.configureTorznabOrGazelle") }
   return { kind: "ready" }
 }
+
+export interface MediaSyncRunInput {
+  running: boolean
+  cancelPending: boolean
+  startPending: boolean
+  hasMaps: boolean
+}
+
+/** A sync in progress wins over every reason, so Cancel stays reachable. */
+export function mediaSyncRunState(input: MediaSyncRunInput, t: Translate): RunState {
+  if (input.running) return input.cancelPending ? { kind: "cancelling" } : { kind: "running" }
+  if (input.startPending) return { kind: "blocked", reason: t("crossseed:run.starting") }
+  if (!input.hasMaps) return { kind: "blocked", reason: t("services:mediaSync.activity.noMaps") }
+  return { kind: "ready" }
+}

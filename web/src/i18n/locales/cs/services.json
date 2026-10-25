@@ -1,11 +1,12 @@
 {
   "pageTitle": "Services",
-  "pageDescription": "The gluetun VPN that qui runs behind, the MyAnonamouse dynamic seedbox IP, and your Sonarr, Radarr, Prowlarr, Bazarr and Tautulli apps.",
+  "pageDescription": "The gluetun VPN that qui runs behind, the MyAnonamouse dynamic seedbox IP, your Sonarr, Radarr, Prowlarr, Bazarr and Tautulli apps, and your Jellyfin and Plex servers.",
   "vpnBadge": "VPN {{status}} · {{ip}}",
   "nav": {
     "gluetun": "Gluetun",
     "seedbox": "Seedbox (MAM)",
-    "apps": "Media apps"
+    "apps": "Media apps",
+    "mediaSync": "Media servers"
   },
   "tabs": {
     "gluetun": "Overview",
@@ -19,7 +20,12 @@
     "apps-issues": "Issues",
     "apps-movies": "Movies",
     "apps-series": "Series",
-    "apps-subtitles": "Subtitles"
+    "apps-subtitles": "Subtitles",
+    "media-servers": "Status",
+    "media-servers-manage": "Servers",
+    "media-sync": "Sync direction",
+    "media-sync-accounts": "Accounts",
+    "media-sync-activity": "Sync activity"
   },
   "actions": {
     "refresh": "Refresh"
@@ -504,6 +510,180 @@
       "download": "Download needs attention",
       "indexer": "Indexer failing",
       "partial": "Could not load all details"
+    }
+  },
+  "mediaSync": {
+    "types": {
+      "jellyfin": "Jellyfin",
+      "plex": "Plex"
+    },
+    "empty": {
+      "title": "No media servers yet",
+      "description": "Add your Jellyfin and Plex servers to see their status here and to sync what each person watched between them."
+    },
+    "actions": {
+      "addServer": "Add server",
+      "open": "Open the server",
+      "openActivity": "Sync activity",
+      "mapAccounts": "Map accounts",
+      "deletePair": "Delete pair",
+      "addPair": "Add pair",
+      "syncNow": "Sync now"
+    },
+    "summary": {
+      "allOnline_one": "{{count}} server online",
+      "allOnline_few": "All {{count}} servers online",
+      "allOnline_other": "All {{count}} servers online",
+      "offline_one": "{{count}} server offline",
+      "offline_few": "{{count}} servers offline",
+      "offline_other": "{{count}} servers offline",
+      "streams_one": "{{count}} stream",
+      "streams_few": "{{count}} streams",
+      "streams_other": "{{count}} streams",
+      "syncTitle": "Watched sync",
+      "syncDescription": "The last sync of each pair of servers."
+    },
+    "status": {
+      "movies": "Movies",
+      "series": "Series",
+      "episodes": "Episodes",
+      "users": "Users",
+      "streams": "Streams",
+      "libraries": "Libraries",
+      "nowPlaying": "Now playing",
+      "nothingPlaying": "Nothing is playing.",
+      "transcoding": "Transcoding"
+    },
+    "servers": {
+      "title": "Media servers",
+      "description": "The Jellyfin and Plex servers qui reads status from and syncs watched state between.",
+      "none": "No servers yet.",
+      "deleteDescription": "qui stops tracking this server and deletes the sync pairs that use it, with their account maps and log. Nothing changes on the server itself."
+    },
+    "help": {
+      "title": "Before you start",
+      "description": "What qui needs from each server.",
+      "plexUsers": "On Plex, qui syncs the owner and every account you share the server with. It asks plex.tv for each account's access, so qui needs internet access.",
+      "ids": "Titles match on IMDb, TMDB and TVDB IDs. A title that has none of these on both servers cannot sync, so keep the metadata agents up to date."
+    },
+    "form": {
+      "type": "Server",
+      "addTitle": "Add media server",
+      "editTitle": "Edit media server",
+      "urlHelp": "The address qui uses to reach the server, for example http://192.168.1.10:8096 for Jellyfin or http://192.168.1.10:32400 for Plex.",
+      "token": {
+        "jellyfin": "API key",
+        "plex": "Plex token"
+      },
+      "tokenSaved": "Saved, leave empty to keep it",
+      "tokenHelp": {
+        "jellyfin": "Jellyfin: create an API key under Dashboard → API Keys. An API key can read and mark watched items for every user.",
+        "plex": "Plex: use the X-Plex-Token of the server owner. Open any item in Plex Web, choose Get Info → View XML, and copy the X-Plex-Token value from the address."
+      },
+      "testOk": "Connected to {{name}} · v{{version}}"
+    },
+    "toasts": {
+      "serverAdded": "Server added",
+      "serverUpdated": "Server updated",
+      "serverDeleted": "Server deleted",
+      "pairAdded": "Sync pair added",
+      "pairSaved": "Sync settings saved",
+      "pairDeleted": "Sync pair deleted",
+      "mapsSaved": "Account maps saved",
+      "started": "Sync started"
+    },
+    "pairs": {
+      "none": "No sync pairs yet. Add one to start syncing.",
+      "needServersTitle": "Add two servers first",
+      "needServers": "A sync pair links two media servers. Add at least two servers to set one up.",
+      "description": "How watched state flows between {{a}} and {{b}}. qui only marks titles as watched; it never marks anything unwatched.",
+      "schedule": "Sync on a schedule",
+      "scheduleHelp": "Off: sync only when you press Sync now on the Sync activity page.",
+      "interval": "Every (minutes)",
+      "invalidInterval": "Enter a whole number of minutes between {{min}} and {{max}}.",
+      "deleteTitle": "Delete {{pair}}?",
+      "deleteDescription": "qui stops syncing these servers and deletes the account maps and the log of this pair. Watched state on the servers stays as it is.",
+      "firstTitle": "Set up a sync",
+      "addTitle": "Add another pair",
+      "addDescription": "Pick two servers and the direction. You map the accounts next.",
+      "serverA": "Server A",
+      "serverB": "Server B",
+      "sameServer": "Pick two different servers."
+    },
+    "directions": {
+      "both": {
+        "label": "Both ways ({{a}} ⇄ {{b}})",
+        "description": "A title watched on either server is marked watched on the other."
+      },
+      "a_to_b": {
+        "label": "{{a}} to {{b}} only",
+        "description": "{{a}} is the source. Titles watched on {{a}} are marked watched on {{b}}; {{a}} is never changed."
+      },
+      "b_to_a": {
+        "label": "{{b}} to {{a}} only",
+        "description": "{{b}} is the source. Titles watched on {{b}} are marked watched on {{a}}; {{b}} is never changed."
+      }
+    },
+    "accounts": {
+      "title": "Accounts to sync",
+      "noPairs": "Add a sync pair on the Sync direction page first.",
+      "pair": "Sync pair",
+      "description": "Each row says that an account on {{a}} and an account on {{b}} are the same person. Only mapped accounts sync.",
+      "matchByName": "Match by name",
+      "matched_one": "Matched {{count}} account by name",
+      "matched_few": "Matched {{count}} accounts by name",
+      "matched_other": "Matched {{count}} accounts by name",
+      "addRow": "Add row",
+      "removeRow": "Remove row",
+      "none": "No accounts mapped yet. Use Match by name or Add row.",
+      "incomplete": "Pick an account on both servers in every row, or remove the row.",
+      "usersFailed": "Could not list the accounts on {{server}}: {{error}}",
+      "accountOn": "Account on {{server}}",
+      "missingUser": "{{name}} (no longer on the server)",
+      "pick": "Pick an account",
+      "admin": "admin"
+    },
+    "activity": {
+      "title": "Sync activity",
+      "logTitle": "Sync log",
+      "logDescription": "The runs of the last 30 days, newest first.",
+      "never": "No syncs yet.",
+      "noMaps": "Map at least one account on the Accounts page first.",
+      "every_one": "Syncs every minute",
+      "every_few": "Syncs every {{count}} minutes",
+      "every_other": "Syncs every {{count}} minutes",
+      "manualOnly": "Syncs only when you press Sync now",
+      "lastRun": "Last sync",
+      "markedOn": "Marked on {{server}}",
+      "notFound": "Not on the other server",
+      "details": "Show details",
+      "time": "Started",
+      "pair": "Pair",
+      "source": "Started by",
+      "result": "Result",
+      "marked": "Marked",
+      "message": "Notes",
+      "nothingMarked": "This sync marked nothing: both servers already agreed.",
+      "titleColumn": "Title",
+      "account": "Account",
+      "markedOnColumn": "Marked on",
+      "truncated_one": "Only the first {{count}} title is listed.",
+      "truncated_few": "Only the first {{count}} titles are listed.",
+      "truncated_other": "Only the first {{count}} titles are listed."
+    },
+    "runStatus": {
+      "running": "Syncing",
+      "success": "Synced",
+      "partial": "Partly synced",
+      "failed": "Failed"
+    },
+    "sources": {
+      "schedule": "Schedule",
+      "manual": "You"
+    },
+    "cancelDialog": {
+      "title": "Stop this sync?",
+      "description": "Titles already marked stay watched. The next sync picks up the rest."
     }
   }
 }

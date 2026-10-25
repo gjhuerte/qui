@@ -47,6 +47,7 @@ import (
 	"github.com/gjhuerte/qui/internal/services/gluetun"
 	"github.com/gjhuerte/qui/internal/services/jackett"
 	"github.com/gjhuerte/qui/internal/services/mediaapps"
+	"github.com/gjhuerte/qui/internal/services/mediasync"
 	"github.com/gjhuerte/qui/internal/services/notifications"
 	"github.com/gjhuerte/qui/internal/services/orphanscan"
 	"github.com/gjhuerte/qui/internal/services/reannounce"
@@ -680,6 +681,16 @@ func (app *Application) runServer() {
 	}
 	mediaAppsService := mediaapps.NewService(appInstanceStore)
 
+	// Watched-state sync between Jellyfin and Plex servers.
+	mediaSyncStore, err := models.NewMediaSyncStore(db, encryptionKey, legacyEncryptionKey)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to initialize media sync store")
+	}
+	mediaSyncService := mediasync.NewService(mediaSyncStore)
+	mediaSyncCtx, mediaSyncCancel := context.WithCancel(context.Background())
+	defer mediaSyncCancel()
+	mediaSyncService.Start(mediaSyncCtx)
+
 	// activityHub fans qui-owned server events (reannounce, scans, cross-seed,
 	// backups, automations, indexer activity, etc.) onto the SSE stream so the
 	// frontend can stop polling those endpoints. Background services publish to it;
@@ -913,6 +924,7 @@ func (app *Application) runServer() {
 		SeedboxService:                   seedboxService,
 		GluetunService:                   gluetunService,
 		MediaAppsService:                 mediaAppsService,
+		MediaSyncService:                 mediaSyncService,
 	})
 
 	// Reconcile any cross-seed runs left in 'running' status from a previous crash/restart.

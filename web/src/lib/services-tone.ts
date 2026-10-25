@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-import type { SeedboxContactState } from "@/types"
+import type { SeedboxContactState, SyncRunStatus } from "@/types"
 
 export type Tone = "good" | "warn" | "bad" | "neutral"
 
@@ -23,6 +23,19 @@ export function seedboxTone(state?: SeedboxContactState): Tone {
       return "warn"
     case "rejected":
     case "unreachable":
+      return "bad"
+    default:
+      return "neutral"
+  }
+}
+
+export function syncRunTone(status?: SyncRunStatus): Tone {
+  switch (status) {
+    case "success":
+      return "good"
+    case "partial":
+      return "warn"
+    case "failed":
       return "bad"
     default:
       return "neutral"

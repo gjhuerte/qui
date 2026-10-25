@@ -1,17 +1,18 @@
 ---
 sidebar_position: 19
-title: Gluetun, MyAnonamouse seedbox and media apps
+title: Gluetun, MyAnonamouse seedbox, media apps and media servers
 sidebar_label: Services
-description: Watch and restart the gluetun VPN, keep the MyAnonamouse dynamic seedbox IP up to date, and track Sonarr, Radarr, Prowlarr, Bazarr and Tautulli.
+description: Watch and restart the gluetun VPN, keep the MyAnonamouse dynamic seedbox IP up to date, track Sonarr, Radarr, Prowlarr, Bazarr and Tautulli, and sync watched state between Jellyfin and Plex.
 ---
 
 # Services
 
-The **Services** page is for a qui that runs behind [gluetun](https://github.com/qdm12/gluetun), with `network_mode: "service:gluetun"`. It has three parts:
+The **Services** page is for a qui that runs behind [gluetun](https://github.com/qdm12/gluetun), with `network_mode: "service:gluetun"`. It has four parts:
 
 - **Gluetun**: the VPN status, the public IP and its location, the forwarded port, the container health, CPU and memory use, the container log, and buttons to restart the VPN or the container.
 - **Seedbox (MAM)**: keeps your MyAnonamouse dynamic seedbox IP up to date. It does the same job as the `myanonamouse/seedboxapi` container, so you do not need that container.
 - **Media apps**: one place for any number of Sonarr, Radarr, Prowlarr, Bazarr and Tautulli instances, inside gluetun or outside it: a status dashboard, one list of issues, and your movies, series and wanted subtitles.
+- **Media servers**: the status of your Jellyfin and Plex servers, and a sync that marks a title watched on one server when the same person watched it on the other.
 
 ## Compose example
 
@@ -152,3 +153,41 @@ qui shares gluetun's network, so its requests leave through gluetun:
 | `HTTP 401: check the API key` | Copy the key again. For Tautulli, turn on **Enable API**. |
 | `not found: check the URL` | Add the URL base. |
 | `did not answer with JSON` | The URL points at a login page or another site. Use the app's direct address. |
+
+## Media servers
+
+**Media servers → Status** shows one card per enabled Jellyfin or Plex server: the version, the number of movies, series and episodes, the libraries, and who is watching what now, with progress, paused streams and transcodes. Below the cards, **Watched sync** shows the last sync of each pair. The page refreshes every 30 seconds; **Refresh** skips the 20-second cache.
+
+### Add a server
+
+1. Open **Media servers → Servers** and click **Add server**.
+2. Choose **Jellyfin** or **Plex** and enter the URL, for example `http://192.168.1.10:8096` or `http://192.168.1.10:32400`.
+3. Enter the credential:
+   - **Jellyfin**: an API key. Create one under **Dashboard → API Keys**. An API key can read and mark watched items for every user.
+   - **Plex**: the `X-Plex-Token` of the server owner. In Plex Web, open any item, choose **Get Info → View XML**, and copy the `X-Plex-Token` value from the address.
+4. Click **Test**, then **Save**.
+
+qui stores the key and the token encrypted and never sends them to the browser. When you edit a server, leave the field empty to keep the stored value. The same network rules as for the media apps apply when qui runs inside gluetun.
+
+### Sync watched state
+
+The sync copies watched state between two servers, for example Jellyfin and Plex. It only marks titles watched. It never marks a title unwatched, and it does not copy partial progress.
+
+1. **Sync direction**: pick server A and server B and the direction:
+   - **Both ways**: a title watched on either server is marked watched on the other.
+   - **A to B only** or **B to A only**: one server is the source and is never changed.
+
+   Turn on **Sync on a schedule** and set the interval (5 minutes to 7 days). With the schedule off, the pair syncs only when you press **Sync now**. You can add more pairs, for example Jellyfin to a second Plex.
+2. **Accounts**: map each account on server A to the account of the same person on server B. **Match by name** maps accounts whose names match, ignoring case, spaces and punctuation. Only mapped accounts sync.
+3. **Sync activity**: press **Sync now**, or wait for the schedule. Each pair shows its last sync, and the log lists the syncs of the last 30 days. **Show details** lists every title a sync marked, for which account and on which server. **Cancel** stops a sync; titles already marked stay watched.
+
+On Plex, qui syncs the owner and every account you share the server with. It reads each account's access token from plex.tv with the owner's token, so qui needs internet access for Plex users.
+
+Titles match on IMDb, TMDB and TVDB IDs. An episode also matches on the series ID plus the season and episode number. A watched title that the other server does not have, or has without a shared ID, counts as **Not on the other server**. Keep the metadata of both servers up to date to keep that number low.
+
+| Result | Meaning |
+| --- | --- |
+| Synced | Every mapped account synced. |
+| Partly synced | Some accounts or titles failed; the notes name them. The others synced. |
+| Failed | Nothing synced, for example because no accounts are mapped or a server is down. |
+

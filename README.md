@@ -1,6 +1,6 @@
 # qui
 
-A fast, modern web interface for qBittorrent. Manage one or many qBittorrent instances from a single, lightweight app, and keep your VPN, your MyAnonamouse seedbox IP and your Sonarr, Radarr, Prowlarr, Bazarr and Tautulli servers in check from the same place.
+A fast, modern web interface for qBittorrent. Manage one or many qBittorrent instances from a single, lightweight app, and keep your VPN, your MyAnonamouse seedbox IP your Sonarr, Radarr, Prowlarr, Bazarr and Tautulli servers, and your Jellyfin and Plex servers in check from the same place.
 
 <div align="center">
   <img src=".github/assets/qui.png" alt="qui" width="100%" />
@@ -14,6 +14,7 @@ A fast, modern web interface for qBittorrent. Manage one or many qBittorrent ins
 - [Set up gluetun in qui](#set-up-gluetun-in-qui)
 - [Set up the MyAnonamouse seedbox IP](#set-up-the-myanonamouse-seedbox-ip)
 - [Track Sonarr, Radarr, Prowlarr, Bazarr and Tautulli](#track-sonarr-radarr-prowlarr-bazarr-and-tautulli)
+- [Sync watched state between Jellyfin and Plex](#sync-watched-state-between-jellyfin-and-plex)
 - [Troubleshooting](#troubleshooting)
 - [Documentation](#documentation)
 - [License](#license)
@@ -50,6 +51,11 @@ A fast, modern web interface for qBittorrent. Manage one or many qBittorrent ins
 - **Issues:** one list of everything that needs attention: apps that are down, health warnings, stuck or failed downloads, failing indexers.
 - **Movies and Series:** search and filter your whole Radarr and Sonarr libraries (missing, downloaded, unreleased, continuing, ended) across every instance, and jump to any title in its app.
 - **Subtitles:** everything Bazarr still needs subtitles for, with the missing languages.
+
+**Media servers**
+
+- **Status:** each Jellyfin and Plex server's version, library counts, libraries, and who is watching what now.
+- **Watched sync:** marks a title watched on one server when the same person watched it on the other. Choose both ways or one way, map the accounts, sync on a schedule or with **Sync now**, and read what each sync marked in the log.
 
 **Operations**
 
@@ -258,6 +264,15 @@ Then use the **Media apps** section:
 | **Series** | All Sonarr series: episodes on disk, missing episodes, next episode, size |
 | **Subtitles** | Episodes and movies Bazarr still needs subtitles for, with the missing languages |
 | **Manage apps** | Add, edit, turn off or delete instances |
+
+## Sync watched state between Jellyfin and Plex
+
+1. Open **Services → Media servers → Servers** and add each server: a Jellyfin API key (**Dashboard → API Keys**) or the Plex owner's `X-Plex-Token`.
+2. **Sync direction**: pick the two servers and choose **Both ways** or one way.
+3. **Accounts**: map each account to the same person's account on the other server, or use **Match by name**.
+4. **Sync activity**: press **Sync now**. The log shows every title each sync marked.
+
+qui only marks titles watched, never unwatched. Titles match on IMDb, TMDB and TVDB IDs. See the [services docs](documentation/docs/features/services.md#media-servers) for details.
 
 The dashboard and issues refresh every minute and the libraries every five minutes. **Refresh** fetches new data right away.
 

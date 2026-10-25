@@ -98,6 +98,10 @@ import type {
   AppMovie,
   AppSeries,
   AppStatus,
+  MediaServer,
+  MediaServerInput,
+  MediaServerStatus,
+  MediaServerUser,
   AppWantedSubtitle,
   GluetunLogLine,
   GluetunRestartState,
@@ -106,6 +110,10 @@ import type {
   GluetunStatus,
   SeedboxContact,
   SeedboxStatus,
+  SyncPair,
+  SyncPairInput,
+  SyncRun,
+  SyncUserMap,
   QBittorrentAppInfo,
   RefreshRSSItemRequest,
   RegexValidationResult,
@@ -2434,6 +2442,75 @@ class ApiClient {
       method: "POST",
       body: JSON.stringify(data),
     })
+  }
+
+  // Media servers (Jellyfin, Plex) and watched sync
+  async getMediaServerStatus(refresh = false): Promise<MediaServerStatus[]> {
+    return this.request<MediaServerStatus[]>(refresh ? "/media-sync/status?refresh=1" : "/media-sync/status")
+  }
+
+  async listMediaServers(): Promise<MediaServer[]> {
+    return this.request<MediaServer[]>("/media-sync/servers")
+  }
+
+  async createMediaServer(data: MediaServerInput): Promise<MediaServer> {
+    return this.request<MediaServer>("/media-sync/servers", { method: "POST", body: JSON.stringify(data) })
+  }
+
+  async updateMediaServer(id: number, data: MediaServerInput): Promise<MediaServer> {
+    return this.request<MediaServer>(`/media-sync/servers/${id}`, { method: "PUT", body: JSON.stringify(data) })
+  }
+
+  async deleteMediaServer(id: number): Promise<void> {
+    return this.request(`/media-sync/servers/${id}`, { method: "DELETE" })
+  }
+
+  async testMediaServer(data: MediaServerInput & { id?: number }): Promise<MediaServerStatus> {
+    return this.request<MediaServerStatus>("/media-sync/servers/test", { method: "POST", body: JSON.stringify(data) })
+  }
+
+  async listMediaServerUsers(id: number): Promise<MediaServerUser[]> {
+    return this.request<MediaServerUser[]>(`/media-sync/servers/${id}/users`)
+  }
+
+  async listSyncPairs(): Promise<SyncPair[]> {
+    return this.request<SyncPair[]>("/media-sync/pairs")
+  }
+
+  async createSyncPair(data: SyncPairInput): Promise<SyncPair> {
+    return this.request<SyncPair>("/media-sync/pairs", { method: "POST", body: JSON.stringify(data) })
+  }
+
+  async updateSyncPair(id: number, data: SyncPairInput): Promise<SyncPair> {
+    return this.request<SyncPair>(`/media-sync/pairs/${id}`, { method: "PUT", body: JSON.stringify(data) })
+  }
+
+  async deleteSyncPair(id: number): Promise<void> {
+    return this.request(`/media-sync/pairs/${id}`, { method: "DELETE" })
+  }
+
+  async getSyncUserMaps(pairId: number): Promise<SyncUserMap[]> {
+    return this.request<SyncUserMap[]>(`/media-sync/pairs/${pairId}/users`)
+  }
+
+  async setSyncUserMaps(pairId: number, maps: SyncUserMap[]): Promise<SyncUserMap[]> {
+    return this.request<SyncUserMap[]>(`/media-sync/pairs/${pairId}/users`, { method: "PUT", body: JSON.stringify(maps) })
+  }
+
+  async runSyncPair(pairId: number): Promise<SyncRun> {
+    return this.request<SyncRun>(`/media-sync/pairs/${pairId}/run`, { method: "POST" })
+  }
+
+  async cancelSyncPair(pairId: number): Promise<void> {
+    return this.request(`/media-sync/pairs/${pairId}/cancel`, { method: "POST" })
+  }
+
+  async listSyncRuns(limit = 50): Promise<SyncRun[]> {
+    return this.request<SyncRun[]>(`/media-sync/runs?limit=${limit}`)
+  }
+
+  async getSyncRun(id: number): Promise<SyncRun> {
+    return this.request<SyncRun>(`/media-sync/runs/${id}`)
   }
 
   // Gluetun endpoints
