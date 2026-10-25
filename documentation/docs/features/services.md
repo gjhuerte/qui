@@ -1,18 +1,19 @@
 ---
 sidebar_position: 19
-title: Gluetun, MyAnonamouse seedbox, media apps and media servers
+title: Gluetun, MyAnonamouse seedbox, media apps, media servers and playlists
 sidebar_label: Services
-description: Watch and restart the gluetun VPN, keep the MyAnonamouse dynamic seedbox IP up to date, track Sonarr, Radarr, Prowlarr, Bazarr and Tautulli, and sync watched state between Jellyfin and Plex.
+description: Watch and restart the gluetun VPN, keep the MyAnonamouse dynamic seedbox IP up to date, track Sonarr, Radarr, Prowlarr, Bazarr and Tautulli, sync watched state between Jellyfin and Plex, and make playlists with an AI assistant.
 ---
 
 # Services
 
-The **Services** page is for a qui that runs behind [gluetun](https://github.com/qdm12/gluetun), with `network_mode: "service:gluetun"`. It has four parts:
+The **Services** page is for a qui that runs behind [gluetun](https://github.com/qdm12/gluetun), with `network_mode: "service:gluetun"`. It has five parts:
 
 - **Gluetun**: the VPN status, the public IP and its location, the forwarded port, the container health, CPU and memory use, the container log, and buttons to restart the VPN or the container.
 - **Seedbox (MAM)**: keeps your MyAnonamouse dynamic seedbox IP up to date. It does the same job as the `myanonamouse/seedboxapi` container, so you do not need that container.
 - **Media apps**: one place for any number of Sonarr, Radarr, Prowlarr, Bazarr and Tautulli instances, inside gluetun or outside it: a status dashboard, one list of issues, and your movies, series and wanted subtitles.
 - **Media servers**: the status of your Jellyfin and Plex servers, and a sync that marks a title watched on one server when the same person watched it on the other.
+- **Playlists**: make playlists with an AI assistant from your music library, and sync them to Jellyfin, Plex, Spotify and YouTube Music.
 
 ## Compose example
 
@@ -190,4 +191,40 @@ Titles match on IMDb, TMDB and TVDB IDs. An episode also matches on the series I
 | Synced | Every mapped account synced. |
 | Partly synced | Some accounts or titles failed; the notes name them. The others synced. |
 | Failed | Nothing synced, for example because no accounts are mapped or a server is down. |
+
+## Playlists
+
+**Playlists → AI playlists** turns a chat with any AI assistant (ChatGPT, Claude, Gemini) into playlists on your services.
+
+1. **Export your music**: pick a Jellyfin or Plex server and an account, and click **Download library**. The text file lists every track, grouped by artist and album, to attach to the chat. Skip this step for a Spotify or YouTube Music playlist of any songs.
+2. **Describe the playlist and copy the prompt**: write what you want to hear and how many songs. Turn **Only songs from my library** off to let the assistant pick any song. Click **Copy prompt**, paste it into the assistant, and attach the library file.
+3. **Paste the answer**: paste the whole answer and click **Create playlist**. qui reads the JSON the prompt asks for, or one `Artist - Title` per line. The playlist shows as a row in the table.
+
+Open a playlist to edit its name and tracks, and to copy it to a service with **Add to a service**:
+
+- **Create a new playlist**: qui finds each track on the service and creates the playlist with the tracks it found. The row then says how many it found and names the ones it did not.
+- **Use a playlist that is already there**: qui opens **Compare**. It lists every track with where it is now: in both, only in qui, only on the service, or not on the service. Untick what to drop, or use **qui's version**, **the service's version** or **Only tracks in both**, then **Apply to both**. qui and the service then hold the same tracks, apart from tracks the service does not have.
+
+**Sync** makes the copy on the service equal to the playlist in qui: it adds what is missing and removes what you removed. It does not reorder tracks that are already there; new tracks go at the end. It never touches other playlists. Deleting a playlist or a service from it in qui leaves the playlist on the service.
+
+| Service | How qui finds a track |
+| --- | --- |
+| Jellyfin, Plex | In the music library of the account you pick, by artist and title |
+| Spotify, YouTube Music | One search per track, by artist and title |
+
+Titles match without case, punctuation, bracketed parts such as `(Remastered)` and featured artists. A track also needs one of its artists to match, so a cover by another artist is not used.
+
+### Services & sign-in
+
+**Playlists → Services & sign-in** explains each service step by step.
+
+- **Jellyfin and Plex** use the servers under **Media servers → Servers**. On Plex, qui can write for the owner and for every account you share the server with.
+- **Spotify** needs your own Spotify app:
+  1. In the [Spotify developer dashboard](https://developer.spotify.com/dashboard), create an app with the Web API.
+  2. Add the redirect URI `http://127.0.0.1:8888/callback`.
+  3. Paste the client ID and secret into qui and click **Save app**.
+  4. Click **Sign in with Spotify** and allow access. The browser then opens the redirect URI, which shows an error page. Copy the whole address from the address bar, paste it into qui, and click **Connect**.
+
+  Spotify runs apps in Development Mode only when the account that made the app has Premium, and for up to 5 accounts.
+- **YouTube Music** has no public API. qui uses the private API of the website, signed in with your browser's cookie, like the `ytmusicapi` library. Open music.youtube.com while signed in, open the developer tools on the Network tab, click Library, and copy the headers of the `browse` request (Firefox: **Copy Request Headers**; Chrome or Edge: **Copy as cURL**). Paste them into qui and click **Connect**. Google can change this API at any time, and signing out of YouTube in that browser signs qui out too. The cookie gives full access to the Google account; qui stores it encrypted.
 

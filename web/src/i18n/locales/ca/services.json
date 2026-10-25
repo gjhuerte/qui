@@ -6,7 +6,8 @@
     "gluetun": "Gluetun",
     "seedbox": "Seedbox (MAM)",
     "apps": "Media apps",
-    "mediaSync": "Media servers"
+    "mediaSync": "Media servers",
+    "playlists": "Playlists"
   },
   "tabs": {
     "gluetun": "Overview",
@@ -25,7 +26,9 @@
     "media-servers-manage": "Servers",
     "media-sync": "Sync direction",
     "media-sync-accounts": "Accounts",
-    "media-sync-activity": "Sync activity"
+    "media-sync-activity": "Sync activity",
+    "playlists": "AI playlists",
+    "playlist-services": "Services & sign-in"
   },
   "actions": {
     "refresh": "Refresh"
@@ -668,6 +671,185 @@
     "cancelDialog": {
       "title": "Stop this sync?",
       "description": "Titles already marked stay watched. The next sync picks up the rest."
+    }
+  },
+  "playlists": {
+    "services": {
+      "jellyfin": "Jellyfin",
+      "plex": "Plex",
+      "spotify": "Spotify",
+      "ytmusic": "YouTube Music"
+    },
+    "account": {
+      "server": "Server",
+      "account": "Account",
+      "noServer": "No server"
+    },
+    "prompt": {
+      "text": "Make me a music playlist.\n\nWhat I want: {{request}}\nNumber of songs: about {{count}}\n{{source}}\n\nReply with only a JSON object in exactly this shape, and no other text:\n{\"name\": \"Playlist name\", \"description\": \"One sentence about the playlist\", \"tracks\": [{\"artist\": \"Artist\", \"title\": \"Song title\", \"album\": \"Album\"}]}\n\nWrite each artist and song title exactly as they appear {{spelling}}. Do not repeat a song.",
+      "noRequest": "(describe the playlist here)",
+      "sourceLibrary": "Pick songs only from my music library, which is in the attached file: one artist per line, then one indented line per album, \"Album: title | title\".",
+      "sourceAny": "Pick any songs that are on streaming services such as Spotify and YouTube Music.",
+      "spellingLibrary": "in my library file",
+      "spellingAny": "on streaming services"
+    },
+    "create": {
+      "title": "Make a playlist with an AI assistant",
+      "description": "Use ChatGPT, Claude, Gemini or any other assistant. qui writes the prompt; you paste the answer back.",
+      "step1Title": "Export your music",
+      "step1Description": "Download your library as a text file and attach it to the chat, so the assistant picks songs you have. Skip this step for Spotify or YouTube Music playlists of any songs.",
+      "noServer": "Add a Jellyfin or Plex server to export your library.",
+      "export": "Download library",
+      "exported": "Library downloaded ({{size}} KB). Attach the file to your chat.",
+      "step2Title": "Describe the playlist and copy the prompt",
+      "step2Description": "Write what you want to hear. Copy the prompt, paste it into the assistant, and attach the library file.",
+      "request": "What playlist do you want?",
+      "requestPlaceholder": "Upbeat 2000s indie for a morning run, no ballads",
+      "count": "Songs",
+      "onlyLibrary": "Only songs from my library",
+      "prompt": "Prompt for the assistant",
+      "copyPrompt": "Copy prompt",
+      "promptCopied": "Prompt copied",
+      "step3Title": "Paste the answer",
+      "step3Description": "Paste the whole answer of the assistant. qui reads the JSON, or one \"Artist - Title\" per line.",
+      "answer": "Answer of the assistant",
+      "answerPlaceholder": "{\"name\": \"…\", \"tracks\": [{\"artist\": \"…\", \"title\": \"…\"}]}",
+      "name": "Name (optional)",
+      "namePlaceholder": "The assistant's name for it",
+      "submit": "Create playlist",
+      "created_one": "Created {{name}} with {{count}} track",
+      "created_other": "Created {{name}} with {{count}} tracks"
+    },
+    "list": {
+      "title": "Playlists",
+      "description": "Open a playlist to sync it to Jellyfin, Plex, Spotify or YouTube Music, or to compare it with a playlist there.",
+      "none": "No playlists yet. Make one above.",
+      "name": "Name",
+      "tracks": "Tracks",
+      "services": "Synced to",
+      "created": "Created",
+      "notSynced": "Not synced",
+      "open": "Open",
+      "delete": "Delete playlist",
+      "deleteDescription": "qui forgets this playlist. The copies on Jellyfin, Plex, Spotify and YouTube Music stay."
+    },
+    "detail": {
+      "asked": "You asked for: {{request}}",
+      "tracks_one": "{{count}} track",
+      "tracks_other": "{{count}} tracks",
+      "servicesTitle": "Synced to",
+      "addService": "Add to a service",
+      "noServices": "Not on any service yet. Add one to create the playlist there.",
+      "notCreated": "Not created yet",
+      "matched": "{{matched}} of {{total}} found",
+      "remoteName": "There as \"{{name}}\"",
+      "lastSynced": "Synced {{when}}",
+      "neverSynced": "Never synced",
+      "sync": "Sync",
+      "compare": "Compare",
+      "removeService": "Remove",
+      "removeTitle": "Stop syncing to {{service}}?",
+      "removeDescription": "qui stops syncing this playlist there. The playlist on the service stays.",
+      "tracksTitle": "Tracks",
+      "description": "Description",
+      "title": "Title",
+      "artist": "Artist",
+      "album": "Album",
+      "removeTrack": "Remove track",
+      "saveHint": "Saving changes only qui. Press Sync to change the services too."
+    },
+    "add": {
+      "title": "Add to a service",
+      "description": "Copy {{name}} to Jellyfin, Plex, Spotify or YouTube Music.",
+      "service": "Service",
+      "notConnected": "(not connected)",
+      "noServer": "No {{service}} server yet.",
+      "connectFirst": "Connect {{service}} first.",
+      "openServices": "Open Services & sign-in",
+      "signedInAs": "Signed in as {{name}}.",
+      "newLabel": "Create a new playlist",
+      "newDescription": "qui creates the playlist there with every track it finds.",
+      "existingLabel": "Use a playlist that is already there",
+      "existingDescription": "qui compares both and lets you choose what each side keeps.",
+      "noRemote": "No playlists found on this account.",
+      "pickPlaylist": "Pick a playlist",
+      "linkAndCompare": "Link and compare",
+      "createAndSync": "Create and sync"
+    },
+    "compare": {
+      "title": "Compare with {{service}}",
+      "description": "Tick what to keep. Applying writes your choice to both qui and \"{{name}}\" on {{service}}.",
+      "loading": "Searching {{service}} for each track…",
+      "keep": "Keep:",
+      "presets": {
+        "everything": "Everything",
+        "local": "qui's version",
+        "remote": "{{service}}'s version",
+        "both": "Only tracks in both"
+      },
+      "keepColumn": "Keep",
+      "where": "Where",
+      "status": {
+        "both": "In both",
+        "localOnly": "Only in qui",
+        "remoteOnly": "Only on {{service}}",
+        "notFound": "Not on {{service}}"
+      },
+      "noChanges": "Nothing to change.",
+      "changes": "{{service}}: +{{addToService}} / −{{removeFromService}} tracks. qui: +{{addToPlaylist}} / −{{removeFromPlaylist}} tracks.",
+      "apply": "Apply to both"
+    },
+    "toasts": {
+      "deleted": "Playlist deleted",
+      "saved": "Playlist saved",
+      "synced_one": "{{count}} track on {{service}}.",
+      "synced_other": "{{count}} tracks on {{service}}.",
+      "missing_one": "{{count}} track was not found.",
+      "missing_other": "{{count}} tracks were not found.",
+      "applied": "Applied to qui and {{service}}",
+      "spotifyAppSaved": "Spotify app saved. Now sign in.",
+      "connected": "Connected as {{name}}"
+    },
+    "setup": {
+      "connectedAs": "Connected as {{name}}",
+      "notConnected": "Not connected",
+      "serversTitle": "Jellyfin and Plex",
+      "serversDescription": "Playlists use the servers you added under Media servers → Servers. Nothing more to set up.",
+      "serversAccount": "You pick the account when you add a playlist to a server. On Plex, qui can write for the owner and every account you share the server with.",
+      "serversMatch": "A track syncs when that account's music library has it, matched by artist and title.",
+      "manageServers": "Manage servers",
+      "spotifyDescription": "qui signs in with your own Spotify app, so it needs a client ID and secret.",
+      "spotifySteps": {
+        "dashboard": "Open the <dashboard>Spotify developer dashboard</dashboard>, sign in, and click Create app. Any name and description will do.",
+        "redirect": "Under Redirect URIs, add exactly this address:",
+        "api": "Under \"Which API/SDKs are you planning to use?\", tick Web API, then save.",
+        "credentials": "Open the app's Settings, copy the Client ID and the Client secret into the fields below, and click Save app.",
+        "signIn": "Click Sign in with Spotify and allow access. Spotify then opens the address above, which shows an error page: that is expected.",
+        "paste": "Copy the whole address from the browser's address bar, paste it below, and click Connect."
+      },
+      "spotifyPremium": "Spotify only runs apps in Development Mode for accounts with Premium: the account that created the app needs Premium. Up to 5 accounts can use the app; add other accounts under User Management.",
+      "clientId": "Client ID",
+      "clientSecret": "Client secret",
+      "saveApp": "Save app",
+      "signIn": "Sign in with Spotify",
+      "signInAgain": "Sign in again",
+      "pasteAddress": "Address after the sign-in",
+      "connect": "Connect",
+      "copy": "Copy",
+      "copied": "Copied",
+      "disconnect": "Disconnect",
+      "ytDescription": "YouTube Music has no public API, so qui signs in like your browser, with its cookie.",
+      "ytWarning": "This uses the private API of the YouTube Music website and may stop working when Google changes it. The cookie gives full access to your Google account: qui stores it encrypted. Signing out of YouTube in that browser also signs qui out; then paste new headers.",
+      "ytSteps": {
+        "open": "Open <ytm>music.youtube.com</ytm> in your browser and sign in.",
+        "devtools": "Open the developer tools (F12) and go to the Network tab. Type browse in the filter box.",
+        "request": "Click Library or Home in YouTube Music, so a POST request to browse shows in the list. Click it.",
+        "copy": "Firefox: right-click the request and choose Copy Value → Copy Request Headers. Chrome or Edge: right-click it and choose Copy → Copy as cURL (bash).",
+        "paste": "Paste everything below and click Connect."
+      },
+      "ytHeaders": "Request headers",
+      "ytPlaceholder": "POST /youtubei/v1/browse … Cookie: … X-Goog-AuthUser: 0",
+      "addressPlaceholder": "{{uri}}?code=…&state=…"
     }
   }
 }

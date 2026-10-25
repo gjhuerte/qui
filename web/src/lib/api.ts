@@ -102,6 +102,15 @@ import type {
   MediaServerInput,
   MediaServerStatus,
   MediaServerUser,
+  Playlist,
+  PlaylistAccount,
+  PlaylistCompareRow,
+  PlaylistLink,
+  PlaylistLinkInput,
+  PlaylistServicesStatus,
+  PlaylistSyncResult,
+  PlaylistTrack,
+  RemotePlaylist,
   AppWantedSubtitle,
   GluetunLogLine,
   GluetunRestartState,
@@ -171,6 +180,13 @@ import { normalizeCrossInstanceTorrents, type RawCrossInstanceTorrent } from "./
 import i18n from "i18next"
 
 const API_BASE = getApiBaseUrl()
+
+function playlistAccountQuery(account: PlaylistAccount): string {
+  const query = new URLSearchParams({ service: account.service })
+  if (account.serverId !== undefined) query.set("serverId", String(account.serverId))
+  if (account.accountId) query.set("accountId", account.accountId)
+  return query.toString()
+}
 
 // The backend FilterOptions has no expandedCategories field. The sidebar keeps
 // categories as the user's selection and expandedCategories as the subcategory
@@ -2511,6 +2527,86 @@ class ApiClient {
 
   async getSyncRun(id: number): Promise<SyncRun> {
     return this.request<SyncRun>(`/media-sync/runs/${id}`)
+  }
+
+  // Playlists (AI-made, synced to Jellyfin, Plex, Spotify and YouTube Music)
+  async listPlaylists(): Promise<Playlist[]> {
+    return this.request<Playlist[]>("/playlists")
+  }
+
+  async getPlaylist(id: number): Promise<Playlist> {
+    return this.request<Playlist>(`/playlists/${id}`)
+  }
+
+  async importPlaylist(data: { text: string; name?: string; request?: string }): Promise<Playlist> {
+    return this.request<Playlist>("/playlists/import", { method: "POST", body: JSON.stringify(data) })
+  }
+
+  async updatePlaylist(id: number, data: { name: string; description: string; tracks: PlaylistTrack[] }): Promise<Playlist> {
+    return this.request<Playlist>(`/playlists/${id}`, { method: "PUT", body: JSON.stringify(data) })
+  }
+
+  async deletePlaylist(id: number): Promise<void> {
+    return this.request(`/playlists/${id}`, { method: "DELETE" })
+  }
+
+  /** The music library of a Jellyfin or Plex account as text for an AI assistant. */
+  async exportMusicLibrary(account: PlaylistAccount): Promise<{ text: string; filename: string }> {
+    const response = await ssoSafeFetch(`${API_BASE}/playlists/library?${playlistAccountQuery(account)}`, { method: "GET" })
+    if (!response.ok) {
+      const { message, data } = await this.extractErrorData(response)
+      throw new APIError(message, response.status, data)
+    }
+    const filename = response.headers.get("Content-Disposition")?.match(/filename="?([^";]+)"?/)?.[1] ?? "music-library.txt"
+    return { text: await response.text(), filename }
+  }
+
+  async listRemotePlaylists(account: PlaylistAccount): Promise<RemotePlaylist[]> {
+    return this.request<RemotePlaylist[]>(`/playlists/remote?${playlistAccountQuery(account)}`)
+  }
+
+  async createPlaylistLink(playlistId: number, data: PlaylistLinkInput): Promise<PlaylistLink> {
+    return this.request<PlaylistLink>(`/playlists/${playlistId}/links`, { method: "POST", body: JSON.stringify(data) })
+  }
+
+  async deletePlaylistLink(playlistId: number, linkId: number): Promise<void> {
+    return this.request(`/playlists/${playlistId}/links/${linkId}`, { method: "DELETE" })
+  }
+
+  async syncPlaylistLink(playlistId: number, linkId: number): Promise<PlaylistSyncResult> {
+    return this.request<PlaylistSyncResult>(`/playlists/${playlistId}/links/${linkId}/sync`, { method: "POST" })
+  }
+
+  async comparePlaylistLink(playlistId: number, linkId: number): Promise<PlaylistCompareRow[]> {
+    return this.request<PlaylistCompareRow[]>(`/playlists/${playlistId}/links/${linkId}/compare`, { method: "POST" })
+  }
+
+  async applyPlaylistCompare(playlistId: number, linkId: number, rows: PlaylistCompareRow[]): Promise<Playlist> {
+    return this.request<Playlist>(`/playlists/${playlistId}/links/${linkId}/apply`, { method: "POST", body: JSON.stringify({ rows }) })
+  }
+
+  async getPlaylistServices(): Promise<PlaylistServicesStatus> {
+    return this.request<PlaylistServicesStatus>("/playlists/services")
+  }
+
+  async saveSpotifyApp(data: { clientId: string; clientSecret: string }): Promise<PlaylistServicesStatus> {
+    return this.request<PlaylistServicesStatus>("/playlists/services/spotify", { method: "PUT", body: JSON.stringify(data) })
+  }
+
+  async startSpotifySignIn(): Promise<{ url: string }> {
+    return this.request<{ url: string }>("/playlists/services/spotify/authorize", { method: "POST" })
+  }
+
+  async connectSpotify(redirectUrl: string): Promise<PlaylistServicesStatus> {
+    return this.request<PlaylistServicesStatus>("/playlists/services/spotify/connect", { method: "POST", body: JSON.stringify({ redirectUrl }) })
+  }
+
+  async connectYTMusic(headers: string): Promise<PlaylistServicesStatus> {
+    return this.request<PlaylistServicesStatus>("/playlists/services/ytmusic", { method: "PUT", body: JSON.stringify({ headers }) })
+  }
+
+  async disconnectPlaylistService(service: "spotify" | "ytmusic"): Promise<void> {
+    return this.request(`/playlists/services/${service}`, { method: "DELETE" })
   }
 
   // Gluetun endpoints

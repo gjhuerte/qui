@@ -18,6 +18,8 @@ import { MediaServersManage } from "@/components/services/MediaServersManage"
 import { MediaSyncAccounts } from "@/components/services/MediaSyncAccounts"
 import { MediaSyncActivity } from "@/components/services/MediaSyncActivity"
 import { MediaSyncPairs } from "@/components/services/MediaSyncPairs"
+import { PlaylistServices } from "@/components/services/PlaylistServices"
+import { PlaylistsPage } from "@/components/services/PlaylistsPage"
 import { SeedboxActivity } from "@/components/services/SeedboxActivity"
 import { SeedboxOverview } from "@/components/services/SeedboxOverview"
 import { ToneBadge } from "@/components/services/shared"
@@ -73,6 +75,8 @@ export function ServicesPage({ activeTab, onTabChange }: ServicesPageProps) {
         {activeTab === "media-sync" && <MediaSyncPairs onNavigate={onTabChange} />}
         {activeTab === "media-sync-accounts" && <MediaSyncAccounts onNavigate={onTabChange} />}
         {activeTab === "media-sync-activity" && <MediaSyncActivity onNavigate={onTabChange} />}
+        {activeTab === "playlists" && <PlaylistsPage onNavigate={onTabChange} />}
+        {activeTab === "playlist-services" && <PlaylistServices onNavigate={onTabChange} />}
       </SectionedPage>
     </div>
   )

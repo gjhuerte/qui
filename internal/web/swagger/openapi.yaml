@@ -6122,6 +6122,487 @@ paths:
         '404':
           description: Not found
 
+  /api/playlists:
+    get:
+      tags:
+        - Playlists
+      summary: List playlists
+      description: Newest first, with the track count and the services each playlist is on. Tracks are left out.
+      responses:
+        '200':
+          description: Playlists
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Playlist'
+
+  /api/playlists/import:
+    post:
+      tags:
+        - Playlists
+      summary: Create a playlist from the answer of an AI assistant
+      description: Reads the JSON object the qui prompt asks for, or one "Artist - Title" line per track.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - text
+              properties:
+                text:
+                  type: string
+                  description: The pasted answer
+                name:
+                  type: string
+                  description: Replaces the name the assistant chose
+                request:
+                  type: string
+                  description: What the user asked the assistant for
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Playlist'
+        '400':
+          description: No tracks found in the text
+
+  /api/playlists/library:
+    get:
+      tags:
+        - Playlists
+      summary: Export the music library of a Jellyfin or Plex account as text
+      parameters:
+        - $ref: '#/components/parameters/PlaylistService'
+        - $ref: '#/components/parameters/PlaylistServerId'
+        - $ref: '#/components/parameters/PlaylistAccountId'
+      responses:
+        '200':
+          description: The library, grouped by artist and album, as a text file
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: Not a Jellyfin or Plex account, or no music
+        '502':
+          description: The server answered with an error
+
+  /api/playlists/remote:
+    get:
+      tags:
+        - Playlists
+      summary: List the playlists that already exist on a service account
+      description: On Spotify, only playlists the user owns.
+      parameters:
+        - $ref: '#/components/parameters/PlaylistService'
+        - $ref: '#/components/parameters/PlaylistServerId'
+        - $ref: '#/components/parameters/PlaylistAccountId'
+      responses:
+        '200':
+          description: Playlists
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RemotePlaylist'
+        '400':
+          description: Invalid account, or the service is not connected
+        '502':
+          description: The service answered with an error
+
+  /api/playlists/services:
+    get:
+      tags:
+        - Playlists
+      summary: Spotify and YouTube Music sign-in status
+      responses:
+        '200':
+          description: Status; secrets are never returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaylistServicesStatus'
+
+  /api/playlists/services/spotify:
+    put:
+      tags:
+        - Playlists
+      summary: Save the Spotify app
+      description: An empty clientSecret keeps the stored one. A new clientId signs out.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - clientId
+              properties:
+                clientId:
+                  type: string
+                clientSecret:
+                  type: string
+      responses:
+        '200':
+          description: Saved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaylistServicesStatus'
+        '400':
+          description: Invalid input
+
+  /api/playlists/services/spotify/authorize:
+    post:
+      tags:
+        - Playlists
+      summary: Start a Spotify sign-in
+      description: Returns the Spotify page to open. After the sign-in Spotify sends the browser to the redirect URI; paste that address to /connect.
+      responses:
+        '200':
+          description: Sign-in page
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+        '400':
+          description: The Spotify app is not saved
+
+  /api/playlists/services/spotify/connect:
+    post:
+      tags:
+        - Playlists
+      summary: Finish a Spotify sign-in
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - redirectUrl
+              properties:
+                redirectUrl:
+                  type: string
+                  description: The address the browser landed on after the sign-in
+      responses:
+        '200':
+          description: Signed in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaylistServicesStatus'
+        '400':
+          description: The address has no code, or the sign-in was not started here
+        '502':
+          description: Spotify answered with an error
+
+  /api/playlists/services/ytmusic:
+    put:
+      tags:
+        - Playlists
+      summary: Connect YouTube Music with browser request headers
+      description: Uses the private API of the YouTube Music web app, signed in with the browser cookie. Google can change it at any time.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - headers
+              properties:
+                headers:
+                  type: string
+                  description: Request headers of a signed-in request to music.youtube.com, or "Copy as cURL"
+      responses:
+        '200':
+          description: Connected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaylistServicesStatus'
+        '400':
+          description: No usable cookie in the headers
+        '502':
+          description: YouTube Music refused the cookie
+
+  /api/playlists/services/{service}:
+    parameters:
+      - name: service
+        in: path
+        required: true
+        schema:
+          type: string
+          enum: [spotify, ytmusic]
+    delete:
+      tags:
+        - Playlists
+      summary: Forget the Spotify or YouTube Music sign-in
+      responses:
+        '204':
+          description: Disconnected
+        '400':
+          description: Unknown service
+
+  /api/playlists/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Playlists
+      summary: Get a playlist with its tracks and services
+      responses:
+        '200':
+          description: Playlist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Playlist'
+        '404':
+          description: Not found
+    put:
+      tags:
+        - Playlists
+      summary: Replace the name, description and tracks of a playlist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - tracks
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                tracks:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PlaylistTrack'
+      responses:
+        '200':
+          description: Saved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Playlist'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+    delete:
+      tags:
+        - Playlists
+      summary: Delete a playlist
+      description: The copies on the services stay.
+      responses:
+        '204':
+          description: Deleted
+        '404':
+          description: Not found
+
+  /api/playlists/{id}/links:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    post:
+      tags:
+        - Playlists
+      summary: Add a service to a playlist
+      description: With remoteId, links a playlist that already exists there. Without it, the first sync creates one.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - service
+              properties:
+                service:
+                  type: string
+                  enum: [jellyfin, plex, spotify, ytmusic]
+                serverId:
+                  type: integer
+                  description: Jellyfin and Plex only
+                accountId:
+                  type: string
+                  description: Jellyfin and Plex only
+                accountName:
+                  type: string
+                remoteId:
+                  type: string
+                remoteName:
+                  type: string
+      responses:
+        '201':
+          description: Added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaylistLink'
+        '400':
+          description: Invalid account, or the service is not connected
+        '404':
+          description: Not found
+
+  /api/playlists/{id}/links/{linkId}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: linkId
+        in: path
+        required: true
+        schema:
+          type: integer
+    delete:
+      tags:
+        - Playlists
+      summary: Remove a service from a playlist
+      description: The copy on the service stays.
+      responses:
+        '204':
+          description: Removed
+        '404':
+          description: Not found
+
+  /api/playlists/{id}/links/{linkId}/sync:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: linkId
+        in: path
+        required: true
+        schema:
+          type: integer
+    post:
+      tags:
+        - Playlists
+      summary: Make the copy on the service equal to the playlist
+      description: Creates the copy on the first sync, then adds and removes tracks. Tracks the service lacks are skipped and returned.
+      responses:
+        '200':
+          description: Synced
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  link:
+                    $ref: '#/components/schemas/PlaylistLink'
+                  missing:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PlaylistTrack'
+        '400':
+          description: None of the tracks were found, or the service is not connected
+        '404':
+          description: Not found
+        '502':
+          description: The service answered with an error
+
+  /api/playlists/{id}/links/{linkId}/compare:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: linkId
+        in: path
+        required: true
+        schema:
+          type: integer
+    post:
+      tags:
+        - Playlists
+      summary: List the playlist and its copy on the service side by side
+      description: Changes nothing. Every row starts with keep true.
+      responses:
+        '200':
+          description: Rows
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlaylistCompareRow'
+        '400':
+          description: The link has no playlist on the service yet
+        '404':
+          description: Not found
+        '502':
+          description: The service answered with an error
+
+  /api/playlists/{id}/links/{linkId}/apply:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: linkId
+        in: path
+        required: true
+        schema:
+          type: integer
+    post:
+      tags:
+        - Playlists
+      summary: Write the choices of a compare to both sides
+      description: The playlist keeps the rows marked keep, in order. The service gains the kept rows it lacks and loses the rows not kept.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rows:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PlaylistCompareRow'
+      responses:
+        '200':
+          description: The updated playlist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Playlist'
+        '400':
+          description: The link has no playlist on the service yet
+        '404':
+          description: Not found
+        '502':
+          description: The service answered with an error
+
   /api/log-exclusions:
     get:
       tags:
@@ -7262,6 +7743,25 @@ components:
         header. Other clients should use an API key.
 
   parameters:
+    PlaylistService:
+      name: service
+      in: query
+      required: true
+      schema:
+        type: string
+        enum: [jellyfin, plex, spotify, ytmusic]
+    PlaylistServerId:
+      name: serverId
+      in: query
+      description: The media server, for Jellyfin and Plex
+      schema:
+        type: integer
+    PlaylistAccountId:
+      name: accountId
+      in: query
+      description: The account on the media server, for Jellyfin and Plex
+      schema:
+        type: string
     AppsRefresh:
       name: refresh
       in: query
@@ -8801,6 +9301,131 @@ components:
                 type: string
               error:
                 type: string
+    PlaylistTrack:
+      type: object
+      required:
+        - title
+      properties:
+        artist:
+          type: string
+        title:
+          type: string
+        album:
+          type: string
+    PlaylistLink:
+      type: object
+      properties:
+        id:
+          type: integer
+        playlistId:
+          type: integer
+        service:
+          type: string
+          enum: [jellyfin, plex, spotify, ytmusic]
+        serverId:
+          type: integer
+        accountId:
+          type: string
+        accountName:
+          type: string
+        remoteId:
+          type: string
+          description: Empty until the first sync creates the playlist on the service
+        remoteName:
+          type: string
+        matched:
+          type: integer
+        missing:
+          type: integer
+        message:
+          type: string
+        lastSyncedAt:
+          type: string
+          format: date-time
+    Playlist:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        request:
+          type: string
+        trackCount:
+          type: integer
+        tracks:
+          type: array
+          description: Only on GET /api/playlists/{id} and writes
+          items:
+            $ref: '#/components/schemas/PlaylistTrack'
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaylistLink'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    RemotePlaylist:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        count:
+          type: integer
+    PlaylistCompareRow:
+      type: object
+      properties:
+        key:
+          type: string
+        artist:
+          type: string
+        title:
+          type: string
+        album:
+          type: string
+        trackId:
+          type: string
+          description: The track on the service; empty when the service lacks it
+        entryId:
+          type: string
+        local:
+          type: boolean
+          description: In the qui playlist now
+        remote:
+          type: boolean
+          description: In the copy on the service now
+        keep:
+          type: boolean
+    PlaylistServicesStatus:
+      type: object
+      properties:
+        spotify:
+          type: object
+          properties:
+            clientId:
+              type: string
+            hasSecret:
+              type: boolean
+            connected:
+              type: boolean
+            accountName:
+              type: string
+            redirectUri:
+              type: string
+        ytmusic:
+          type: object
+          properties:
+            connected:
+              type: boolean
+            accountName:
+              type: string
     AppInstance:
       type: object
       properties:
@@ -11678,6 +12303,8 @@ tags:
     description: Sonarr, Radarr, Prowlarr, Bazarr and Tautulli instances tracked on the Services page
   - name: Media Sync
     description: Jellyfin and Plex servers and the watched-state sync between them
+  - name: Playlists
+    description: Playlists made with an AI assistant and their copies on Jellyfin, Plex, Spotify and YouTube Music
   - name: Gluetun
     description: Gluetun VPN status, logs and restarts
   - name: Notifications

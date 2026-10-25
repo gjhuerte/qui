@@ -43,6 +43,7 @@ import (
 	"github.com/gjhuerte/qui/internal/services/mediasync"
 	"github.com/gjhuerte/qui/internal/services/notifications"
 	"github.com/gjhuerte/qui/internal/services/orphanscan"
+	"github.com/gjhuerte/qui/internal/services/playlists"
 	"github.com/gjhuerte/qui/internal/services/reannounce"
 	"github.com/gjhuerte/qui/internal/services/seedbox"
 	"github.com/gjhuerte/qui/internal/services/trackericons"
@@ -108,6 +109,7 @@ type Server struct {
 	gluetunService                   *gluetun.Service
 	mediaAppsService                 *mediaapps.Service
 	mediaSyncService                 *mediasync.Service
+	playlistsService                 *playlists.Service
 	// shuttingDown ends the log and RSS streams: http.Server.Shutdown does not cancel request contexts.
 	shuttingDown <-chan struct{}
 }
@@ -163,6 +165,7 @@ type Dependencies struct {
 	GluetunService                   *gluetun.Service
 	MediaAppsService                 *mediaapps.Service
 	MediaSyncService                 *mediasync.Service
+	PlaylistsService                 *playlists.Service
 }
 
 func NewServer(deps *Dependencies) *Server {
@@ -242,6 +245,7 @@ func NewServer(deps *Dependencies) *Server {
 		gluetunService:                   deps.GluetunService,
 		mediaAppsService:                 deps.MediaAppsService,
 		mediaSyncService:                 deps.MediaSyncService,
+		playlistsService:                 deps.PlaylistsService,
 		shuttingDown:                     streamsCtx.Done(),
 	}
 	// Shutdown runs this callback on every call; a CancelFunc tolerates repeats where close would panic.
@@ -421,6 +425,7 @@ func (s *Server) Handler() (*chi.Mux, error) {
 	gluetunHandler := handlers.NewGluetunHandler(s.gluetunService)
 	mediaAppsHandler := handlers.NewMediaAppsHandler(s.mediaAppsService)
 	mediaSyncHandler := handlers.NewMediaSyncHandler(s.mediaSyncService)
+	playlistsHandler := handlers.NewPlaylistsHandler(s.playlistsService)
 
 	// Torznab/Jackett handler
 	var jackettHandler *handlers.JackettHandler
@@ -551,6 +556,7 @@ func (s *Server) Handler() (*chi.Mux, error) {
 			gluetunHandler.Routes(r)
 			mediaAppsHandler.Routes(r)
 			mediaSyncHandler.Routes(r)
+			playlistsHandler.Routes(r)
 
 			r.Route("/arr", func(r chi.Router) {
 				r.Get("/instances", arrHandler.ListInstances)

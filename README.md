@@ -1,6 +1,6 @@
 # qui
 
-A fast, modern web interface for qBittorrent. Manage one or many qBittorrent instances from a single, lightweight app, and keep your VPN, your MyAnonamouse seedbox IP your Sonarr, Radarr, Prowlarr, Bazarr and Tautulli servers, and your Jellyfin and Plex servers in check from the same place.
+A fast, modern web interface for qBittorrent. Manage one or many qBittorrent instances from a single, lightweight app, and keep your VPN, your MyAnonamouse seedbox IP your Sonarr, Radarr, Prowlarr, Bazarr and Tautulli servers, your Jellyfin and Plex servers in check from the same place, and make playlists with an AI assistant for Jellyfin, Plex, Spotify and YouTube Music.
 
 <div align="center">
   <img src=".github/assets/qui.png" alt="qui" width="100%" />
@@ -15,6 +15,7 @@ A fast, modern web interface for qBittorrent. Manage one or many qBittorrent ins
 - [Set up the MyAnonamouse seedbox IP](#set-up-the-myanonamouse-seedbox-ip)
 - [Track Sonarr, Radarr, Prowlarr, Bazarr and Tautulli](#track-sonarr-radarr-prowlarr-bazarr-and-tautulli)
 - [Sync watched state between Jellyfin and Plex](#sync-watched-state-between-jellyfin-and-plex)
+- [Make playlists with an AI assistant](#make-playlists-with-an-ai-assistant)
 - [Troubleshooting](#troubleshooting)
 - [Documentation](#documentation)
 - [License](#license)
@@ -56,6 +57,11 @@ A fast, modern web interface for qBittorrent. Manage one or many qBittorrent ins
 
 - **Status:** each Jellyfin and Plex server's version, library counts, libraries, and who is watching what now.
 - **Watched sync:** marks a title watched on one server when the same person watched it on the other. Choose both ways or one way, map the accounts, sync on a schedule or with **Sync now**, and read what each sync marked in the log.
+
+**Playlists**
+
+- **AI playlists:** export your music library as text, copy a ready prompt into any AI assistant, and paste its answer back as a playlist.
+- **Sync anywhere:** copy a playlist to Jellyfin, Plex, Spotify or YouTube Music, or compare it with a playlist that is already there and choose what each side keeps.
 
 **Operations**
 
@@ -273,6 +279,15 @@ Then use the **Media apps** section:
 4. **Sync activity**: press **Sync now**. The log shows every title each sync marked.
 
 qui only marks titles watched, never unwatched. Titles match on IMDb, TMDB and TVDB IDs. See the [services docs](documentation/docs/features/services.md#media-servers) for details.
+
+## Make playlists with an AI assistant
+
+1. Open **Services → Playlists → Services & sign-in** and connect Spotify or YouTube Music if you want them. Jellyfin and Plex use your media servers.
+2. On **AI playlists**, click **Download library**, describe the playlist, click **Copy prompt**, and send both to ChatGPT, Claude or Gemini.
+3. Paste the answer and click **Create playlist**.
+4. Open the playlist, click **Add to a service**, and create a new playlist there or compare it with one you already have.
+
+See the [services docs](documentation/docs/features/services.md#playlists) for details.
 
 The dashboard and issues refresh every minute and the libraries every five minutes. **Refresh** fetches new data right away.
 

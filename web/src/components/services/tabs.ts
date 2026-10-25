@@ -11,6 +11,7 @@ import { z } from "zod"
 export const SERVICES_NAV_GROUPS = [
   { labelKey: "nav.apps", tabs: ["apps", "apps-issues", "apps-movies", "apps-series", "apps-subtitles", "apps-manage"] },
   { labelKey: "nav.mediaSync", tabs: ["media-servers", "media-servers-manage", "media-sync", "media-sync-accounts", "media-sync-activity"] },
+  { labelKey: "nav.playlists", tabs: ["playlists", "playlist-services"] },
   { labelKey: "nav.gluetun", tabs: ["gluetun", "gluetun-logs", "gluetun-config", "gluetun-connection"] },
   { labelKey: "nav.seedbox", tabs: ["seedbox", "seedbox-activity"] },
 ] as const

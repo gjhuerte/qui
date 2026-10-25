@@ -316,3 +316,10 @@ func (p *plex) markWatched(ctx context.Context, userID string, item Item) error 
 	query := url.Values{"identifier": {"com.plexapp.plugins.library"}, "key": {item.ID}}
 	return p.call(ctx, token, http.MethodGet, "/:/scrobble", query, nil)
 }
+
+// PlexUserToken returns the token that acts as one account on a Plex server:
+// the owner's token for the owner, or the account's own token from plex.tv.
+func PlexUserToken(ctx context.Context, srv *models.MediaServer, userID string) (string, error) {
+	p := &plex{srv: srv, http: &http.Client{Timeout: requestTimeout}, plexTV: defaultPlexTV}
+	return p.token(ctx, userID)
+}

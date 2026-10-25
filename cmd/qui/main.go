@@ -50,6 +50,7 @@ import (
 	"github.com/gjhuerte/qui/internal/services/mediasync"
 	"github.com/gjhuerte/qui/internal/services/notifications"
 	"github.com/gjhuerte/qui/internal/services/orphanscan"
+	"github.com/gjhuerte/qui/internal/services/playlists"
 	"github.com/gjhuerte/qui/internal/services/reannounce"
 	"github.com/gjhuerte/qui/internal/services/seedbox"
 	"github.com/gjhuerte/qui/internal/services/trackericons"
@@ -691,6 +692,13 @@ func (app *Application) runServer() {
 	defer mediaSyncCancel()
 	mediaSyncService.Start(mediaSyncCtx)
 
+	// AI-made playlists and their copies on Jellyfin, Plex, Spotify and YouTube Music.
+	playlistStore, err := models.NewPlaylistStore(db, encryptionKey, legacyEncryptionKey)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to initialize playlist store")
+	}
+	playlistsService := playlists.NewService(playlistStore, mediaSyncStore)
+
 	// activityHub fans qui-owned server events (reannounce, scans, cross-seed,
 	// backups, automations, indexer activity, etc.) onto the SSE stream so the
 	// frontend can stop polling those endpoints. Background services publish to it;
@@ -925,6 +933,7 @@ func (app *Application) runServer() {
 		GluetunService:                   gluetunService,
 		MediaAppsService:                 mediaAppsService,
 		MediaSyncService:                 mediaSyncService,
+		PlaylistsService:                 playlistsService,
 	})
 
 	// Reconcile any cross-seed runs left in 'running' status from a previous crash/restart.
