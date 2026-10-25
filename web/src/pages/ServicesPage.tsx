@@ -5,10 +5,14 @@
 
 import { PageHeader } from "@/components/layout/PageHeader"
 import { SectionedPage, type SectionNavGroup } from "@/components/layout/SectionedPage"
+import { AppsDashboard } from "@/components/services/AppsDashboard"
+import { AppsIssues } from "@/components/services/AppsIssues"
+import { AppsManage } from "@/components/services/AppsManage"
 import { GluetunConfig } from "@/components/services/GluetunConfig"
 import { GluetunConnection } from "@/components/services/GluetunConnection"
 import { GluetunLogs } from "@/components/services/GluetunLogs"
 import { GluetunOverview } from "@/components/services/GluetunOverview"
+import { MoviesView, SeriesView, SubtitlesView } from "@/components/services/LibraryViews"
 import { SeedboxActivity } from "@/components/services/SeedboxActivity"
 import { SeedboxOverview } from "@/components/services/SeedboxOverview"
 import { ToneBadge } from "@/components/services/shared"
@@ -53,6 +57,12 @@ export function ServicesPage({ activeTab, onTabChange }: ServicesPageProps) {
         {activeTab === "gluetun-connection" && <GluetunConnection />}
         {activeTab === "seedbox" && <SeedboxOverview />}
         {activeTab === "seedbox-activity" && <SeedboxActivity />}
+        {activeTab === "apps" && <AppsDashboard onNavigate={onTabChange} />}
+        {activeTab === "apps-issues" && <AppsIssues onNavigate={onTabChange} />}
+        {activeTab === "apps-movies" && <MoviesView onNavigate={onTabChange} />}
+        {activeTab === "apps-series" && <SeriesView onNavigate={onTabChange} />}
+        {activeTab === "apps-subtitles" && <SubtitlesView onNavigate={onTabChange} />}
+        {activeTab === "apps-manage" && <AppsManage />}
       </SectionedPage>
     </div>
   )

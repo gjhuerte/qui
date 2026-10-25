@@ -46,6 +46,7 @@ import (
 	"github.com/gjhuerte/qui/internal/services/filesmanager"
 	"github.com/gjhuerte/qui/internal/services/gluetun"
 	"github.com/gjhuerte/qui/internal/services/jackett"
+	"github.com/gjhuerte/qui/internal/services/mediaapps"
 	"github.com/gjhuerte/qui/internal/services/notifications"
 	"github.com/gjhuerte/qui/internal/services/orphanscan"
 	"github.com/gjhuerte/qui/internal/services/reannounce"
@@ -673,6 +674,12 @@ func (app *Application) runServer() {
 	}
 	gluetunService := gluetun.NewService(gluetunSettingsStore)
 
+	appInstanceStore, err := models.NewAppInstanceStore(db, encryptionKey, legacyEncryptionKey)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to initialize media app store")
+	}
+	mediaAppsService := mediaapps.NewService(appInstanceStore)
+
 	// activityHub fans qui-owned server events (reannounce, scans, cross-seed,
 	// backups, automations, indexer activity, etc.) onto the SSE stream so the
 	// frontend can stop polling those endpoints. Background services publish to it;
@@ -905,6 +912,7 @@ func (app *Application) runServer() {
 		ActivityHub:                      activityHub,
 		SeedboxService:                   seedboxService,
 		GluetunService:                   gluetunService,
+		MediaAppsService:                 mediaAppsService,
 	})
 
 	// Reconcile any cross-seed runs left in 'running' status from a previous crash/restart.

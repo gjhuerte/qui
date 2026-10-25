@@ -4,7 +4,7 @@
  */
 
 import { api } from "@/lib/api"
-import type { GluetunSettingsInput } from "@/types"
+import type { AppInstanceInput, GluetunSettingsInput } from "@/types"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 export const seedboxKeys = {
@@ -108,4 +108,66 @@ export function useRestartGluetunVPN() {
 
 export function useRestartGluetunContainer() {
   return useGluetunMutation((withDependents: boolean) => api.restartGluetunContainer(withDependents))
+}
+
+export const appKeys = {
+  all: ["apps"] as const,
+  status: ["apps", "status"] as const,
+  instances: ["apps", "instances"] as const,
+  movies: ["apps", "movies"] as const,
+  series: ["apps", "series"] as const,
+  subtitles: ["apps", "subtitles"] as const,
+}
+
+export function useAppStatus() {
+  return useQuery({
+    queryKey: appKeys.status,
+    queryFn: () => api.getAppStatus(),
+    refetchInterval: 60_000,
+  })
+}
+
+export function useAppInstances() {
+  return useQuery({
+    queryKey: appKeys.instances,
+    queryFn: () => api.listAppInstances(),
+  })
+}
+
+function useAppMutation<TArgs, TResult>(fn: (args: TArgs) => Promise<TResult>) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: fn,
+    onSettled: () => queryClient.invalidateQueries({ queryKey: appKeys.all }),
+  })
+}
+
+export function useSaveAppInstance() {
+  return useAppMutation(({ id, data }: { id?: number; data: AppInstanceInput }) =>
+    id ? api.updateAppInstance(id, data) : api.createAppInstance(data))
+}
+
+export function useDeleteAppInstance() {
+  return useAppMutation((id: number) => api.deleteAppInstance(id))
+}
+
+export function useTestAppInstance() {
+  return useMutation({
+    mutationFn: (data: AppInstanceInput & { id?: number }) => api.testAppInstance(data),
+  })
+}
+
+// Libraries change slowly; the server caches them for a minute too.
+const LIBRARY_REFETCH = 5 * 60_000
+
+export function useAppMovies() {
+  return useQuery({ queryKey: appKeys.movies, queryFn: () => api.getAppMovies(), refetchInterval: LIBRARY_REFETCH })
+}
+
+export function useAppSeries() {
+  return useQuery({ queryKey: appKeys.series, queryFn: () => api.getAppSeries(), refetchInterval: LIBRARY_REFETCH })
+}
+
+export function useAppSubtitles() {
+  return useQuery({ queryKey: appKeys.subtitles, queryFn: () => api.getAppSubtitles(), refetchInterval: LIBRARY_REFETCH })
 }

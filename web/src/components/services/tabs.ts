@@ -9,6 +9,7 @@ import { z } from "zod"
 
 /** Nav sections in display order. */
 export const SERVICES_NAV_GROUPS = [
+  { labelKey: "nav.apps", tabs: ["apps", "apps-issues", "apps-movies", "apps-series", "apps-subtitles", "apps-manage"] },
   { labelKey: "nav.gluetun", tabs: ["gluetun", "gluetun-logs", "gluetun-config", "gluetun-connection"] },
   { labelKey: "nav.seedbox", tabs: ["seedbox", "seedbox-activity"] },
 ] as const
@@ -18,7 +19,7 @@ export type ServicesTab = (typeof SERVICES_NAV_GROUPS)[number]["tabs"][number]
 /** Tab values as they appear in the URL search parameter. The cast gives z.enum the tuple it needs. */
 export const SERVICES_TABS = SERVICES_NAV_GROUPS.flatMap(group => group.tabs) as [ServicesTab, ...ServicesTab[]]
 
-export const DEFAULT_SERVICES_TAB: ServicesTab = "gluetun"
+export const DEFAULT_SERVICES_TAB: ServicesTab = "apps"
 
 /** An unknown tab value drops to undefined, and the route then shows the default tab. */
 export const servicesSearchSchema = z.object({

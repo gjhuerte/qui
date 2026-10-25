@@ -5593,6 +5593,174 @@ paths:
         '502':
           description: Docker could not be reached
 
+  /api/apps/status:
+    get:
+      tags:
+        - Media Apps
+      summary: Get the status of every enabled media app
+      description: Queries each enabled Sonarr, Radarr, Prowlarr, Bazarr and Tautulli instance in parallel. Results are cached for 20 seconds.
+      parameters:
+        - name: refresh
+          in: query
+          description: Set to 1 to skip the cache
+          schema:
+            type: string
+            enum: ['1']
+      responses:
+        '200':
+          description: One status per enabled instance
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AppStatus'
+
+  /api/apps/movies:
+    get:
+      tags:
+        - Media Apps
+      summary: List the movies of every enabled Radarr instance
+      parameters:
+        - $ref: '#/components/parameters/AppsRefresh'
+      responses:
+        '200':
+          description: Merged movie list, sorted by title. Cached for one minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppLibrary'
+
+  /api/apps/series:
+    get:
+      tags:
+        - Media Apps
+      summary: List the series of every enabled Sonarr instance
+      parameters:
+        - $ref: '#/components/parameters/AppsRefresh'
+      responses:
+        '200':
+          description: Merged series list, sorted by title. Cached for one minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppLibrary'
+
+  /api/apps/subtitles:
+    get:
+      tags:
+        - Media Apps
+      summary: List wanted subtitles of every enabled Bazarr instance
+      parameters:
+        - $ref: '#/components/parameters/AppsRefresh'
+      responses:
+        '200':
+          description: Episodes and movies that miss subtitles. Cached for one minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppLibrary'
+
+  /api/apps/test:
+    post:
+      tags:
+        - Media Apps
+      summary: Test a media app connection
+      description: Connects with the given settings. With id and no apiKey, the stored key of that instance is used.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/AppInstanceInput'
+                - type: object
+                  properties:
+                    id:
+                      type: integer
+      responses:
+        '200':
+          description: The status the app returned; online is false when it could not connect
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppStatus'
+        '400':
+          description: Invalid input
+
+  /api/apps/instances:
+    get:
+      tags:
+        - Media Apps
+      summary: List media app instances
+      responses:
+        '200':
+          description: Instances (API keys are never returned)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AppInstance'
+    post:
+      tags:
+        - Media Apps
+      summary: Add a media app instance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppInstanceInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppInstance'
+        '400':
+          description: Invalid input
+
+  /api/apps/instances/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    put:
+      tags:
+        - Media Apps
+      summary: Update a media app instance
+      description: An empty apiKey keeps the stored key.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppInstanceInput'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppInstance'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+    delete:
+      tags:
+        - Media Apps
+      summary: Delete a media app instance
+      responses:
+        '204':
+          description: Deleted
+        '404':
+          description: Not found
+
   /api/log-exclusions:
     get:
       tags:
@@ -6733,6 +6901,13 @@ components:
         header. Other clients should use an API key.
 
   parameters:
+    AppsRefresh:
+      name: refresh
+      in: query
+      description: Set to 1 to skip the cache
+      schema:
+        type: string
+        enum: ['1']
     instanceID:
       name: instanceID
       in: path
@@ -8026,6 +8201,210 @@ components:
                     type: string
         restart:
           $ref: '#/components/schemas/GluetunRestartState'
+    AppLibrary:
+      type: object
+      description: Items merged from every enabled instance of one app type. Each item has an instance reference and a link to its page in the app.
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        instances:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              error:
+                type: string
+        loadedAt:
+          type: string
+          format: date-time
+    AppInstance:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          enum: [sonarr, radarr, prowlarr, bazarr, tautulli]
+        name:
+          type: string
+        baseUrl:
+          type: string
+        enabled:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    AppInstanceInput:
+      type: object
+      required:
+        - type
+        - name
+        - baseUrl
+      properties:
+        type:
+          type: string
+          enum: [sonarr, radarr, prowlarr, bazarr, tautulli]
+        name:
+          type: string
+        baseUrl:
+          type: string
+          description: Including any URL base, for example http://192.168.1.10:8989/sonarr
+        apiKey:
+          type: string
+        enabled:
+          type: boolean
+    AppStatus:
+      type: object
+      description: Status of one instance. Fields that do not apply to its type are omitted.
+      properties:
+        instance:
+          $ref: '#/components/schemas/AppInstance'
+        online:
+          type: boolean
+        error:
+          type: string
+        version:
+          type: string
+        checkedAt:
+          type: string
+          format: date-time
+        health:
+          type: array
+          items:
+            type: object
+            properties:
+              level:
+                type: string
+              source:
+                type: string
+              message:
+                type: string
+        queue:
+          type: object
+          description: Sonarr and Radarr download queue (first 10 items)
+          properties:
+            total:
+              type: integer
+            items:
+              type: array
+              items:
+                type: object
+                properties:
+                  title:
+                    type: string
+                  status:
+                    type: string
+                  progress:
+                    type: number
+                  timeLeft:
+                    type: string
+                  client:
+                    type: string
+                  warning:
+                    type: boolean
+        missing:
+          type: integer
+          description: Monitored items without a file (Sonarr, Radarr)
+        disks:
+          type: array
+          items:
+            type: object
+            properties:
+              path:
+                type: string
+              free:
+                type: integer
+              total:
+                type: integer
+        upcoming:
+          type: array
+          description: Next 7 days from the calendar (Sonarr, Radarr)
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+              subtitle:
+                type: string
+              date:
+                type: string
+              hasFile:
+                type: boolean
+        indexers:
+          type: object
+          description: Prowlarr indexers
+          properties:
+            total:
+              type: integer
+            enabled:
+              type: integer
+            failing:
+              type: array
+              items:
+                type: string
+            queries:
+              type: integer
+            grabs:
+              type: integer
+        subtitles:
+          type: object
+          description: Bazarr wanted subtitles
+          properties:
+            wantedEpisodes:
+              type: integer
+            wantedMovies:
+              type: integer
+        streams:
+          type: object
+          description: Tautulli activity
+          properties:
+            count:
+              type: integer
+            bandwidth:
+              type: integer
+              description: kbps
+            sessions:
+              type: array
+              items:
+                type: object
+                properties:
+                  user:
+                    type: string
+                  title:
+                    type: string
+                  state:
+                    type: string
+                  progress:
+                    type: number
+                  player:
+                    type: string
+                  decision:
+                    type: string
+                  quality:
+                    type: string
+        warnings:
+          type: array
+          items:
+            type: string
     LogExclusions:
       type: object
       description: Muted log message patterns
@@ -10727,6 +11106,8 @@ tags:
     description: API key management
   - name: Seedbox
     description: MyAnonamouse dynamic seedbox IP updates
+  - name: Media Apps
+    description: Sonarr, Radarr, Prowlarr, Bazarr and Tautulli instances tracked on the Services page
   - name: Gluetun
     description: Gluetun VPN status, logs and restarts
   - name: Notifications

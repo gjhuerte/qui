@@ -15,6 +15,7 @@ Internal reference for agents and maintainers. Read this before changing cross-m
 - `internal/backups/`: scheduled snapshots.
 - `internal/services/seedbox/`: MyAnonamouse dynamic seedbox IP updates (the job of the `myanonamouse/seedboxapi` container). A scheduler goroutine calls MAM every interval and keeps the cookie MAM rotates; the cookie is encrypted in `seedbox_settings`.
 - `internal/services/gluetun/`: the gluetun VPN that qui runs behind. Status from gluetun's control server; logs, health, stats and container restarts from the Docker Engine API over a small HTTP client (no Docker SDK). A container restart also restarts the containers in gluetun's network namespace.
+- `internal/services/mediaapps/`: read-only status of Sonarr, Radarr, Prowlarr, Bazarr and Tautulli instances (`app_instances`, separate from the cross-seed `arr_instances`). One request queries every enabled instance in parallel; the result is cached for 20 seconds. The movie, series and wanted-subtitle lists merge every instance of one type and are cached for one minute.
 - `internal/database/`: SQLite/Postgres migrations and database setup.
 - `internal/models/`: data models and store interfaces.
 - `pkg/`: shared utilities.

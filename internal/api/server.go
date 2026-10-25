@@ -39,6 +39,7 @@ import (
 	"github.com/gjhuerte/qui/internal/services/filesmanager"
 	"github.com/gjhuerte/qui/internal/services/gluetun"
 	"github.com/gjhuerte/qui/internal/services/jackett"
+	"github.com/gjhuerte/qui/internal/services/mediaapps"
 	"github.com/gjhuerte/qui/internal/services/notifications"
 	"github.com/gjhuerte/qui/internal/services/orphanscan"
 	"github.com/gjhuerte/qui/internal/services/reannounce"
@@ -104,6 +105,7 @@ type Server struct {
 	activityHub                      *activity.Hub
 	seedboxService                   *seedbox.Service
 	gluetunService                   *gluetun.Service
+	mediaAppsService                 *mediaapps.Service
 	// shuttingDown ends the log and RSS streams: http.Server.Shutdown does not cancel request contexts.
 	shuttingDown <-chan struct{}
 }
@@ -157,6 +159,7 @@ type Dependencies struct {
 	ActivityHub                      *activity.Hub
 	SeedboxService                   *seedbox.Service
 	GluetunService                   *gluetun.Service
+	MediaAppsService                 *mediaapps.Service
 }
 
 func NewServer(deps *Dependencies) *Server {
@@ -234,6 +237,7 @@ func NewServer(deps *Dependencies) *Server {
 		activityHub:                      deps.ActivityHub,
 		seedboxService:                   deps.SeedboxService,
 		gluetunService:                   deps.GluetunService,
+		mediaAppsService:                 deps.MediaAppsService,
 		shuttingDown:                     streamsCtx.Done(),
 	}
 	// Shutdown runs this callback on every call; a CancelFunc tolerates repeats where close would panic.
@@ -411,6 +415,7 @@ func (s *Server) Handler() (*chi.Mux, error) {
 	notificationsHandler := handlers.NewNotificationsHandler(s.notificationTargetStore, s.notificationService)
 	seedboxHandler := handlers.NewSeedboxHandler(s.seedboxService)
 	gluetunHandler := handlers.NewGluetunHandler(s.gluetunService)
+	mediaAppsHandler := handlers.NewMediaAppsHandler(s.mediaAppsService)
 
 	// Torznab/Jackett handler
 	var jackettHandler *handlers.JackettHandler
@@ -539,6 +544,7 @@ func (s *Server) Handler() (*chi.Mux, error) {
 			// Seedbox (MyAnonamouse dynamic IP) and gluetun VPN management
 			seedboxHandler.Routes(r)
 			gluetunHandler.Routes(r)
+			mediaAppsHandler.Routes(r)
 
 			r.Route("/arr", func(r chi.Router) {
 				r.Get("/instances", arrHandler.ListInstances)

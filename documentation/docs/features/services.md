@@ -1,16 +1,17 @@
 ---
 sidebar_position: 19
-title: Gluetun and MyAnonamouse seedbox
+title: Gluetun, MyAnonamouse seedbox and media apps
 sidebar_label: Services
-description: Watch and restart the gluetun VPN, and keep the MyAnonamouse dynamic seedbox IP up to date.
+description: Watch and restart the gluetun VPN, keep the MyAnonamouse dynamic seedbox IP up to date, and track Sonarr, Radarr, Prowlarr, Bazarr and Tautulli.
 ---
 
 # Services
 
-The **Services** page is for a qui that runs behind [gluetun](https://github.com/qdm12/gluetun), with `network_mode: "service:gluetun"`. It has two parts:
+The **Services** page is for a qui that runs behind [gluetun](https://github.com/qdm12/gluetun), with `network_mode: "service:gluetun"`. It has three parts:
 
 - **Gluetun**: the VPN status, the public IP and its location, the forwarded port, the container health, CPU and memory use, the container log, and buttons to restart the VPN or the container.
 - **Seedbox (MAM)**: keeps your MyAnonamouse dynamic seedbox IP up to date. It does the same job as the `myanonamouse/seedboxapi` container, so you do not need that container.
+- **Media apps**: one place for any number of Sonarr, Radarr, Prowlarr, Bazarr and Tautulli instances, inside gluetun or outside it: a status dashboard, one list of issues, and your movies, series and wanted subtitles.
 
 ## Compose example
 
@@ -102,3 +103,52 @@ qui stores the cookie encrypted. When MAM sends a new cookie, qui saves it. **Ac
 ### Moving from the seedboxapi container
 
 Remove the `seedboxapi` service and its port from gluetun. The seedboxapi page shows only the end of the cookie, and MAM rotates it, so create a new dynamic seedbox session on MAM and paste its `mam_id` on the Seedbox page.
+
+## Media apps
+
+**Media apps → Dashboard** shows one card per enabled instance. qui only reads from the apps.
+
+| App | What the card shows |
+| --- | --- |
+| Sonarr, Radarr | Version, health warnings, download queue with progress, missing items, the next 7 days of the calendar, disk space |
+| Prowlarr | Version, health warnings, enabled and failing indexers, grabs and queries |
+| Bazarr | Version, health warnings, wanted episode and movie subtitles |
+| Tautulli | Version, Plex connection, streams with user, progress, direct play or transcode, and bandwidth |
+
+The dashboard refreshes every minute. qui caches the answers for 20 seconds, so several open tabs share one round of requests. **Refresh** skips the cache.
+
+### Issues, movies, series and subtitles
+
+- **Issues** lists everything that needs attention across all apps, errors first: apps that cannot be reached, health warnings, downloads Sonarr or Radarr flag as stuck or failed (with their reason), failing Prowlarr indexers, and a Tautulli that lost Plex.
+- **Movies** merges the movie lists of every Radarr instance. Filter by **Missing** (monitored, released, no file), **Downloaded**, **Not released yet** and **Unmonitored**, and by instance.
+- **Series** merges every Sonarr instance. It shows episodes on disk against monitored aired episodes, the missing count, the next episode and the size. Filter by **Missing episodes**, **Complete**, **Continuing**, **Ended** and **Unmonitored**.
+- **Subtitles** lists what every Bazarr instance still needs subtitles for, with the missing languages (HI and forced marked).
+
+Click a title to open it in its app. qui caches each list for one minute; **Refresh** loads it again. When one instance fails, the page names it and still shows the others.
+
+### Add an app
+
+1. Open **Media apps → Manage apps** and click **Add app**.
+2. Choose the app and enter a name, the URL and the API key. Sonarr, Radarr, Prowlarr and Bazarr show the key under **Settings → General → Security**. Tautulli shows it under **Settings → Web Interface → API**, with **Enable API** turned on.
+3. Click **Test**, then **Save**.
+
+Add as many instances of each app as you run. The **Enabled** switch hides an instance from the dashboard without deleting it. When you edit an instance, leave the API key empty to keep the stored key. qui stores API keys encrypted and never sends them to the browser.
+
+These instances are separate from the Sonarr and Radarr connections under **Settings → Integrations**, which cross-seed uses to look up IDs.
+
+### Reach the apps from inside gluetun
+
+qui shares gluetun's network, so its requests leave through gluetun:
+
+- An app that also uses `network_mode: "service:gluetun"` is at `http://127.0.0.1:<port>`.
+- For an app on your LAN or another Docker network, use the IP address of its host and add that network to `FIREWALL_OUTBOUND_SUBNETS` on gluetun, for example `FIREWALL_OUTBOUND_SUBNETS=192.168.1.0/24,172.16.0.0/12`. Without it, the gluetun firewall blocks the connection. Recreate gluetun and the containers that share its network after the change.
+- Container names do not resolve: gluetun runs its own DNS.
+- Include the URL base if the app has one, for example `http://192.168.1.10:8989/sonarr`.
+
+| Error on the card | Fix |
+| --- | --- |
+| `i/o timeout`, `connection refused` | Check the address, and `FIREWALL_OUTBOUND_SUBNETS` on gluetun. |
+| `no such host` | Use an IP address. |
+| `HTTP 401: check the API key` | Copy the key again. For Tautulli, turn on **Enable API**. |
+| `not found: check the URL` | Add the URL base. |
+| `did not answer with JSON` | The URL points at a login page or another site. Use the app's direct address. |

@@ -1,6 +1,6 @@
 # qui
 
-A fast, modern web interface for qBittorrent. Manage one or many qBittorrent instances from a single, lightweight app, and keep your VPN and MyAnonamouse seedbox IP in check from the same place.
+A fast, modern web interface for qBittorrent. Manage one or many qBittorrent instances from a single, lightweight app, and keep your VPN, your MyAnonamouse seedbox IP and your Sonarr, Radarr, Prowlarr, Bazarr and Tautulli servers in check from the same place.
 
 <div align="center">
   <img src=".github/assets/qui.png" alt="qui" width="100%" />
@@ -13,6 +13,7 @@ A fast, modern web interface for qBittorrent. Manage one or many qBittorrent ins
 - [Full stack: gluetun, qBittorrent, qui](#full-stack-gluetun-qbittorrent-qui)
 - [Set up gluetun in qui](#set-up-gluetun-in-qui)
 - [Set up the MyAnonamouse seedbox IP](#set-up-the-myanonamouse-seedbox-ip)
+- [Track Sonarr, Radarr, Prowlarr, Bazarr and Tautulli](#track-sonarr-radarr-prowlarr-bazarr-and-tautulli)
 - [Troubleshooting](#troubleshooting)
 - [Documentation](#documentation)
 - [License](#license)
@@ -41,6 +42,14 @@ A fast, modern web interface for qBittorrent. Manage one or many qBittorrent ins
 
 - **Gluetun:** see the VPN status, public IP and location, forwarded port, container health, CPU and memory, and the container log. Restart the VPN or the whole container from the browser.
 - **MyAnonamouse dynamic seedbox IP:** keeps MAM's seedbox IP up to date with your VPN IP, with an activity history. No separate seedboxapi container needed.
+
+**Media apps**
+
+- **One place for your whole stack:** add any number of Sonarr, Radarr, Prowlarr, Bazarr and Tautulli instances (for example Sonarr and Sonarr 4K), inside gluetun or outside it.
+- **Dashboard:** each app's status, version and health, download queue, missing items, the next 7 days, disk space, indexers, and who is watching on Plex.
+- **Issues:** one list of everything that needs attention: apps that are down, health warnings, stuck or failed downloads, failing indexers.
+- **Movies and Series:** search and filter your whole Radarr and Sonarr libraries (missing, downloaded, unreleased, continuing, ended) across every instance, and jump to any title in its app.
+- **Subtitles:** everything Bazarr still needs subtitles for, with the missing languages.
 
 **Operations**
 
@@ -110,6 +119,8 @@ services:
       # Lets qui use the control server. No quotes around the JSON.
       - HTTP_CONTROL_SERVER_AUTH_DEFAULT_ROLE={"auth":"apikey","apikey":"your-gluetun-api-key"}
       - HEALTH_TARGET_ADDRESS=1.1.1.1
+      # Lets qui reach apps on your LAN and Docker networks (Media apps)
+      - FIREWALL_OUTBOUND_SUBNETS=192.168.1.0/24,172.16.0.0/12
     ports:
       - "7476:7476" # qui
       - "8080:8080" # qBittorrent WebUI
@@ -219,6 +230,50 @@ qui stores the cookie encrypted and saves the new one whenever MAM rotates it. *
 
 If you used the `seedboxapi` container before, remove it and its port from gluetun, and create a new MAM session for qui.
 
+## Track Sonarr, Radarr, Prowlarr, Bazarr and Tautulli
+
+qui only reads from these apps: it shows their state and libraries, it never changes anything in them. Each title links to its page in the app.
+
+1. Open **Services → Media apps → Manage apps** and click **Add app**.
+2. Choose the app, give it a name (for example `Sonarr 4K`), and enter its URL and API key:
+
+   | App | Default URL | Where to find the API key |
+   | --- | --- | --- |
+   | Sonarr | `http://<ip>:8989` | Settings → General → Security |
+   | Radarr | `http://<ip>:7878` | Settings → General → Security |
+   | Prowlarr | `http://<ip>:9696` | Settings → General → Security |
+   | Bazarr | `http://<ip>:6767` | Settings → General → Security |
+   | Tautulli | `http://<ip>:8181` | Settings → Web Interface → API (turn on **Enable API**) |
+
+3. Click **Test**. It should say **Connected** with the app's version. Then click **Save**.
+4. Repeat for every instance.
+
+Then use the **Media apps** section:
+
+| Page | What it shows |
+| --- | --- |
+| **Dashboard** | One card per app: status, version, health, downloads, missing items, the next 7 days, disk space, indexers, streams |
+| **Issues** | Everything that needs attention, errors first |
+| **Movies** | All Radarr movies: search, filter by missing, downloaded, not released or unmonitored, and by instance |
+| **Series** | All Sonarr series: episodes on disk, missing episodes, next episode, size |
+| **Subtitles** | Episodes and movies Bazarr still needs subtitles for, with the missing languages |
+| **Manage apps** | Add, edit, turn off or delete instances |
+
+The dashboard and issues refresh every minute and the libraries every five minutes. **Refresh** fetches new data right away.
+
+Your apps can run inside gluetun or outside it. Use the URL that matches:
+
+| Where the app runs | URL in qui | Also needed |
+| --- | --- | --- |
+| Inside gluetun (`network_mode: "service:gluetun"`) | `http://127.0.0.1:<port>` | Nothing |
+| On the same host, outside gluetun | `http://<host LAN IP>:<port>`, for example `http://192.168.1.10:8989` | The port published on the app, and your LAN in `FIREWALL_OUTBOUND_SUBNETS` |
+| On another Docker network | `http://<container IP>:<port>` or the host IP and published port | That Docker network (for example `172.16.0.0/12`) in `FIREWALL_OUTBOUND_SUBNETS` |
+| On another machine | `http://<machine IP>:<port>` | Your LAN in `FIREWALL_OUTBOUND_SUBNETS` |
+
+qui itself runs inside gluetun, so its requests to apps outside gluetun pass gluetun's firewall. `FIREWALL_OUTBOUND_SUBNETS` lets them through without leaving the VPN for anything else. Container names do not work: gluetun's DNS cannot resolve them. If an app runs under a URL base (for example `/sonarr` behind a reverse proxy), include it: `http://192.168.1.10:8989/sonarr`.
+
+Turn an instance off with the **Enabled** switch to hide it from the dashboard without deleting it. The Sonarr and Radarr connections under **Settings → Integrations** are separate: cross-seed uses those to look up IDs.
+
 ## Troubleshooting
 
 ### qui does not open
@@ -286,6 +341,24 @@ Do not mount `/var/run/docker.sock` into qui directly unless you accept the risk
 | **Too recent** | MAM limits how often the IP can change. Nothing to do; the next check retries. |
 | **Rejected** (for example *ASN mismatch* or *IP mismatch*) | The session does not allow updates from this connection. Create a new session locked to **ASN**, with dynamic seedbox allowed, and paste the new cookie. |
 | **Unreachable** | Usually the VPN is down. Check **Gluetun → Overview** and the gluetun log. |
+
+### Media apps: an app shows Offline
+
+The red text on the card says why:
+
+| Message | Fix |
+| --- | --- |
+| `i/o timeout` or `connection refused` | qui cannot reach the address. For an app outside gluetun, add its network to `FIREWALL_OUTBOUND_SUBNETS` on gluetun and recreate gluetun, qBittorrent and qui. Check the IP and port. |
+| `no such host` | Use an IP address instead of a container or host name. |
+| `HTTP 401: check the API key` | Copy the API key again from the app's settings. For Tautulli, also turn on **Enable API**. |
+| `not found: check the URL` | The app runs under a URL base. Add it to the URL, for example `/sonarr`. |
+| `did not answer with JSON` | The URL points at something else, often a reverse proxy login page. Use the app's direct address. |
+
+To test from inside qui's network, run `docker exec qui wget -qO- http://192.168.1.10:8989/ping`. A timeout there means the gluetun firewall or the network blocks it, not qui.
+
+**Movies**, **Series** or **Subtitles** show **Some instances could not be loaded** when one instance fails; the others still show. Large libraries can take a few seconds the first time.
+
+An app that is online but shows **Some details could not be loaded** answered the main request but not all of them, usually because it is an older version. The other numbers on the card are still correct.
 
 ### Collect information for a bug report
 

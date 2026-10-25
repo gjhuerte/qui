@@ -1,10 +1,11 @@
 {
   "pageTitle": "Services",
-  "pageDescription": "The gluetun VPN that qui runs behind and the MyAnonamouse dynamic seedbox IP.",
+  "pageDescription": "The gluetun VPN that qui runs behind, the MyAnonamouse dynamic seedbox IP, and your Sonarr, Radarr, Prowlarr, Bazarr and Tautulli apps.",
   "vpnBadge": "VPN {{status}} · {{ip}}",
   "nav": {
     "gluetun": "Gluetun",
-    "seedbox": "Seedbox (MAM)"
+    "seedbox": "Seedbox (MAM)",
+    "apps": "Media apps"
   },
   "tabs": {
     "gluetun": "Overview",
@@ -12,7 +13,13 @@
     "gluetun-config": "Configuration",
     "gluetun-connection": "Connection",
     "seedbox": "Dynamic IP",
-    "seedbox-activity": "Activity"
+    "seedbox-activity": "Activity",
+    "apps": "Dashboard",
+    "apps-manage": "Manage apps",
+    "apps-issues": "Issues",
+    "apps-movies": "Movies",
+    "apps-series": "Series",
+    "apps-subtitles": "Subtitles"
   },
   "actions": {
     "refresh": "Refresh"
@@ -272,6 +279,231 @@
       "result": "Result",
       "ip": "IP",
       "answer": "Answer"
+    }
+  },
+  "apps": {
+    "types": {
+      "sonarr": "Sonarr",
+      "radarr": "Radarr",
+      "prowlarr": "Prowlarr",
+      "bazarr": "Bazarr",
+      "tautulli": "Tautulli"
+    },
+    "version": "v{{version}}",
+    "online": "Online",
+    "offline": "Offline",
+    "issues_one": "{{count}} issue",
+    "issues_few": "{{count}} issues",
+    "issues_other": "{{count}} issues",
+    "partial": "Some details could not be loaded: {{errors}}",
+    "missing": "Missing",
+    "upcoming": "Next 7 days",
+    "disks": "Disk space",
+    "diskFree": "{{free}} free of {{total}}",
+    "summary": {
+      "allOnline_one": "{{count}} app online",
+      "allOnline_few": "All {{count}} apps online",
+      "allOnline_other": "All {{count}} apps online",
+      "offline_one": "{{count}} app offline",
+      "offline_few": "{{count}} apps offline",
+      "offline_other": "{{count}} apps offline",
+      "issues_one": "{{count}} issue to check",
+      "issues_few": "{{count}} issues to check",
+      "issues_other": "{{count}} issues to check"
+    },
+    "queue": {
+      "label": "In queue",
+      "title": "Downloading"
+    },
+    "indexers": {
+      "enabled": "Indexers enabled",
+      "enabledValue": "{{enabled}} of {{total}}",
+      "failing": "Failing indexers",
+      "failingList": "Failing: {{names}}",
+      "grabs": "Grabs / queries",
+      "grabsValue": "{{grabs}} / {{queries}}"
+    },
+    "subtitles": {
+      "episodes": "Wanted episode subtitles",
+      "movies": "Wanted movie subtitles"
+    },
+    "streams": {
+      "count": "Streams",
+      "bandwidth": "Bandwidth",
+      "bandwidthValue": "{{mbps}} Mbps",
+      "title": "Now playing",
+      "states": {
+        "playing": "Playing",
+        "paused": "Paused",
+        "buffering": "Buffering",
+        "unknown": "Unknown"
+      },
+      "decisions": {
+        "direct play": "Direct play",
+        "copy": "Direct stream",
+        "transcode": "Transcode",
+        "unknown": "Unknown"
+      }
+    },
+    "actions": {
+      "add": "Add app",
+      "edit": "Edit",
+      "delete": "Delete",
+      "open": "Open the app",
+      "test": "Test",
+      "save": "Save"
+    },
+    "empty": {
+      "title": "No apps yet",
+      "description": "Add your Sonarr, Radarr, Prowlarr, Bazarr and Tautulli servers to see their status, downloads, missing items, wanted subtitles, indexers and streams here."
+    },
+    "manage": {
+      "title": "Apps",
+      "description": "Add as many instances of each app as you run, for example Sonarr and Sonarr 4K. qui only reads from them.",
+      "none": "No apps added yet."
+    },
+    "form": {
+      "addTitle": "Add app",
+      "editTitle": "Edit app",
+      "type": "App",
+      "name": "Name",
+      "url": "URL",
+      "urlHelp": "The address qui uses to reach the app, including any URL base, for example http://192.168.1.10:8989/sonarr.",
+      "apiKey": "API key",
+      "apiKeySaved": "Saved, leave empty to keep it",
+      "enabled": "Enabled",
+      "testOk": "Connected · v{{version}}",
+      "testFailed": "Could not connect",
+      "keyHelp": {
+        "sonarr": "Find the API key in Sonarr under Settings → General → Security.",
+        "radarr": "Find the API key in Radarr under Settings → General → Security.",
+        "prowlarr": "Find the API key in Prowlarr under Settings → General → Security.",
+        "bazarr": "Find the API key in Bazarr under Settings → General → Security.",
+        "tautulli": "Find the API key in Tautulli under Settings → Web Interface → API. Turn on Enable API."
+      }
+    },
+    "deleteDialog": {
+      "title": "Delete {{name}}?",
+      "description": "qui stops tracking this app. Nothing changes in the app itself."
+    },
+    "toasts": {
+      "added": "App added",
+      "updated": "App updated",
+      "deleted": "App deleted"
+    },
+    "help": {
+      "title": "Reaching your apps from qui",
+      "description": "Each app can run inside gluetun or outside it; qui reaches it at the URL you enter. qui's own traffic leaves through gluetun, so apps outside it need a firewall exception.",
+      "sameNetwork": "An app that also runs with network_mode: \"service:gluetun\" is at http://127.0.0.1 with its port.",
+      "lan": "For an app on your LAN or another Docker network, add its network to FIREWALL_OUTBOUND_SUBNETS on gluetun, for example 192.168.1.0/24,172.16.0.0/12. Otherwise the gluetun firewall blocks the connection.",
+      "names": "Use an IP address: gluetun's DNS cannot resolve Docker container names.",
+      "urlBase": "If the app runs under a URL base, such as /sonarr behind a reverse proxy, include it in the URL."
+    }
+  },
+  "library": {
+    "loaded": "Updated {{when}}.",
+    "search": "Search",
+    "filter": "Filter",
+    "instance": "Instance",
+    "allInstances": "All instances",
+    "count": "{{shown}} of {{total}}",
+    "page": "Page {{page}} of {{pages}}",
+    "previous": "Previous page",
+    "next": "Next page",
+    "noMatches": "Nothing matches the search and filter.",
+    "partialTitle": "Some instances could not be loaded",
+    "columns": {
+      "title": "Title",
+      "status": "Status",
+      "quality": "Quality",
+      "size": "Size",
+      "episodes": "Episodes",
+      "next": "Next episode",
+      "missingLanguages": "Missing subtitles"
+    },
+    "movies": {
+      "title": "Movies",
+      "description": "Every movie in your Radarr instances. Click a title to open it in Radarr.",
+      "noInstances": "Add a Radarr instance to see your movies here.",
+      "releases": "Releases {{when}}",
+      "filters": {
+        "all": "All movies",
+        "missing": "Missing",
+        "downloaded": "Downloaded",
+        "unreleased": "Not released yet",
+        "unmonitored": "Unmonitored"
+      },
+      "states": {
+        "downloaded": "Downloaded",
+        "missing": "Missing",
+        "unreleased": "Not released",
+        "unmonitored": "Unmonitored"
+      }
+    },
+    "series": {
+      "title": "Series",
+      "description": "Every series in your Sonarr instances. Episode counts include monitored episodes that have aired. Click a title to open it in Sonarr.",
+      "noInstances": "Add a Sonarr instance to see your series here.",
+      "seasons_one": "{{count}} season",
+      "seasons_few": "{{count}} seasons",
+      "seasons_other": "{{count}} seasons",
+      "unmonitored": "Unmonitored",
+      "episodeCount": "{{files}} / {{episodes}}",
+      "missing_one": "{{count}} missing",
+      "missing_few": "{{count}} missing",
+      "missing_other": "{{count}} missing",
+      "filters": {
+        "all": "All series",
+        "missing": "Missing episodes",
+        "complete": "Complete",
+        "continuing": "Continuing",
+        "ended": "Ended",
+        "unmonitored": "Unmonitored"
+      },
+      "states": {
+        "continuing": "Continuing",
+        "ended": "Ended",
+        "upcoming": "Upcoming",
+        "deleted": "Deleted",
+        "unknown": "Unknown status"
+      }
+    },
+    "subtitles": {
+      "title": "Wanted subtitles",
+      "description": "Episodes and movies that Bazarr is still looking for subtitles for. Click a title to open it in Bazarr.",
+      "noInstances": "Add a Bazarr instance to see wanted subtitles here.",
+      "filters": {
+        "all": "Episodes and movies",
+        "episode": "Episodes",
+        "movie": "Movies"
+      },
+      "kinds": {
+        "episode": "Episode",
+        "movie": "Movie"
+      }
+    }
+  },
+  "issues": {
+    "title": "Issues",
+    "description": "Everything that needs attention across your apps: apps that are down, health warnings, downloads that are stuck or failed, and failing indexers.",
+    "none_one": "No issues. Your app is healthy.",
+    "none_few": "No issues. All {{count}} apps are healthy.",
+    "none_other": "No issues. All {{count}} apps are healthy.",
+    "columns": {
+      "severity": "Severity",
+      "app": "App",
+      "issue": "Issue"
+    },
+    "severity": {
+      "error": "Error",
+      "warning": "Warning"
+    },
+    "kinds": {
+      "offline": "Not reachable",
+      "health": "Health check",
+      "download": "Download needs attention",
+      "indexer": "Indexer failing",
+      "partial": "Could not load all details"
     }
   }
 }

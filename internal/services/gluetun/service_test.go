@@ -123,11 +123,16 @@ type fakeEngine struct {
 	mu       sync.Mutex
 	restarts []string
 	healthy  bool
+	// hold, when set, keeps restart requests waiting until it is closed.
+	hold chan struct{}
 }
 
 const gluetunID = "aaaaaaaaaaaa1111111111111111111111111111111111111111111111111111"
 
 func (f *fakeEngine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if f.hold != nil && strings.HasSuffix(r.URL.Path, "/restart") {
+		<-f.hold
+	}
 	f.mu.Lock()
 	defer f.mu.Unlock()
 	switch {
@@ -239,7 +244,7 @@ func TestStatusReportsAuthFailure(t *testing.T) {
 }
 
 func TestRestartContainerRestartsDependents(t *testing.T) {
-	engine := &fakeEngine{}
+	engine := &fakeEngine{hold: make(chan struct{})}
 	dockerServer := httptest.NewServer(engine)
 	defer dockerServer.Close()
 
@@ -258,6 +263,7 @@ func TestRestartContainerRestartsDependents(t *testing.T) {
 	if _, err := svc.RestartContainer(context.Background(), true); err != ErrRestartRunning {
 		t.Fatalf("second restart: %v", err)
 	}
+	close(engine.hold)
 
 	deadline := time.Now().Add(5 * time.Second)
 	for {

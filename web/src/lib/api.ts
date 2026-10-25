@@ -92,6 +92,13 @@ import type {
   NotificationTarget,
   NotificationTargetRequest,
   NotificationTestRequest,
+  AppInstance,
+  AppInstanceInput,
+  AppLibrary,
+  AppMovie,
+  AppSeries,
+  AppStatus,
+  AppWantedSubtitle,
   GluetunLogLine,
   GluetunRestartState,
   GluetunSettings,
@@ -2381,6 +2388,52 @@ class ApiClient {
 
   async syncSeedbox(): Promise<SeedboxContact> {
     return this.request<SeedboxContact>("/seedbox/sync", { method: "POST" })
+  }
+
+  // Media apps (Sonarr, Radarr, Prowlarr, Bazarr, Tautulli) endpoints
+  async getAppStatus(refresh = false): Promise<AppStatus[]> {
+    return this.request<AppStatus[]>(refresh ? "/apps/status?refresh=1" : "/apps/status")
+  }
+
+  async getAppMovies(refresh = false): Promise<AppLibrary<AppMovie>> {
+    return this.request<AppLibrary<AppMovie>>(refresh ? "/apps/movies?refresh=1" : "/apps/movies")
+  }
+
+  async getAppSeries(refresh = false): Promise<AppLibrary<AppSeries>> {
+    return this.request<AppLibrary<AppSeries>>(refresh ? "/apps/series?refresh=1" : "/apps/series")
+  }
+
+  async getAppSubtitles(refresh = false): Promise<AppLibrary<AppWantedSubtitle>> {
+    return this.request<AppLibrary<AppWantedSubtitle>>(refresh ? "/apps/subtitles?refresh=1" : "/apps/subtitles")
+  }
+
+  async listAppInstances(): Promise<AppInstance[]> {
+    return this.request<AppInstance[]>("/apps/instances")
+  }
+
+  async createAppInstance(data: AppInstanceInput): Promise<AppInstance> {
+    return this.request<AppInstance>("/apps/instances", {
+      method: "POST",
+      body: JSON.stringify(data),
+    })
+  }
+
+  async updateAppInstance(id: number, data: AppInstanceInput): Promise<AppInstance> {
+    return this.request<AppInstance>(`/apps/instances/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    })
+  }
+
+  async deleteAppInstance(id: number): Promise<void> {
+    return this.request(`/apps/instances/${id}`, { method: "DELETE" })
+  }
+
+  async testAppInstance(data: AppInstanceInput & { id?: number }): Promise<AppStatus> {
+    return this.request<AppStatus>("/apps/test", {
+      method: "POST",
+      body: JSON.stringify(data),
+    })
   }
 
   // Gluetun endpoints
