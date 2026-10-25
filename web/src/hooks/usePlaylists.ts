@@ -84,7 +84,7 @@ export function useApplyPlaylistCompare() {
 }
 
 export function useSaveSpotifyApp() {
-  return usePlaylistMutation((data: { clientId: string; clientSecret: string }) => api.saveSpotifyApp(data))
+  return usePlaylistMutation((data: { clientId: string; clientSecret: string; redirectUri: string }) => api.saveSpotifyApp(data))
 }
 
 export function useStartSpotifySignIn() {

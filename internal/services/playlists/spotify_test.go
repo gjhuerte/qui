@@ -99,7 +99,7 @@ func TestSpotifySignInAndTarget(t *testing.T) {
 
 	_, err := svc.SpotifyAuthorizeURL(ctx)
 	require.ErrorIs(t, err, ErrInvalid, "no app saved yet")
-	require.NoError(t, svc.SaveSpotifyApp(ctx, "cid", "secret"))
+	require.NoError(t, svc.SaveSpotifyApp(ctx, SpotifyApp{ClientID: "cid", ClientSecret: "secret"}))
 
 	authURL, err := svc.SpotifyAuthorizeURL(ctx)
 	require.NoError(t, err)
@@ -147,8 +147,57 @@ func TestSpotifySignInAndTarget(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, "newpl", id)
 
-	require.NoError(t, svc.SaveSpotifyApp(ctx, "other-client", ""))
+	require.NoError(t, svc.SaveSpotifyApp(ctx, SpotifyApp{ClientID: "other-client"}))
 	status, err = svc.Services(ctx)
 	require.NoError(t, err)
 	require.False(t, status.Spotify.Connected, "a new client ID signs out")
+}
+
+func TestSpotifyRedirectURI(t *testing.T) {
+	for raw, want := range map[string]string{
+		"":                 "",
+		SpotifyRedirectURI: "",
+		" https://qui.example.com/api/playlists/services/spotify/callback ": "https://qui.example.com/api/playlists/services/spotify/callback",
+		"http://127.0.0.1:7476/api/playlists/services/spotify/callback":     "http://127.0.0.1:7476/api/playlists/services/spotify/callback",
+	} {
+		got, err := cleanRedirectURI(raw)
+		require.NoError(t, err, raw)
+		require.Equal(t, want, got, raw)
+	}
+	for _, raw := range []string{"http://192.168.1.10:7476/callback", "http://localhost:8888/callback", "qui.example.com/callback"} {
+		_, err := cleanRedirectURI(raw)
+		require.ErrorIs(t, err, ErrInvalid, raw)
+	}
+}
+
+func TestSpotifyCustomRedirectURI(t *testing.T) {
+	f := newFakeSpotify(t)
+	store, _ := testStores(t)
+	svc := NewService(store, nil)
+	svc.spotify = spotifyURLs{accounts: f.URL, api: f.URL + "/v1"}
+	ctx := t.Context()
+	custom := "https://qui.example.com/api/playlists/services/spotify/callback"
+
+	require.ErrorIs(t, svc.SaveSpotifyApp(ctx, SpotifyApp{ClientID: "cid", ClientSecret: "secret", RedirectURI: "http://192.168.1.10/cb"}), ErrInvalid)
+	require.NoError(t, svc.SaveSpotifyApp(ctx, SpotifyApp{ClientID: "cid", ClientSecret: "secret", RedirectURI: custom}))
+	status, err := svc.Services(ctx)
+	require.NoError(t, err)
+	require.Equal(t, custom, status.Spotify.RedirectURI)
+	require.Equal(t, SpotifyRedirectURI, status.Spotify.DefaultRedirectURI)
+
+	authURL, err := svc.SpotifyAuthorizeURL(ctx)
+	require.NoError(t, err)
+	parsed, err := url.Parse(authURL)
+	require.NoError(t, err)
+	require.Equal(t, custom, parsed.Query().Get("redirect_uri"))
+
+	// The callback route passes only the query.
+	name, err := svc.ConnectSpotify(ctx, "?code=the-code&state="+parsed.Query().Get("state"))
+	require.NoError(t, err)
+	require.Equal(t, "Gab", name)
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	form, err := url.ParseQuery(f.bodies["POST /api/token"])
+	require.NoError(t, err)
+	require.Equal(t, custom, form.Get("redirect_uri"), "the code exchange repeats the sign-in's redirect URI")
 }

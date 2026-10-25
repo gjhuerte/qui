@@ -20,6 +20,7 @@ import {
   useSaveSpotifyApp,
   useStartSpotifySignIn
 } from "@/hooks/usePlaylists"
+import { getApiBaseUrl } from "@/lib/base-url"
 import { copyTextToClipboard } from "@/lib/utils"
 import type { PlaylistServicesStatus } from "@/types"
 import { AlertTriangle, Copy, ExternalLink, Loader2, LogIn, Unplug } from "lucide-react"
@@ -95,9 +96,15 @@ function SpotifyCard({ status }: { status: PlaylistServicesStatus }) {
   const disconnect = useDisconnectPlaylistService()
   const [clientId, setClientId] = useState(status.spotify.clientId ?? "")
   const [clientSecret, setClientSecret] = useState("")
+  const [redirectUri, setRedirectUri] = useState(status.spotify.redirectUri)
   const [redirected, setRedirected] = useState("")
   const [started, setStarted] = useState(false)
   const appSaved = !!status.spotify.clientId && status.spotify.hasSecret
+  const quiCallback = `${window.location.origin}${getApiBaseUrl()}/playlists/services/spotify/callback`
+  // With qui's own address, the callback route finishes the sign-in.
+  const usesCallback = status.spotify.redirectUri !== status.spotify.defaultRedirectUri
+  // Set by the callback route when the sign-in failed.
+  const callbackError = new URLSearchParams(window.location.search).get("spotifyError")
 
   const copyRedirect = async () => {
     try {
@@ -146,8 +153,14 @@ function SpotifyCard({ status }: { status: PlaylistServicesStatus }) {
           <li>{t("playlists.setup.spotifySteps.api")}</li>
           <li>{t("playlists.setup.spotifySteps.credentials")}</li>
           <li>{t("playlists.setup.spotifySteps.signIn")}</li>
-          <li>{t("playlists.setup.spotifySteps.paste")}</li>
+          <li>{t("playlists.setup.spotifySteps.finish")}</li>
         </ol>
+        {callbackError && (
+          <Alert variant="destructive">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertDescription className="break-words">{t("playlists.setup.spotifyFailed", { error: callbackError })}</AlertDescription>
+          </Alert>
+        )}
         <Alert>
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription>{t("playlists.setup.spotifyPremium")}</AlertDescription>
@@ -171,9 +184,28 @@ function SpotifyCard({ status }: { status: PlaylistServicesStatus }) {
             />
           </div>
         </div>
+        <div className="space-y-2">
+          <Label htmlFor="spotify-redirect-uri">{t("playlists.setup.redirectUri")}</Label>
+          <Input
+            id="spotify-redirect-uri"
+            value={redirectUri}
+            onChange={(e) => setRedirectUri(e.target.value)}
+            className="font-mono text-xs"
+            autoComplete="off"
+            spellCheck={false}
+          />
+          <div className="flex flex-wrap gap-2">
+            <Button variant="outline" size="sm" onClick={() => setRedirectUri(quiCallback)}>{t("playlists.setup.useQuiAddress")}</Button>
+            <Button variant="outline" size="sm" onClick={() => setRedirectUri(status.spotify.defaultRedirectUri)}>{t("playlists.setup.useDefault")}</Button>
+          </div>
+          <p className="text-xs text-muted-foreground">{t("playlists.setup.redirectHelp")}</p>
+          {window.location.protocol !== "https:" && redirectUri === quiCallback && (
+            <p className="text-xs text-destructive">{t("playlists.setup.redirectNeedsHttps")}</p>
+          )}
+        </div>
         <Button
           variant="outline"
-          onClick={() => saveApp.mutate({ clientId, clientSecret }, {
+          onClick={() => saveApp.mutate({ clientId, clientSecret, redirectUri }, {
             onSuccess: () => {
               setClientSecret("")
               toast.success(t("playlists.toasts.spotifyAppSaved"))
@@ -193,7 +225,7 @@ function SpotifyCard({ status }: { status: PlaylistServicesStatus }) {
               {status.spotify.connected ? t("playlists.setup.signInAgain") : t("playlists.setup.signIn")}
               <ExternalLink className="ml-2 h-3.5 w-3.5" />
             </Button>
-            {(started || !status.spotify.connected) && (
+            {!usesCallback && (started || !status.spotify.connected) && (
               <div className="space-y-2">
                 <Label htmlFor="spotify-redirected">{t("playlists.setup.pasteAddress")}</Label>
                 <div className="flex flex-col gap-2 sm:flex-row">

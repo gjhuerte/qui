@@ -221,9 +221,13 @@ Titles match without case, punctuation, bracketed parts such as `(Remastered)` a
 - **Jellyfin and Plex** use the servers under **Media servers → Servers**. On Plex, qui can write for the owner and for every account you share the server with.
 - **Spotify** needs your own Spotify app:
   1. In the [Spotify developer dashboard](https://developer.spotify.com/dashboard), create an app with the Web API.
-  2. Add the redirect URI `http://127.0.0.1:8888/callback`.
-  3. Paste the client ID and secret into qui and click **Save app**.
-  4. Click **Sign in with Spotify** and allow access. The browser then opens the redirect URI, which shows an error page. Copy the whole address from the address bar, paste it into qui, and click **Connect**.
+  2. Pick the redirect URI in qui and add the same address to the app:
+     - **qui's own address**, when you reach qui over HTTPS (for example behind a reverse proxy): `https://<your qui address>/api/playlists/services/spotify/callback`. **Use this qui's address** fills it in, base URL included. After the sign-in Spotify brings you back to qui and you are done.
+     - **The default** `http://127.0.0.1:8888/callback`, for a qui without HTTPS. Nothing has to run there, so it works when qui runs in Docker on another computer.
+
+     Spotify only accepts `https://` addresses, or `http://127.0.0.1`. A LAN address such as `http://192.168.1.10:7476` is refused.
+  3. Paste the client ID and secret into qui, check the redirect URI, and click **Save app**.
+  4. Click **Sign in with Spotify** and allow access. With the default address, the browser then shows an error page: copy the whole address from the address bar, paste it into qui, and click **Connect**.
 
   Spotify runs apps in Development Mode only when the account that made the app has Premium, and for up to 5 accounts.
 - **YouTube Music** has no public API. qui uses the private API of the website, signed in with your browser's cookie, like the `ytmusicapi` library. Open music.youtube.com while signed in, open the developer tools on the Network tab, click Library, and copy the headers of the `browse` request (Firefox: **Copy Request Headers**; Chrome or Edge: **Copy as cURL**). Paste them into qui and click **Connect**. Google can change this API at any time, and signing out of YouTube in that browser signs qui out too. The cookie gives full access to the Google account; qui stores it encrypted.

@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 	"time"
@@ -39,6 +40,7 @@ func (h *PlaylistsHandler) Routes(r chi.Router) {
 		r.Put("/services/spotify", h.SaveSpotify)
 		r.Post("/services/spotify/authorize", h.SpotifyAuthorize)
 		r.Post("/services/spotify/connect", h.SpotifyConnect)
+		r.Get("/services/spotify/callback", h.SpotifyCallback)
 		r.Put("/services/ytmusic", h.SaveYTMusic)
 		r.Delete("/services/{service}", h.Disconnect)
 		r.Get("/{id}", h.Get)
@@ -291,14 +293,11 @@ func (h *PlaylistsHandler) Services(w http.ResponseWriter, r *http.Request) {
 
 // SaveSpotify handles PUT /api/playlists/services/spotify. An empty secret keeps the stored one.
 func (h *PlaylistsHandler) SaveSpotify(w http.ResponseWriter, r *http.Request) {
-	var body struct {
-		ClientID     string `json:"clientId"`
-		ClientSecret string `json:"clientSecret"`
-	}
+	var body playlists.SpotifyApp
 	if !decodePlaylistBody(w, r, &body) {
 		return
 	}
-	if err := h.service.SaveSpotifyApp(r.Context(), body.ClientID, body.ClientSecret); err != nil {
+	if err := h.service.SaveSpotifyApp(r.Context(), body); err != nil {
 		respondPlaylistError(w, err, "save the Spotify app")
 		return
 	}
@@ -307,12 +306,12 @@ func (h *PlaylistsHandler) SaveSpotify(w http.ResponseWriter, r *http.Request) {
 
 // SpotifyAuthorize handles POST /api/playlists/services/spotify/authorize
 func (h *PlaylistsHandler) SpotifyAuthorize(w http.ResponseWriter, r *http.Request) {
-	url, err := h.service.SpotifyAuthorizeURL(r.Context())
+	authURL, err := h.service.SpotifyAuthorizeURL(r.Context())
 	if err != nil {
 		respondPlaylistError(w, err, "start the Spotify sign-in")
 		return
 	}
-	RespondJSON(w, http.StatusOK, map[string]string{"url": url})
+	RespondJSON(w, http.StatusOK, map[string]string{"url": authURL})
 }
 
 // SpotifyConnect handles POST /api/playlists/services/spotify/connect with the address the browser landed on.
@@ -328,6 +327,26 @@ func (h *PlaylistsHandler) SpotifyConnect(w http.ResponseWriter, r *http.Request
 		return
 	}
 	h.Services(w, r)
+}
+
+// spotifyCallbackToPage leads from .../api/playlists/services/spotify/callback
+// to the Services page, whatever base URL qui runs under.
+const spotifyCallbackToPage = "../../../../services?tab=playlist-services"
+
+// SpotifyCallback handles GET /api/playlists/services/spotify/callback, the
+// redirect URI when it is qui's own address. Spotify sends the browser here
+// after the sign-in; qui finishes it and returns to the Services page.
+func (h *PlaylistsHandler) SpotifyCallback(w http.ResponseWriter, r *http.Request) {
+	target := spotifyCallbackToPage
+	if _, err := h.service.ConnectSpotify(r.Context(), "?"+r.URL.RawQuery); err != nil {
+		log.Warn().Err(err).Msg("playlists: Spotify sign-in failed")
+		target += "&spotifyError=" + url.QueryEscape(err.Error())
+	}
+	// A relative Location, resolved by the browser against the address it
+	// used: http.Redirect would resolve it against r.URL.Path, which lacks
+	// the base URL when qui runs under one.
+	w.Header().Set("Location", target)
+	w.WriteHeader(http.StatusFound)
 }
 
 // SaveYTMusic handles PUT /api/playlists/services/ytmusic with headers copied from the browser.

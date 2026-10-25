@@ -841,11 +841,11 @@
       "spotifyDescription": "qui signs in with your own Spotify app, so it needs a client ID and secret.",
       "spotifySteps": {
         "dashboard": "Open the <dashboard>Spotify developer dashboard</dashboard>, sign in, and click Create app. Any name and description will do.",
-        "redirect": "Under Redirect URIs, add exactly this address:",
+        "redirect": "Under Redirect URIs, add the redirect URI shown in the field below, exactly as written:",
         "api": "Under \"Which API/SDKs are you planning to use?\", tick Web API, then save.",
-        "credentials": "Open the app's Settings, copy the Client ID and the Client secret into the fields below, and click Save app.",
-        "signIn": "Click Sign in with Spotify and allow access. Spotify then opens the address above, which shows an error page: that is expected.",
-        "paste": "Copy the whole address from the browser's address bar, paste it below, and click Connect."
+        "credentials": "Open the app's Settings, copy the Client ID and the Client secret into the fields below, check the redirect URI, and click Save app.",
+        "signIn": "Click Sign in with Spotify and allow access.",
+        "finish": "With qui's own address, Spotify brings you back to this page and the sign-in is done. With the default 127.0.0.1 address, the browser shows an error page instead: that is expected. Copy the whole address from the address bar, paste it below, and click Connect. This works from any computer, wherever qui runs."
       },
       "spotifyPremium": "Spotify only runs apps in Development Mode for accounts with Premium: the account that created the app needs Premium. Up to 5 accounts can use the app; add other accounts under User Management.",
       "clientId": "Client ID",
@@ -869,7 +869,13 @@
       },
       "ytHeaders": "Request headers",
       "ytPlaceholder": "POST /youtubei/v1/browse … Cookie: … X-Goog-AuthUser: 0",
-      "addressPlaceholder": "{{uri}}?code=…&state=…"
+      "addressPlaceholder": "{{uri}}?code=…&state=…",
+      "redirectUri": "Redirect URI",
+      "useQuiAddress": "Use this qui's address",
+      "useDefault": "Use the default (127.0.0.1)",
+      "redirectHelp": "It must match the app in the Spotify dashboard exactly. Spotify only accepts https:// addresses, or http://127.0.0.1. Use qui's address when you reach qui over HTTPS, for example behind a reverse proxy; otherwise keep the default.",
+      "redirectNeedsHttps": "You reach qui over http://, which Spotify does not accept here. Open qui through its HTTPS address first, or use the default.",
+      "spotifyFailed": "The Spotify sign-in failed: {{error}}"
     }
   }
 }

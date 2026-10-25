@@ -106,9 +106,16 @@ type Service struct {
 	ytBase    string
 
 	mu sync.Mutex
-	// spotifyStates holds the state of each Spotify sign-in started in the
-	// last hour, so a pasted address must come from this qui.
-	spotifyStates map[string]time.Time
+	// spotifyStates holds each Spotify sign-in started in the last hour, so
+	// a pasted address must come from this qui.
+	spotifyStates map[string]spotifyState
+}
+
+// spotifyState is a started sign-in. The code exchange must repeat the
+// redirect URI the sign-in used.
+type spotifyState struct {
+	at       time.Time
+	redirect string
 }
 
 func NewService(store Store, servers ServerStore) *Service {
@@ -119,7 +126,7 @@ func NewService(store Store, servers ServerStore) *Service {
 		plexToken:     mediasync.PlexUserToken,
 		spotify:       defaultSpotifyURLs,
 		ytBase:        ytMusicBase,
-		spotifyStates: map[string]time.Time{},
+		spotifyStates: map[string]spotifyState{},
 	}
 }
 

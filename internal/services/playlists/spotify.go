@@ -17,10 +17,10 @@ import (
 	"github.com/gjhuerte/qui/internal/models"
 )
 
-// SpotifyRedirectURI is the address Spotify sends the browser to after the
-// sign-in. Nothing listens there: the user copies the address from the
-// browser and pastes it into qui. A loopback address is the only http
-// address Spotify accepts, and it works wherever qui runs.
+// SpotifyRedirectURI is the default address Spotify sends the browser to
+// after the sign-in. Nothing listens there: the user copies the address from
+// the browser and pastes it into qui, so it works wherever qui runs. A user
+// whose qui has an HTTPS address can use qui's own callback route instead.
 const SpotifyRedirectURI = "http://127.0.0.1:8888/callback"
 
 const spotifyScopes = "playlist-read-private playlist-modify-private playlist-modify-public"
@@ -36,6 +36,36 @@ type spotifySettings struct {
 	ClientID     string `json:"clientId"`
 	ClientSecret string `json:"clientSecret"`
 	RefreshToken string `json:"refreshToken,omitempty"`
+	// RedirectURI is empty for the default.
+	RedirectURI string `json:"redirectUri,omitempty"`
+}
+
+func (s *spotifySettings) redirect() string {
+	if s.RedirectURI != "" {
+		return s.RedirectURI
+	}
+	return SpotifyRedirectURI
+}
+
+// cleanRedirectURI checks an address against Spotify's rules: HTTPS, or
+// HTTP on a loopback IP. Empty means the default.
+func cleanRedirectURI(raw string) (string, error) {
+	raw = strings.TrimSpace(raw)
+	if raw == "" || raw == SpotifyRedirectURI {
+		return "", nil
+	}
+	u, err := url.Parse(raw)
+	if err != nil || u.Host == "" || u.Fragment != "" {
+		return "", fmt.Errorf("%w: the redirect URI must be a full address such as https://qui.example.com/api/playlists/services/spotify/callback", ErrInvalid)
+	}
+	host := u.Hostname()
+	switch {
+	case u.Scheme == "https":
+	case u.Scheme == "http" && (host == "127.0.0.1" || host == "::1"):
+	default:
+		return "", fmt.Errorf("%w: Spotify only accepts https:// redirect URIs, or http://127.0.0.1. Use the default address, or put qui behind HTTPS", ErrInvalid)
+	}
+	return raw, nil
 }
 
 func (s *Service) loadSpotify(ctx context.Context) (*spotifySettings, *models.PlaylistServiceSettings, error) {
@@ -62,12 +92,23 @@ func (s *Service) saveSpotify(ctx context.Context, settings *spotifySettings, ac
 	})
 }
 
-// SaveSpotifyApp stores the client ID and secret of the user's Spotify app.
-// An empty secret keeps the stored one. A new client ID signs out.
-func (s *Service) SaveSpotifyApp(ctx context.Context, clientID, clientSecret string) error {
-	clientID, clientSecret = strings.TrimSpace(clientID), strings.TrimSpace(clientSecret)
+// SpotifyApp is the user's Spotify app. An empty ClientSecret keeps the
+// stored one; an empty RedirectURI means the default.
+type SpotifyApp struct {
+	ClientID     string `json:"clientId"`
+	ClientSecret string `json:"clientSecret"`
+	RedirectURI  string `json:"redirectUri"`
+}
+
+// SaveSpotifyApp stores the user's Spotify app. A new client ID signs out.
+func (s *Service) SaveSpotifyApp(ctx context.Context, app SpotifyApp) error {
+	clientID, clientSecret := strings.TrimSpace(app.ClientID), strings.TrimSpace(app.ClientSecret)
 	if clientID == "" {
 		return fmt.Errorf("%w: the client ID is required", ErrInvalid)
+	}
+	redirect, err := cleanRedirectURI(app.RedirectURI)
+	if err != nil {
+		return err
 	}
 	settings, stored, err := s.loadSpotify(ctx)
 	if err != nil {
@@ -80,7 +121,7 @@ func (s *Service) SaveSpotifyApp(ctx context.Context, clientID, clientSecret str
 	if settings.ClientID != clientID {
 		settings.RefreshToken, accountName = "", ""
 	}
-	settings.ClientID = clientID
+	settings.ClientID, settings.RedirectURI = clientID, redirect
 	if clientSecret != "" {
 		settings.ClientSecret = clientSecret
 	}
@@ -106,18 +147,18 @@ func (s *Service) SpotifyAuthorizeURL(ctx context.Context) (string, error) {
 	state := hex.EncodeToString(buf)
 
 	s.mu.Lock()
-	for st, at := range s.spotifyStates {
-		if time.Since(at) > time.Hour {
+	for st, started := range s.spotifyStates {
+		if time.Since(started.at) > time.Hour {
 			delete(s.spotifyStates, st)
 		}
 	}
-	s.spotifyStates[state] = time.Now()
+	s.spotifyStates[state] = spotifyState{at: time.Now(), redirect: settings.redirect()}
 	s.mu.Unlock()
 
 	query := url.Values{
 		"client_id":     {settings.ClientID},
 		"response_type": {"code"},
-		"redirect_uri":  {SpotifyRedirectURI},
+		"redirect_uri":  {settings.redirect()},
 		"scope":         {spotifyScopes},
 		"state":         {state},
 	}
@@ -156,7 +197,7 @@ func (s *Service) ConnectSpotify(ctx context.Context, redirected string) (string
 		return "", fmt.Errorf("%w: the address has no code; paste the whole address from the browser", ErrInvalid)
 	}
 	s.mu.Lock()
-	_, known := s.spotifyStates[state]
+	started, known := s.spotifyStates[state]
 	delete(s.spotifyStates, state)
 	s.mu.Unlock()
 	if !known {
@@ -170,7 +211,7 @@ func (s *Service) ConnectSpotify(ctx context.Context, redirected string) (string
 	token, err := s.spotifyTokenRequest(ctx, settings, url.Values{
 		"grant_type":   {"authorization_code"},
 		"code":         {code},
-		"redirect_uri": {SpotifyRedirectURI},
+		"redirect_uri": {started.redirect},
 	})
 	if err != nil {
 		return "", fmt.Errorf("spotify: %w", err)

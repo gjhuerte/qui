@@ -18,7 +18,10 @@ type ServicesStatus struct {
 		HasSecret   bool   `json:"hasSecret"`
 		Connected   bool   `json:"connected"`
 		AccountName string `json:"accountName,omitempty"`
-		RedirectURI string `json:"redirectUri"`
+		// RedirectURI is the one in use; DefaultRedirectURI the one qui
+		// suggests when qui has no HTTPS address.
+		RedirectURI        string `json:"redirectUri"`
+		DefaultRedirectURI string `json:"defaultRedirectUri"`
 	} `json:"spotify"`
 	YTMusic struct {
 		Connected   bool   `json:"connected"`
@@ -28,12 +31,11 @@ type ServicesStatus struct {
 
 func (s *Service) Services(ctx context.Context) (*ServicesStatus, error) {
 	out := &ServicesStatus{}
-	out.Spotify.RedirectURI = SpotifyRedirectURI
-
 	settings, stored, err := s.loadSpotify(ctx)
 	if err != nil {
 		return nil, err
 	}
+	out.Spotify.RedirectURI, out.Spotify.DefaultRedirectURI = settings.redirect(), SpotifyRedirectURI
 	out.Spotify.ClientID = settings.ClientID
 	out.Spotify.HasSecret = settings.ClientSecret != ""
 	out.Spotify.Connected = settings.RefreshToken != ""

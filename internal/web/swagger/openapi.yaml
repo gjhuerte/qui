@@ -6249,6 +6249,9 @@ paths:
                   type: string
                 clientSecret:
                   type: string
+                redirectUri:
+                  type: string
+                  description: Empty for the default http://127.0.0.1:8888/callback. Otherwise https://, or http:// on 127.0.0.1; qui's own is <qui address>/api/playlists/services/spotify/callback.
       responses:
         '200':
           description: Saved
@@ -6306,6 +6309,29 @@ paths:
           description: The address has no code, or the sign-in was not started here
         '502':
           description: Spotify answered with an error
+
+  /api/playlists/services/spotify/callback:
+    get:
+      tags:
+        - Playlists
+      summary: Finish a Spotify sign-in when the redirect URI is qui's own address
+      description: Spotify sends the browser here. qui exchanges the code and redirects to the Services page, with spotifyError in the query when the sign-in failed.
+      parameters:
+        - name: code
+          in: query
+          schema:
+            type: string
+        - name: state
+          in: query
+          schema:
+            type: string
+        - name: error
+          in: query
+          schema:
+            type: string
+      responses:
+        '302':
+          description: Back to the Services page
 
   /api/playlists/services/ytmusic:
     put:
@@ -9418,6 +9444,9 @@ components:
             accountName:
               type: string
             redirectUri:
+              type: string
+              description: The redirect URI in use
+            defaultRedirectUri:
               type: string
         ytmusic:
           type: object

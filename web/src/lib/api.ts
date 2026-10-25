@@ -2589,7 +2589,7 @@ class ApiClient {
     return this.request<PlaylistServicesStatus>("/playlists/services")
   }
 
-  async saveSpotifyApp(data: { clientId: string; clientSecret: string }): Promise<PlaylistServicesStatus> {
+  async saveSpotifyApp(data: { clientId: string; clientSecret: string; redirectUri: string }): Promise<PlaylistServicesStatus> {
     return this.request<PlaylistServicesStatus>("/playlists/services/spotify", { method: "PUT", body: JSON.stringify(data) })
   }
 

@@ -84,7 +84,9 @@ export interface PlaylistServicesStatus {
     hasSecret: boolean
     connected: boolean
     accountName?: string
+    /** The redirect URI in use. */
     redirectUri: string
+    defaultRedirectUri: string
   }
   ytmusic: {
     connected: boolean
