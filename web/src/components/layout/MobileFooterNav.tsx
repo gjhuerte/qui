@@ -71,6 +71,7 @@ import {
   Moon,
   Palette,
   Rss,
+  ShieldCheck,
   SearchCode,
   Search as SearchIcon,
   Server,
@@ -467,6 +468,15 @@ export function MobileFooterNav() {
                   >
                     <Rss className="h-4 w-4" />
                     {t("nav.rss")}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    to="/services"
+                    className="flex items-center gap-2"
+                  >
+                    <ShieldCheck className="h-4 w-4" />
+                    {t("nav.services")}
                   </Link>
                 </DropdownMenuItem>
 

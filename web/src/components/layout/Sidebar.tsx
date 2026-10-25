@@ -46,6 +46,7 @@ import {
   Search,
   SearchCode,
   Settings,
+  ShieldCheck,
   Zap
 } from "lucide-react"
 import { useCallback, useMemo } from "react"
@@ -98,6 +99,12 @@ const navigation: NavItem[] = [
     titleKey: "nav.rss",
     href: "/rss",
     icon: Rss,
+  },
+  {
+    id: "services",
+    titleKey: "nav.services",
+    href: "/services",
+    icon: ShieldCheck,
   },
   {
     id: "settings",

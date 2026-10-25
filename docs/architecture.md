@@ -13,6 +13,8 @@ Internal reference for agents and maintainers. Read this before changing cross-m
 - `internal/proxy/`: reverse proxy support for external apps.
 - `internal/services/activity/`: in-process publish and subscribe for server activity. A service publishes a kind and IDs, never data. `/api/stream` sends each event to the browser as an `activity` event, and the frontend invalidates the matching react-query key prefix (`web/src/lib/activity-invalidation.ts`). The hub drops events while no stream is open, so after a reconnect the frontend invalidates every activity feed. The files, peers, and pieces of one torrent stay on polling, because qBittorrent does not push them. The file list comes from a database cache that can be up to five minutes old. The files endpoint skips the cache when the request has `refresh=1`.
 - `internal/backups/`: scheduled snapshots.
+- `internal/services/seedbox/`: MyAnonamouse dynamic seedbox IP updates (the job of the `myanonamouse/seedboxapi` container). A scheduler goroutine calls MAM every interval and keeps the cookie MAM rotates; the cookie is encrypted in `seedbox_settings`.
+- `internal/services/gluetun/`: the gluetun VPN that qui runs behind. Status from gluetun's control server; logs, health, stats and container restarts from the Docker Engine API over a small HTTP client (no Docker SDK). A container restart also restarts the containers in gluetun's network namespace.
 - `internal/database/`: SQLite/Postgres migrations and database setup.
 - `internal/models/`: data models and store interfaces.
 - `pkg/`: shared utilities.

@@ -4,9 +4,9 @@ Locale and translation rules for work under `web/src/i18n/`.
 
 ## Layout
 
-11 locales live under `web/src/i18n/locales/<lang>/`, each with 10 namespaces:
+11 locales live under `web/src/i18n/locales/<lang>/`, each with 11 namespaces:
 
-`common`, `auth`, `settings`, `torrents`, `dashboard`, `crossseed`, `rss`, `search`, `instances`, `automations`
+`common`, `auth`, `settings`, `torrents`, `dashboard`, `crossseed`, `rss`, `search`, `instances`, `automations`, `services`
 
 English is fallback/eager-loaded. Other languages are lazy-loaded by `initI18n()` / `changeLanguage()` through `import.meta.glob` in `web/src/i18n/index.ts`. Supported today: `en`, `zh-CN`, `zh-TW`, `fr`, `de`, `cs`, `it`, `ko`, `uk`, `pt-BR`, `ca`.
 

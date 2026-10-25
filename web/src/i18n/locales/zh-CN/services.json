@@ -1,0 +1,271 @@
+{
+  "pageTitle": "Services",
+  "pageDescription": "The gluetun VPN that qui runs behind and the MyAnonamouse dynamic seedbox IP.",
+  "vpnBadge": "VPN {{status}} · {{ip}}",
+  "nav": {
+    "gluetun": "Gluetun",
+    "seedbox": "Seedbox (MAM)"
+  },
+  "tabs": {
+    "gluetun": "Overview",
+    "gluetun-logs": "Logs",
+    "gluetun-config": "Configuration",
+    "gluetun-connection": "Connection",
+    "seedbox": "Dynamic IP",
+    "seedbox-activity": "Activity"
+  },
+  "actions": {
+    "refresh": "Refresh"
+  },
+  "states": {
+    "running": "Running",
+    "stopped": "Stopped",
+    "crashed": "Crashed",
+    "completed": "Completed",
+    "exited": "Exited",
+    "restarting": "Restarting",
+    "paused": "Paused",
+    "created": "Created",
+    "dead": "Dead",
+    "removing": "Removing",
+    "healthy": "Healthy",
+    "unhealthy": "Unhealthy",
+    "starting": "Starting",
+    "unreachable": "Unreachable",
+    "unknown": "Unknown"
+  },
+  "gluetun": {
+    "loadFailed": "Could not load the gluetun status",
+    "partialTitle": "Some information is not available",
+    "controlUnreachable": "Control server: {{error}}",
+    "dockerUnavailable": "Docker: {{error}}",
+    "openConnection": "Check the connection settings",
+    "vpn": {
+      "title": "VPN",
+      "description": "From gluetun's control server: the tunnel, the IP it exits from and the forwarded port.",
+      "publicIp": "Public IP",
+      "location": "Location",
+      "organization": "Provider network",
+      "forwardedPort": "Forwarded port",
+      "dns": "DNS",
+      "timezone": "Time zone",
+      "hostname": "Hostname",
+      "coordinates": "Coordinates",
+      "partialErrors": "Some requests failed: {{error}}"
+    },
+    "actions": {
+      "restartVpn": "Restart VPN",
+      "stopVpn": "Stop VPN",
+      "startVpn": "Start VPN",
+      "restartContainer": "Restart container"
+    },
+    "restartDialog": {
+      "title": "Restart the gluetun container?",
+      "description": "Docker restarts gluetun and waits until its health check passes. Torrents lose their connection until the VPN is back. Restart VPN is the lighter option when only the tunnel is stuck.",
+      "withDependents": "Then restart the containers that share its network: {{containers}}",
+      "dependentsHelp": "Without this, those containers keep a dead network until they restart. If qui is one of them, this page reloads when qui is back.",
+      "confirm": "Restart"
+    },
+    "restart": {
+      "runningTitle": "Restarting gluetun",
+      "failedTitle": "The restart failed",
+      "doneTitle": "Restart finished",
+      "doneDescription": "Restarted: {{containers}}",
+      "steps": {
+        "gluetun": "Restarting the gluetun container…",
+        "waiting": "Waiting for gluetun to report healthy…",
+        "dependents": "Restarting the containers that share its network…",
+        "done": "Done"
+      }
+    },
+    "toasts": {
+      "vpnStarted": "VPN started",
+      "vpnStopped": "VPN stopped",
+      "vpnRestarted": "VPN restarted",
+      "restartStarted": "Restart started"
+    },
+    "container": {
+      "title": "Container",
+      "name": "Name",
+      "started": "Started",
+      "restartCount": "Restarts",
+      "restartPolicy": "Restart policy",
+      "cpu": "CPU",
+      "cpuLimit_other": "of {{count}} CPUs",
+      "memory": "Memory",
+      "network": "Network traffic",
+      "networkValue": "↓ {{rx}} · ↑ {{tx}}",
+      "processes": "Processes",
+      "capabilities": "Capabilities",
+      "error": "Last error",
+      "ports": "Published ports",
+      "healthChecks": "Recent health checks",
+      "failingStreak_other": "{{count}} failures in a row"
+    },
+    "dependents": {
+      "title": "Shared network",
+      "description": "Containers that run with network_mode: \"service:gluetun\". Their traffic leaves through the VPN.",
+      "none": "No other container uses gluetun's network.",
+      "name": "Container",
+      "image": "Image",
+      "state": "State"
+    }
+  },
+  "logs": {
+    "title": "Gluetun logs",
+    "description": "The container log from Docker. In view: {{errors}} errors, {{warnings}} warnings.",
+    "searchPlaceholder": "Search messages",
+    "levelLabel": "Level",
+    "tailLabel": "Lines",
+    "tailOption_other": "Last {{count}} lines",
+    "autoRefresh": "Auto refresh",
+    "copy": "Copy",
+    "copied": "Logs copied",
+    "copyFailed": "Could not copy the logs",
+    "loadFailed": "Could not load the logs",
+    "empty": "No log lines match.",
+    "filters": {
+      "all": "All levels",
+      "warn": "Warnings and errors",
+      "error": "Errors only"
+    },
+    "levels": {
+      "debug": "DEBUG",
+      "info": "INFO",
+      "warn": "WARN",
+      "error": "ERROR",
+      "other": "·"
+    }
+  },
+  "config": {
+    "redacted": "Hidden",
+    "environment": {
+      "title": "Environment",
+      "description": "Variables the container sets on top of the image defaults, as in your compose file. Keys and passwords are hidden.",
+      "unavailable": "Docker access is needed to read the environment.",
+      "empty": "The container uses the image defaults only.",
+      "name": "Variable",
+      "value": "Value"
+    },
+    "vpnSettings": {
+      "title": "VPN settings",
+      "description": "The settings gluetun is running with, from its control server. Keys and passwords are hidden."
+    }
+  },
+  "connection": {
+    "saved": "Connection settings saved",
+    "save": "Save",
+    "control": {
+      "title": "Control server",
+      "description": "gluetun's HTTP control server gives the VPN status, the public IP and the forwarded port, and starts and stops the VPN.",
+      "url": "Control server URL",
+      "urlHelp": "With network_mode: \"service:gluetun\" qui shares gluetun's network, so http://127.0.0.1:8000 works.",
+      "auth": "Authentication",
+      "authHelp": "The control server needs authentication since gluetun v3.40. Set HTTP_CONTROL_SERVER_AUTH_DEFAULT_ROLE on gluetun, for example '{\"auth\":\"apikey\",\"apikey\":\"…\"}'.",
+      "authTypes": {
+        "none": "None",
+        "apikey": "API key",
+        "basic": "Username and password"
+      },
+      "username": "Username",
+      "apiKey": "API key",
+      "password": "Password",
+      "secretSaved": "Saved, leave empty to keep it"
+    },
+    "docker": {
+      "title": "Docker",
+      "description": "Logs, health, resource use and container restarts come from the Docker API.",
+      "enable": "Use the Docker API",
+      "enableHelp": "Needs the Docker socket in the qui container. Anyone who can use the socket controls the host.",
+      "host": "Docker host",
+      "hostHelp": "unix:///var/run/docker.sock for a mounted socket, or tcp://host:2375 for a socket proxy. A container restart needs the socket: a TCP proxy is out of reach while gluetun restarts.",
+      "container": "Gluetun container name",
+      "composeHelp": "Mount the socket and give qui the docker group. The entrypoint drops extra groups when PUID/PGID are set, so use user: instead:"
+    }
+  },
+  "seedbox": {
+    "asn": "AS{{asn}}",
+    "httpStatus": "(HTTP {{status}})",
+    "states": {
+      "updated": "Updated",
+      "unchanged": "No change",
+      "waiting": "No mam_id",
+      "throttled": "Too recent",
+      "rejected": "Rejected",
+      "unreachable": "Unreachable"
+    },
+    "sources": {
+      "schedule": "Schedule",
+      "manual": "Manual",
+      "cookie": "New mam_id"
+    },
+    "outcomes": {
+      "updated": "MAM registered {{ip}}.",
+      "unchanged": "MAM already has {{ip}}.",
+      "waiting": "MAM sees {{ip}}. Add a mam_id to start updating.",
+      "throttled": "MAM says the last change was too recent. The next check retries.",
+      "rejected": "MAM rejected the update: {{message}}",
+      "unreachable": "MAM could not be reached: {{message}}"
+    },
+    "actions": {
+      "updateNow": "Update now",
+      "remove": "Remove mam_id",
+      "saveAndUpdate": "Save and update"
+    },
+    "toasts": {
+      "removed": "mam_id removed. Updates pause until you add one.",
+      "scheduleSaved": "Schedule saved"
+    },
+    "removeDialog": {
+      "title": "Remove the mam_id?",
+      "description": "qui stops updating your seedbox IP on MyAnonamouse until you add a new mam_id."
+    },
+    "status": {
+      "title": "Seedbox IP",
+      "description": "What MyAnonamouse saw on the last check. Requests leave through gluetun, so this is the VPN's IP.",
+      "ip": "IP",
+      "asn": "Network (ASN)",
+      "lastCheck": "Last check",
+      "nextCheck": "Next check",
+      "paused": "Automatic updates are off",
+      "answer": "MAM's answer",
+      "never": "qui has not contacted MAM yet.",
+      "rejectedHelp": "This session cannot be updated from this connection. Create a new dynamic seedbox session for the VPN, locked to its ASN, and paste the new mam_id.",
+      "unreachableHelp": "This usually means the VPN is down. Check the Gluetun overview."
+    },
+    "session": {
+      "title": "Session (mam_id)",
+      "description": "The cookie of a MyAnonamouse session made for dynamic seedbox use. It is stored encrypted, and qui saves the new value when MAM rotates it.",
+      "configured": "Saved {{masked}}",
+      "missing": "Not set",
+      "steps": {
+        "open": "On MyAnonamouse, open <mam>Preferences → Security</mam> and create a session.",
+        "ip": "IP: the VPN's IP as MAM sees it ({{ip}}), not your browser's IP.",
+        "asn": "IP vs ASN locked session: ASN, so the IP can change within your VPN provider.",
+        "dynamic": "Allow Session to set Dynamic Seedbox: Yes. Use a separate session for qui.",
+        "paste": "Copy the cookie value MAM shows and paste it here."
+      },
+      "label": "mam_id",
+      "replaceLabel": "Replace the mam_id",
+      "placeholder": "Paste the mam_id value"
+    },
+    "schedule": {
+      "title": "Schedule",
+      "description": "MAM answers \"No change\" when the IP is the same, so frequent checks are harmless.",
+      "enabled": "Automatic updates",
+      "enabledHelp": "Turn off to update only with Update now.",
+      "interval": "Check every (minutes)",
+      "invalid": "Enter a whole number of minutes between 1 and 1440.",
+      "save": "Save schedule"
+    },
+    "activity": {
+      "title": "Activity",
+      "description": "Every request to MAM from the last 14 days, newest first (up to 50).",
+      "time": "Time",
+      "source": "Trigger",
+      "result": "Result",
+      "ip": "IP",
+      "answer": "Answer"
+    }
+  }
+}

@@ -44,10 +44,12 @@ import (
 	"github.com/gjhuerte/qui/internal/services/discscan"
 	"github.com/gjhuerte/qui/internal/services/externalprograms"
 	"github.com/gjhuerte/qui/internal/services/filesmanager"
+	"github.com/gjhuerte/qui/internal/services/gluetun"
 	"github.com/gjhuerte/qui/internal/services/jackett"
 	"github.com/gjhuerte/qui/internal/services/notifications"
 	"github.com/gjhuerte/qui/internal/services/orphanscan"
 	"github.com/gjhuerte/qui/internal/services/reannounce"
+	"github.com/gjhuerte/qui/internal/services/seedbox"
 	"github.com/gjhuerte/qui/internal/services/trackericons"
 	"github.com/gjhuerte/qui/internal/sqlite3store"
 	"github.com/gjhuerte/qui/internal/sshpool"
@@ -655,6 +657,22 @@ func (app *Application) runServer() {
 		notificationService.Start(notificationCtx)
 	}
 
+	// MyAnonamouse dynamic seedbox IP updater and gluetun VPN management.
+	seedboxStore, err := models.NewSeedboxStore(db, encryptionKey, legacyEncryptionKey)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to initialize seedbox store")
+	}
+	seedboxService := seedbox.NewService(seedboxStore)
+	seedboxCtx, seedboxCancel := context.WithCancel(context.Background())
+	defer seedboxCancel()
+	seedboxService.Start(seedboxCtx)
+
+	gluetunSettingsStore, err := models.NewGluetunSettingsStore(db, encryptionKey, legacyEncryptionKey)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to initialize gluetun settings store")
+	}
+	gluetunService := gluetun.NewService(gluetunSettingsStore)
+
 	// activityHub fans qui-owned server events (reannounce, scans, cross-seed,
 	// backups, automations, indexer activity, etc.) onto the SSE stream so the
 	// frontend can stop polling those endpoints. Background services publish to it;
@@ -885,6 +903,8 @@ func (app *Application) runServer() {
 		ArrInstanceStore:                 arrInstanceStore,
 		ArrService:                       arrService,
 		ActivityHub:                      activityHub,
+		SeedboxService:                   seedboxService,
+		GluetunService:                   gluetunService,
 	})
 
 	// Reconcile any cross-seed runs left in 'running' status from a previous crash/restart.

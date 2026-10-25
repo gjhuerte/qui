@@ -37,10 +37,12 @@ import (
 	"github.com/gjhuerte/qui/internal/services/discscan"
 	"github.com/gjhuerte/qui/internal/services/externalprograms"
 	"github.com/gjhuerte/qui/internal/services/filesmanager"
+	"github.com/gjhuerte/qui/internal/services/gluetun"
 	"github.com/gjhuerte/qui/internal/services/jackett"
 	"github.com/gjhuerte/qui/internal/services/notifications"
 	"github.com/gjhuerte/qui/internal/services/orphanscan"
 	"github.com/gjhuerte/qui/internal/services/reannounce"
+	"github.com/gjhuerte/qui/internal/services/seedbox"
 	"github.com/gjhuerte/qui/internal/services/trackericons"
 	"github.com/gjhuerte/qui/internal/sshpool"
 	"github.com/gjhuerte/qui/internal/update"
@@ -100,6 +102,8 @@ type Server struct {
 	arrInstanceStore                 *models.ArrInstanceStore
 	arrService                       *arr.Service
 	activityHub                      *activity.Hub
+	seedboxService                   *seedbox.Service
+	gluetunService                   *gluetun.Service
 	// shuttingDown ends the log and RSS streams: http.Server.Shutdown does not cancel request contexts.
 	shuttingDown <-chan struct{}
 }
@@ -151,6 +155,8 @@ type Dependencies struct {
 	ArrInstanceStore                 *models.ArrInstanceStore
 	ArrService                       *arr.Service
 	ActivityHub                      *activity.Hub
+	SeedboxService                   *seedbox.Service
+	GluetunService                   *gluetun.Service
 }
 
 func NewServer(deps *Dependencies) *Server {
@@ -226,6 +232,8 @@ func NewServer(deps *Dependencies) *Server {
 		arrInstanceStore:                 deps.ArrInstanceStore,
 		arrService:                       deps.ArrService,
 		activityHub:                      deps.ActivityHub,
+		seedboxService:                   deps.SeedboxService,
+		gluetunService:                   deps.GluetunService,
 		shuttingDown:                     streamsCtx.Done(),
 	}
 	// Shutdown runs this callback on every call; a CancelFunc tolerates repeats where close would panic.
@@ -401,6 +409,8 @@ func (s *Server) Handler() (*chi.Mux, error) {
 	logExclusionsHandler := handlers.NewLogExclusionsHandler(s.logExclusionsStore)
 	logsHandler := handlers.NewLogsHandler(s.config, s.shuttingDown)
 	notificationsHandler := handlers.NewNotificationsHandler(s.notificationTargetStore, s.notificationService)
+	seedboxHandler := handlers.NewSeedboxHandler(s.seedboxService)
+	gluetunHandler := handlers.NewGluetunHandler(s.gluetunService)
 
 	// Torznab/Jackett handler
 	var jackettHandler *handlers.JackettHandler
@@ -526,6 +536,10 @@ func (s *Server) Handler() (*chi.Mux, error) {
 			})
 
 			// ARR (Sonarr/Radarr) instance management
+			// Seedbox (MyAnonamouse dynamic IP) and gluetun VPN management
+			seedboxHandler.Routes(r)
+			gluetunHandler.Routes(r)
+
 			r.Route("/arr", func(r chi.Router) {
 				r.Get("/instances", arrHandler.ListInstances)
 				r.Post("/instances", arrHandler.CreateInstance)

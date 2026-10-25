@@ -5346,6 +5346,253 @@ paths:
         '400':
           description: Invalid settings or attempting to modify locked fields
 
+  /api/seedbox:
+    get:
+      tags:
+        - Seedbox
+      summary: Get seedbox status
+      description: The MyAnonamouse dynamic seedbox settings, the next scheduled update and the recent requests to MAM.
+      responses:
+        '200':
+          description: Seedbox status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeedboxStatus'
+
+  /api/seedbox/mam-id:
+    put:
+      tags:
+        - Seedbox
+      summary: Save the mam_id
+      description: Stores the mam_id session cookie (encrypted) and contacts MAM with it right away.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - mamId
+              properties:
+                mamId:
+                  type: string
+                  description: Cookie value; a leading "mam_id=" and quotes are removed.
+      responses:
+        '200':
+          description: The request to MAM made with the new cookie
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeedboxContact'
+        '400':
+          description: The value is empty or has spaces
+    delete:
+      tags:
+        - Seedbox
+      summary: Remove the mam_id
+      responses:
+        '204':
+          description: Removed. Updates only look up the IP until a new cookie is saved.
+
+  /api/seedbox/settings:
+    put:
+      tags:
+        - Seedbox
+      summary: Update the seedbox schedule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - enabled
+                - intervalSeconds
+              properties:
+                enabled:
+                  type: boolean
+                intervalSeconds:
+                  type: integer
+                  minimum: 60
+                  maximum: 86400
+      responses:
+        '200':
+          description: Seedbox status after the change
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeedboxStatus'
+        '400':
+          description: Interval out of range
+
+  /api/seedbox/sync:
+    post:
+      tags:
+        - Seedbox
+      summary: Update the seedbox IP now
+      responses:
+        '200':
+          description: The request to MAM and its outcome
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeedboxContact'
+
+  /api/gluetun/status:
+    get:
+      tags:
+        - Gluetun
+      summary: Get gluetun status
+      description: VPN status, public IP and forwarded ports from the control server; container state, health, resource use and the containers that share its network from the Docker API.
+      responses:
+        '200':
+          description: Gluetun status. Each part reports its own error when it cannot be reached.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GluetunStatus'
+
+  /api/gluetun/logs:
+    get:
+      tags:
+        - Gluetun
+      summary: Get gluetun container logs
+      parameters:
+        - name: tail
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 5000
+            default: 500
+      responses:
+        '200':
+          description: The last log lines, oldest first
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  lines:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/GluetunLogLine'
+        '502':
+          description: Docker could not be reached
+
+  /api/gluetun/vpn-settings:
+    get:
+      tags:
+        - Gluetun
+      summary: Get gluetun VPN settings
+      description: The settings from GET /v1/vpn/settings of the control server, with keys and passwords redacted.
+      responses:
+        '200':
+          description: VPN settings
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '502':
+          description: The control server could not be reached
+
+  /api/gluetun/settings:
+    get:
+      tags:
+        - Gluetun
+      summary: Get gluetun connection settings
+      responses:
+        '200':
+          description: Connection settings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GluetunSettings'
+    put:
+      tags:
+        - Gluetun
+      summary: Update gluetun connection settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GluetunSettingsInput'
+      responses:
+        '200':
+          description: Saved settings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GluetunSettings'
+        '400':
+          description: Invalid settings
+
+  /api/gluetun/vpn:
+    put:
+      tags:
+        - Gluetun
+      summary: Start or stop the VPN
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - status
+              properties:
+                status:
+                  type: string
+                  enum: [running, stopped]
+      responses:
+        '204':
+          description: Status changed
+        '502':
+          description: The control server refused or could not be reached
+
+  /api/gluetun/vpn/restart:
+    post:
+      tags:
+        - Gluetun
+      summary: Restart the VPN
+      description: Stops and starts the VPN through the control server. The container and its network stay up.
+      responses:
+        '204':
+          description: VPN restarted
+        '502':
+          description: The control server refused or could not be reached
+
+  /api/gluetun/restart:
+    post:
+      tags:
+        - Gluetun
+      summary: Restart the gluetun container
+      description: Restarts the container through the Docker API in the background, waits until it is healthy, then restarts the containers that share its network. GET /api/gluetun/status reports the progress.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                withDependents:
+                  type: boolean
+                  default: true
+      responses:
+        '202':
+          description: Restart started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GluetunRestartState'
+        '409':
+          description: A restart is already running
+        '502':
+          description: Docker could not be reached
+
   /api/log-exclusions:
     get:
       tags:
@@ -7578,6 +7825,207 @@ components:
           format: date-time
           description: Last modification time
 
+    SeedboxContact:
+      type: object
+      description: One request to MAM and its outcome
+      properties:
+        id:
+          type: integer
+        source:
+          type: string
+          enum: [schedule, manual, cookie]
+        state:
+          type: string
+          enum: [updated, unchanged, waiting, throttled, rejected, unreachable]
+        httpStatus:
+          type: integer
+        message:
+          type: string
+        ip:
+          type: string
+        asn:
+          type: integer
+        asOrg:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    SeedboxStatus:
+      type: object
+      properties:
+        mamId:
+          type: object
+          properties:
+            configured:
+              type: boolean
+            masked:
+              type: string
+              description: Last four characters of the stored cookie
+        enabled:
+          type: boolean
+        intervalSeconds:
+          type: integer
+        nextContactAt:
+          type: string
+          format: date-time
+        latest:
+          $ref: '#/components/schemas/SeedboxContact'
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/SeedboxContact'
+    GluetunSettings:
+      type: object
+      properties:
+        controlUrl:
+          type: string
+        authType:
+          type: string
+          enum: [none, apikey, basic]
+        username:
+          type: string
+        hasSecret:
+          type: boolean
+        dockerHost:
+          type: string
+          description: unix:///var/run/docker.sock, tcp://host:port or empty to turn Docker access off
+        containerName:
+          type: string
+    GluetunSettingsInput:
+      type: object
+      required:
+        - controlUrl
+        - authType
+        - containerName
+      properties:
+        controlUrl:
+          type: string
+        authType:
+          type: string
+          enum: [none, apikey, basic]
+        username:
+          type: string
+        secret:
+          type: string
+          description: API key or password. Omit to keep the stored value; an empty string clears it.
+        dockerHost:
+          type: string
+        containerName:
+          type: string
+    GluetunRestartState:
+      type: object
+      properties:
+        running:
+          type: boolean
+        step:
+          type: string
+          enum: [gluetun, waiting, dependents, done]
+        containers:
+          type: array
+          items:
+            type: string
+        startedAt:
+          type: string
+          format: date-time
+        finishedAt:
+          type: string
+          format: date-time
+        error:
+          type: string
+    GluetunLogLine:
+      type: object
+      properties:
+        time:
+          type: string
+        level:
+          type: string
+          enum: [debug, info, warn, error, other]
+        module:
+          type: string
+        message:
+          type: string
+    GluetunStatus:
+      type: object
+      properties:
+        control:
+          type: object
+          properties:
+            reachable:
+              type: boolean
+            error:
+              type: string
+            vpnStatus:
+              type: string
+            dnsStatus:
+              type: string
+            forwardedPorts:
+              type: array
+              items:
+                type: integer
+            publicIp:
+              type: object
+              properties:
+                ip:
+                  type: string
+                country:
+                  type: string
+                region:
+                  type: string
+                city:
+                  type: string
+                location:
+                  type: string
+                organization:
+                  type: string
+                postalCode:
+                  type: string
+                timezone:
+                  type: string
+                hostname:
+                  type: string
+        docker:
+          type: object
+          properties:
+            available:
+              type: boolean
+            error:
+              type: string
+            container:
+              type: object
+              additionalProperties: true
+              description: Image, state, health checks, limits, published ports and the environment the container sets on top of the image (secrets redacted)
+            stats:
+              type: object
+              properties:
+                cpuPercent:
+                  type: number
+                memoryUsage:
+                  type: integer
+                memoryLimit:
+                  type: integer
+                rxBytes:
+                  type: integer
+                txBytes:
+                  type: integer
+                pids:
+                  type: integer
+            dependents:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  image:
+                    type: string
+                  state:
+                    type: string
+                  status:
+                    type: string
+        restart:
+          $ref: '#/components/schemas/GluetunRestartState'
     LogExclusions:
       type: object
       description: Muted log message patterns
@@ -10277,6 +10725,10 @@ tags:
     description: User authentication and session management
   - name: API Keys
     description: API key management
+  - name: Seedbox
+    description: MyAnonamouse dynamic seedbox IP updates
+  - name: Gluetun
+    description: Gluetun VPN status, logs and restarts
   - name: Notifications
     description: Notification-related endpoints for targets and events
   - name: ARR Integrations

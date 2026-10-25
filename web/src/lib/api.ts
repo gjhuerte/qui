@@ -92,6 +92,13 @@ import type {
   NotificationTarget,
   NotificationTargetRequest,
   NotificationTestRequest,
+  GluetunLogLine,
+  GluetunRestartState,
+  GluetunSettings,
+  GluetunSettingsInput,
+  GluetunStatus,
+  SeedboxContact,
+  SeedboxStatus,
   QBittorrentAppInfo,
   RefreshRSSItemRequest,
   RegexValidationResult,
@@ -2346,6 +2353,75 @@ class ApiClient {
     return this.request<{ status: string }>(`/notifications/targets/${id}/test`, {
       method: "POST",
       body: data ? JSON.stringify(data) : undefined,
+    })
+  }
+
+  // Seedbox (MyAnonamouse dynamic seedbox IP) endpoints
+  async getSeedboxStatus(): Promise<SeedboxStatus> {
+    return this.request<SeedboxStatus>("/seedbox")
+  }
+
+  async setSeedboxMamId(mamId: string): Promise<SeedboxContact> {
+    return this.request<SeedboxContact>("/seedbox/mam-id", {
+      method: "PUT",
+      body: JSON.stringify({ mamId }),
+    })
+  }
+
+  async clearSeedboxMamId(): Promise<void> {
+    return this.request("/seedbox/mam-id", { method: "DELETE" })
+  }
+
+  async updateSeedboxSettings(data: { enabled: boolean; intervalSeconds: number }): Promise<SeedboxStatus> {
+    return this.request<SeedboxStatus>("/seedbox/settings", {
+      method: "PUT",
+      body: JSON.stringify(data),
+    })
+  }
+
+  async syncSeedbox(): Promise<SeedboxContact> {
+    return this.request<SeedboxContact>("/seedbox/sync", { method: "POST" })
+  }
+
+  // Gluetun endpoints
+  async getGluetunStatus(): Promise<GluetunStatus> {
+    return this.request<GluetunStatus>("/gluetun/status")
+  }
+
+  async getGluetunLogs(tail: number): Promise<{ lines: GluetunLogLine[] }> {
+    return this.request<{ lines: GluetunLogLine[] }>(`/gluetun/logs?tail=${tail}`)
+  }
+
+  async getGluetunVPNSettings(): Promise<Record<string, unknown>> {
+    return this.request<Record<string, unknown>>("/gluetun/vpn-settings")
+  }
+
+  async getGluetunSettings(): Promise<GluetunSettings> {
+    return this.request<GluetunSettings>("/gluetun/settings")
+  }
+
+  async updateGluetunSettings(data: GluetunSettingsInput): Promise<GluetunSettings> {
+    return this.request<GluetunSettings>("/gluetun/settings", {
+      method: "PUT",
+      body: JSON.stringify(data),
+    })
+  }
+
+  async setGluetunVPNStatus(status: "running" | "stopped"): Promise<void> {
+    return this.request("/gluetun/vpn", {
+      method: "PUT",
+      body: JSON.stringify({ status }),
+    })
+  }
+
+  async restartGluetunVPN(): Promise<void> {
+    return this.request("/gluetun/vpn/restart", { method: "POST" })
+  }
+
+  async restartGluetunContainer(withDependents: boolean): Promise<GluetunRestartState> {
+    return this.request<GluetunRestartState>("/gluetun/restart", {
+      method: "POST",
+      body: JSON.stringify({ withDependents }),
     })
   }
 
