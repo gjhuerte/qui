@@ -42,7 +42,7 @@ build/docker:
 build/dockerx:
 	docker buildx build -t ghcr.io/gjhuerte/qui:dev -f docker-prod/Dockerfile . --build-arg GIT_COMMIT=$(GIT_COMMIT) --build-arg BUILD_DATE=$(BUILD_DATE) --build-arg VERSION=$(VERSION) --platform=linux/amd64,linux/arm64 --pull --load
 
-# Docker development stack (air + Vite hot reload), UI on http://localhost:5173
+# Docker development stack (air hot reload, API on :7476); run `make dev-frontend` on the host for the UI
 docker/dev:
 	QUI_UID=$$(id -u) QUI_GID=$$(id -g) docker compose -f docker-dev/docker-compose.yml up --build
 
